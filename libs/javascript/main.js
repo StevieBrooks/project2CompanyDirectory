@@ -14,7 +14,6 @@ $(document).ready(function() {
     readyReq.open("GET", "libs/php/getAll.php", true);
 
     readyReq.onload = function() {
-        console.log("hey");
         if(this.status == 200) {
             let readyRes = JSON.parse(this.responseText);
 
@@ -58,25 +57,16 @@ $(".db-surname").click(function() {
     tbody.html($('tr',tbody).get().reverse());
 })
 
-// $(".db-firstname").click(function() {
-//     personnelArr.sort(function(item1, item2) {
-//         return item1.firstName < item2.firstName ? -1 : 1;
-//     })
-//     personnelArr.forEach(function(item, index) {
-//         $(".db-body").html(`
-//         <tr class="emp-row">
-//             <td class="number">${index + 1}</td>
-//             <td class="surname">${item.lastName}</td>
-//             <td class="firstname">${item.firstName}</td>
-//             <td class="email">${item.email}</td>
-//             <td class="dept">${item.department}</td>
-//             <td class="location">${item.location}</td>
-//             <td class="modify"><button type="button" class="btn btn-success">Edit</button>
-//             <button type="button" class="btn btn-danger">Delete</button></td>
-//         </tr>
-//         `); 
-//     })
-//     console.log(personnelArr);
+$(".db-firstname").click(function() {
+    console.log($(".db-body")[0]);
+    $(".db-body").sort(function(item1, item2) {
+        return item1.firstName < item2.firstName ? -1 : 1;
+    })
     
-// })
+})
+
+
+/*====================================================
+                CALLS TO PHP
+======================================================*/
 
