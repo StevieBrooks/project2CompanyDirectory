@@ -1,4 +1,11 @@
+/*=======================================================
+                        VARIABLES
+========================================================*/
+
 let personnelArr = null;
+let tbody = $("table tbody");
+// let delBtn = $('.del-btn');
+
 
 
 /*======================================================
@@ -30,8 +37,8 @@ $(document).ready(function() {
                     <td class="email">${item.email}</td>
                     <td class="dept">${item.department}</td>
                     <td class="location">${item.location}</td>
-                    <td class="modify"><button type="button" class="btn btn-success">Edit</button>
-                    <button type="button" class="btn btn-danger">Delete</button></td>
+                    <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
+                    <button type="button" class="btn btn-danger del-btn">Delete</button></td>
                 </tr>
                 `); 
             })
@@ -48,12 +55,10 @@ $(document).ready(function() {
 =====================================================*/
 
 $(".db-index").click(function() {
-    let tbody = $('table tbody');
     tbody.html($('tr',tbody).get().reverse());
 })
 
 $(".db-surname").click(function() {
-    let tbody = $('table tbody');
     tbody.html($('tr',tbody).get().reverse());
 })
 
@@ -70,3 +75,15 @@ $(".db-firstname").click(function() {
                 CALLS TO PHP
 ======================================================*/
 
+tbody.on("click", ".del-btn", function(e) {
+    console.log(e.target.parentElement.parentElement.children[0].innerHTML);
+    let id = e.target.parentElement.parentElement.children[0].innerHTML;
+
+    $.ajax({
+        "url": `libs/php/deletePersonnelByID?id=${id}`,
+        "type": "DELETE",
+        "success": function(result) {
+            console.log(result);
+        }
+    })
+})
