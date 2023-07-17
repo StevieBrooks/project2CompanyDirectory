@@ -95,16 +95,25 @@ $(".dropdown-departments").click(function() {
         "success": function(result) {
             departmentArr = result.data;
             console.log(departmentArr);
-            departmentArr.forEach(function(item) {
+            $(".db-head").html(`
+            <tr>
+                <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-name">Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-locationID">LocationID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-edDel">Edit / Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+            </tr>
+            `)
+            $(".db-body").html("");
+            departmentArr.forEach(item => {
                 $(".db-body").append(`
                 <tr class="emp-row">
-                    <td class="number">${item.id}</td>
-                    <td class="surname">${item.name}</td>
-                    <td class="firstname">${item.locationID}</td>
+                    <td class="index">${item.id}</td>
+                    <td class="name">${item.name}</td>
+                    <td class="locationID">${item.locationID}</td>
                     <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
                     <button type="button" class="btn btn-danger del-btn">Delete</button></td>
                 </tr>
-                `); 
+                `)
             })
         }
     })
