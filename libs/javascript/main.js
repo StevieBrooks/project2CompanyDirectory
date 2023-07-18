@@ -2,10 +2,10 @@
                         VARIABLES
 ========================================================*/
 
-let personnelArr = null;
 let departmentArr = null;
+let locationArr = null;
+let personnelArr = null;
 let tbody = $("table tbody");
-// let delBtn = $('.del-btn');
 
 
 
@@ -93,8 +93,8 @@ $(".dropdown-departments").click(function() {
         "url": "libs/php/getAllDepartments.php",
         "type": "GET",
         "success": function(result) {
-            departmentArr = result.data;
-            console.log(departmentArr);
+            // departmentArr = result.data;
+            // console.log(departmentArr);
             $(".db-head").html(`
             <tr>
                 <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
@@ -104,12 +104,81 @@ $(".dropdown-departments").click(function() {
             </tr>
             `)
             $(".db-body").html("");
-            departmentArr.forEach(item => {
+            result.data.forEach(item => {
                 $(".db-body").append(`
                 <tr class="emp-row">
                     <td class="index">${item.id}</td>
                     <td class="name">${item.name}</td>
                     <td class="locationID">${item.locationID}</td>
+                    <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
+                    <button type="button" class="btn btn-danger del-btn">Delete</button></td>
+                </tr>
+                `)
+            })
+        }
+    })
+
+})
+
+/*===================GET ALL LOCATIONS======================*/
+$(".dropdown-locations").click(function() {
+
+    $.ajax({
+        "url": "libs/php/getAllLocations.php",
+        "type": "GET",
+        "success": function(result) {
+            // locationArr = result.data;
+            // console.log(locationArr);
+            $(".db-head").html(`
+            <tr>
+                <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-name">Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-edDel">Edit / Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+            </tr>
+            `)
+            $(".db-body").html("");
+            result.data.forEach(item => {
+                $(".db-body").append(`
+                <tr class="emp-row">
+                    <td class="index">${item.id}</td>
+                    <td class="name">${item.name}</td>
+                    <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
+                    <button type="button" class="btn btn-danger del-btn">Delete</button></td>
+                </tr>
+                `)
+            })
+        }
+    })
+
+})
+
+/*===================GET ALL PERSONNEL======================*/
+$(".dropdown-personnel").click(function() {
+
+    $.ajax({
+        "url": "libs/php/getAllPersonnel.php",
+        "type": "GET",
+        "success": function(result) {
+
+            $(".db-head").html(`
+            <tr>
+                <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-name">Surname <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-name">First Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-name">Email <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-name">DepartmentID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-edDel">Edit / Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+            </tr>
+            `)
+            $(".db-body").html("");
+            result.data.forEach(item => {
+                $(".db-body").append(`
+                <tr class="emp-row">
+                    <td class="index">${item.id}</td>
+                    <td class="name">${item.lastName}</td>
+                    <td class="name">${item.firstName}</td>
+                    <td class="name">${item.email}</td>
+                    <td class="name">${item.departmentID}</td>
                     <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
                     <button type="button" class="btn btn-danger del-btn">Delete</button></td>
                 </tr>
