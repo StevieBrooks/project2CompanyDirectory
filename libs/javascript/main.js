@@ -156,7 +156,7 @@ $(".dropdown-locations").click(function() {
 $(".dropdown-personnel").click(function() {
 
     $.ajax({
-        "url": "libs/php/getAllPersonnel.php",
+        "url": "libs/php/getAll.php",
         "type": "GET",
         "success": function(result) {
 
@@ -166,7 +166,8 @@ $(".dropdown-personnel").click(function() {
                 <th class="db-name">Surname <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
                 <th class="db-name">First Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
                 <th class="db-name">Email <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-name">DepartmentID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-name">Department <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-name">Location <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
                 <th class="db-edDel">Edit / Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
             </tr>
             `)
@@ -178,7 +179,8 @@ $(".dropdown-personnel").click(function() {
                     <td class="name">${item.lastName}</td>
                     <td class="name">${item.firstName}</td>
                     <td class="name">${item.email}</td>
-                    <td class="name">${item.departmentID}</td>
+                    <td class="name">${item.department}</td>
+                    <td class="name">${item.location}</td>
                     <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
                     <button type="button" class="btn btn-danger del-btn">Delete</button></td>
                 </tr>
@@ -189,8 +191,24 @@ $(".dropdown-personnel").click(function() {
 
 })
 
+/*===================SEARCH EMPLOYEES======================*/
+$(".emp-search-btn").click(function() {
 
+    const empQuery = $(".emp-search").val();
+    console.log(empQuery);
 
+    $.ajax({
+        "url": `libs/php/search.php?empQuery=${empQuery}`,
+        "type": "GET",
+        "success": function(result) {
+
+            console.log(result);
+
+        }
+    })
+
+})
+// work on this tomoz!!!
 
 
 
