@@ -30,11 +30,11 @@
 	}	
 
 
-	$query = 'SELECT * FROM personnel WHERE firstName LIKE ?';
+	$query = 'SELECT * FROM personnel WHERE firstName LIKE ? OR lastName LIKE ? OR email LIKE ?';
     $param = "%" . $_REQUEST['empQuery'] . "%";
 
 	$stmt = $conn->prepare($query);
-	$stmt->bind_param("s", $param);
+	$stmt->bind_param("sss", $param, $param, $param);
 	$stmt->execute();
 	$result = $stmt->get_result();
 	
