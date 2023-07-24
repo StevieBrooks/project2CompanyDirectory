@@ -6,6 +6,7 @@ let departmentArr = null;
 let locationArr = null;
 let personnelArr = null;
 let tbody = $("table tbody");
+let perCount = 0;
 
 
 
@@ -30,6 +31,9 @@ $(document).ready(function() {
                 personnelArr.push(item);
             })
             personnelArr.forEach(function(item) {
+                perCount++;
+                $(".rec-count").text(perCount);
+
                 $(".db-body").append(`
                 <tr class="emp-row">
                     <td class="number">${item.id}</td>
@@ -74,11 +78,16 @@ tbody.on("click", ".del-btn", function(e) {
     console.log(e.target.parentElement.parentElement);
     let id = e.target.parentElement.parentElement.children[0].innerHTML;
     let persRow = $(e.target.parentElement.parentElement);
+    perCount--;
+            $(".rec-count").text(perCount);
 
     $.ajax({
         "url": `libs/php/deletePersonnelByID.php?id=${id}`,
         "type": "DELETE",
         "success": function(result) {
+            
+            // this isn't working in real time. WHY?
+
             console.log(result);
             console.log(personnelArr);
             persRow.slideUp();
@@ -232,10 +241,19 @@ $(".emp-search-btn").click(function() {
     })
 
 })
-// work on this tomoz!!!
 
+/*===================ADD EMPLOYEE======================*/
+$(".add-btn").click(function() {
+    $("#addModal").modal("show");
+})
 
-
+$(".add-person-btn").click(function() {
+    const fName = $("#formControlInput1").val();
+    const sName = $("#formControlInput2").val();
+    const email = $("#formControlInput3").val();
+    const dept = $("#deptForm").val();
+    console.log(dept);
+})
 
 
 // need to figure out how to restore original db and make a copy of this for when user refresh page, etc
