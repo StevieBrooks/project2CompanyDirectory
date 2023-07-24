@@ -201,8 +201,32 @@ $(".emp-search-btn").click(function() {
         "url": `libs/php/search.php?empQuery=${empQuery}`,
         "type": "GET",
         "success": function(result) {
+            
+            $(".db-head").html(`
+            <tr>
+                <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-name">Surname <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-name">First Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-name">Email <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-name">Department <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-edDel">Edit / Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+            </tr>
+            `)
 
-            console.log(result);
+            $(".db-body").html("");
+            result.data.forEach(item => {
+                $(".db-body").append(`
+                <tr class="emp-row">
+                    <td class="index">${item.id}</td>
+                    <td class="name">${item.lastName}</td>
+                    <td class="name">${item.firstName}</td>
+                    <td class="name">${item.email}</td>
+                    <td class="name">${item.departmentID}</td>
+                    <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
+                    <button type="button" class="btn btn-danger del-btn">Delete</button></td>
+                </tr>
+                `)
+            })
 
         }
     })
