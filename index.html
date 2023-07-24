@@ -41,8 +41,8 @@
             </ul>
 
             <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
+              <input class="form-control emp-search me-2" type="search" placeholder="Search Employees" aria-label="Search">
+              <button class="btn btn-light emp-search-btn" type="submit">Search</button>
             </form>
 
           </div>
@@ -50,8 +50,8 @@
       </nav>
 
       <div class="btn-group mt-3 mx-3" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-outline-primary">Count: <span class="rec-count">100</span></button>
-        <button type="button" class="btn btn-primary">Add+</button>
+        <button type="button" class="btn btn-outline-primary">Count: <span class="rec-count"></span></button>
+        <button type="button" class="btn btn-primary add-btn">Add+</button>
         <button type="button" class="btn btn-primary">Reset</button>
       </div>
 
@@ -74,7 +74,49 @@
         </table>
       </div>
 
+      <div class="modal" id="addModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Add Personnel</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
 
+              <!--consider removing labels and using placeholders as labels instead-->
+
+              <label for="formControlInput1" class="form-label">First Name: <input type="text" class="form-control" id="formControlInput1" placeholder="Type 2-20 characters..."></label>
+
+              <label for="formControlInput2" class="form-label">Surname: <input type="text" class="form-control" id="formControlInput2" placeholder="Type 2-20 characters"></label>
+
+              <label for="exampleFormControlInput3" class="form-label">Email address: <input type="email" class="form-control" id="formControlInput3" placeholder="name@example.com"></label>
+
+              <label for="deptForm">Department:
+                <select class="form-select" id="deptForm" aria-label="Default select example">
+                  <option selected>Please Select</option>
+                  <option value="hum-res">Human Resources</option>
+                  <option value="sales">Sales</option>
+                  <option value="market">Marketing</option>
+                  <option value="legal">Legal</option>
+                  <option value="services">Services</option>
+                  <option value="res-dev">Research & Development</option>
+                  <option value="pro-man">Product Management</option>
+                  <option value="training">Training</option>
+                  <option value="support">Support</option>
+                  <option value="engin">Engineering</option>
+                  <option value="acc">Accounting</option>
+                  <option value="bus-dev">Business Development</option>
+                </select>
+              </label> 
+  
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary add-person-btn">Add to Database</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
 
