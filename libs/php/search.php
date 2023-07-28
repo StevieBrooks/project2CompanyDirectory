@@ -29,8 +29,14 @@
 
 	}	
 
+	$query = 'SELECT personnel.id, personnel.firstName, personnel.lastName, personnel.email, department.name AS department
+	FROM personnel
+	INNER JOIN department ON personnel.departmentID = department.id
+	WHERE personnel.firstName LIKE ? OR personnel.lastName LIKE ? OR personnel.email LIKE ?';
 
-	$query = 'SELECT * FROM personnel WHERE firstName LIKE ? OR lastName LIKE ? OR email LIKE ?';
+
+
+
     $param = "%" . $_REQUEST['empQuery'] . "%";
 
 	$stmt = $conn->prepare($query);
