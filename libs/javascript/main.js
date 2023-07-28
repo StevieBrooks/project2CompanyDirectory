@@ -7,6 +7,7 @@ let locationArr = null;
 let personnelArr = null;
 let tbody = $("table tbody");
 let perCount = 0;
+let empQuery = null;
 
 
 
@@ -78,15 +79,15 @@ tbody.on("click", ".del-btn", function(e) {
     console.log(e.target.parentElement.parentElement);
     let id = e.target.parentElement.parentElement.children[0].innerHTML;
     let persRow = $(e.target.parentElement.parentElement);
-    perCount--;
-            $(".rec-count").text(perCount);
+    
 
     $.ajax({
         "url": `libs/php/deletePersonnelByID.php?id=${id}`,
         "type": "DELETE",
         "success": function(result) {
-            
-            // this isn't working in real time. WHY?
+            // now working in real time but need to build in function to confirm user wants to delete
+            perCount--;
+            $(".rec-count").text(perCount);
 
             console.log(result);
             console.log(personnelArr);
@@ -102,13 +103,15 @@ $(".dropdown-departments").click(function() {
         "url": "libs/php/getAllDepartments.php",
         "type": "GET",
         "success": function(result) {
+            console.log(result);
+            $(".rec-count").text(result.data.length);
             // departmentArr = result.data;
             // console.log(departmentArr);
             $(".db-head").html(`
             <tr>
                 <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
                 <th class="db-name">Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-locationID">LocationID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-locationID">Location <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
                 <th class="db-edDel">Edit / Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
             </tr>
             `)
@@ -118,7 +121,7 @@ $(".dropdown-departments").click(function() {
                 <tr class="emp-row">
                     <td class="index">${item.id}</td>
                     <td class="name">${item.name}</td>
-                    <td class="locationID">${item.locationID}</td>
+                    <td class="locationID">${item.location}</td>
                     <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
                     <button type="button" class="btn btn-danger del-btn">Delete</button></td>
                 </tr>
@@ -136,6 +139,7 @@ $(".dropdown-locations").click(function() {
         "url": "libs/php/getAllLocations.php",
         "type": "GET",
         "success": function(result) {
+            $(".rec-count").text(result.data.length);
             // locationArr = result.data;
             // console.log(locationArr);
             $(".db-head").html(`
@@ -168,6 +172,7 @@ $(".dropdown-personnel").click(function() {
         "url": "libs/php/getAll.php",
         "type": "GET",
         "success": function(result) {
+            $(".rec-count").text(result.data.length);
 
             $(".db-head").html(`
             <tr>
@@ -203,13 +208,15 @@ $(".dropdown-personnel").click(function() {
 /*===================SEARCH EMPLOYEES======================*/
 $(".emp-search-btn").click(function() {
 
-    const empQuery = $(".emp-search").val();
+    empQuery = $(".emp-search").val();
     console.log(empQuery);
 
     $.ajax({
         "url": `libs/php/search.php?empQuery=${empQuery}`,
         "type": "GET",
         "success": function(result) {
+            console.log(result);
+            $(".rec-count").text(result.data.length);
             
             $(".db-head").html(`
             <tr>
@@ -230,7 +237,7 @@ $(".emp-search-btn").click(function() {
                     <td class="name">${item.lastName}</td>
                     <td class="name">${item.firstName}</td>
                     <td class="name">${item.email}</td>
-                    <td class="name">${item.departmentID}</td>
+                    <td class="name">${item.department}</td>
                     <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
                     <button type="button" class="btn btn-danger del-btn">Delete</button></td>
                 </tr>
@@ -242,18 +249,80 @@ $(".emp-search-btn").click(function() {
 
 })
 
-/*===================ADD EMPLOYEE======================*/
+$(document).on("keydown", function(e) {
+
+    empQuery = $(".emp-search").val();
+
+    if(e.originalEvent.keyCode == 13 && empQuery.length > 0) {
+
+        console.log(empQuery.length);
+
+        $.ajax({
+            "url": `libs/php/search.php?empQuery=${empQuery}`,
+            "type": "GET",
+            "success": function(result) {
+
+                $(".rec-count").text(result.data.length);
+                
+                $(".db-head").html(`
+                <tr>
+                    <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                    <th class="db-name">Surname <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                    <th class="db-name">First Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                    <th class="db-name">Email <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                    <th class="db-name">Department <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                    <th class="db-edDel">Edit / Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                </tr>
+                `)
+    
+                $(".db-body").html("");
+                result.data.forEach(item => {
+                    $(".db-body").append(`
+                    <tr class="emp-row">
+                        <td class="index">${item.id}</td>
+                        <td class="name">${item.lastName}</td>
+                        <td class="name">${item.firstName}</td>
+                        <td class="name">${item.email}</td>
+                        <td class="name">${item.department}</td>
+                        <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
+                        <button type="button" class="btn btn-danger del-btn">Delete</button></td>
+                    </tr>
+                    `)
+                })
+    
+            }
+        })
+    }
+})
+
+/*===================ADD NEW======================*/
 $(".add-btn").click(function() {
     $("#addModal").modal("show");
 })
 
-$(".add-person-btn").click(function() {
-    const fName = $("#formControlInput1").val();
-    const sName = $("#formControlInput2").val();
-    const email = $("#formControlInput3").val();
-    const dept = $("#deptForm").val();
-    console.log(dept);
+$("#pdlSelect").click(function(e) {
+    console.log(e);
+    // console.log(this.children);
 })
+
+// need to figure out how to target specific options from select so can append card with relevent inputs
+
+
+
+
+
+
+
+
+
+
+// $(".add-person-btn").click(function() {
+//     const fName = $("#formControlInput1").val();
+//     const sName = $("#formControlInput2").val();
+//     const email = $("#formControlInput3").val();
+//     const dept = $("#deptForm").val();
+//     console.log(dept);
+// })
 
 
 // need to figure out how to restore original db and make a copy of this for when user refresh page, etc
