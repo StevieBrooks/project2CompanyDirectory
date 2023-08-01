@@ -296,6 +296,9 @@ $(document).on("keydown", function(e) {
 })
 
 /*===================ADD NEW======================*/
+let pdlChoice = null;
+
+
 $(".add-btn").click(function() {
     $("#addModal").modal("show");
 })
@@ -304,8 +307,9 @@ $(".add-btn").click(function() {
 $(".pdl-card").first().css("display", "none");
 
 $("#pdlSelect").on("change", function(e) {
-    const pdlChoice = e.target.value;
-    if(pdlChoice === 'personnel') {
+    pdlChoice = e.target.value;
+    console.log(pdlChoice);
+    if(pdlChoice.length > 0) {
         console.log($(".pdl-card").first());
         $(".pdl-card").first().css("display", "block");
         
@@ -314,13 +318,13 @@ $("#pdlSelect").on("change", function(e) {
     switch(pdlChoice) {
         case "personnel":
             $(".pdl-card .card-body").html(`
-            <input type="text" class="form-control" id="formControlInput1" placeholder="First Name....">
+            <input type="text" class="form-control p-fname" id="formControlInput1" placeholder="First Name....">
 
-            <input type="text" class="form-control" id="formControlInput2" placeholder="Surname...">
+            <input type="text" class="form-control p-sname" id="formControlInput2" placeholder="Surname...">
 
-            <input type="email" class="form-control" id="formControlInput3" placeholder="Email">
+            <input type="email" class="form-control p-email" id="formControlInput3" placeholder="Email">
 
-            <select class="form-select" id="deptForm" aria-label="Default select example">
+            <select class="form-select p-dept" id="deptForm" aria-label="Default select example">
                 <option value="" selected>Department</option>
                 <option value="1">Human Resources</option>
                 <option value="2">Sales</option>
@@ -337,40 +341,67 @@ $("#pdlSelect").on("change", function(e) {
               </select>
             `);
             break;
+
+        case "department":
+            $(".pdl-card .card-body").html(`
+            <input type="text" class="form-control d-name" id="formControlInput1" placeholder="Department name...">
+
+            <input type="text" class="form-control d-location" id="formControlInput2" placeholder="Department location...">
+            `);
+            break;
+
+        case "location":
+            $(".pdl-card .card-body").html(`
+            <input type="text" class="form-control l-name" id="formControlInput1" placeholder="Location name...">
+            `);
+            break;
+
     }
 })
 
 $(".add-new-btn").click(function() {
-    const firstName = $("#formControlInput1").val();
-    const surname = $("#formControlInput2").val();
-    const email = $("#formControlInput3").val();
-    const dept = $("#deptForm").val()
-    if(firstName.length > 0 && surname.length > 0 && email.length > 0 && dept.length > 0) {
-        $.ajax({
-            url: `libs/php/insertPersonnel.php?firstName=${firstName}&lastName=${surname}&email=${email}&departmentID=${dept}`,
-            type: "POST",
-            success: function(result) {
-                console.log(result);
-                perCount++;
-                $(".rec-count").text(perCount);
-                // $(".db-body").append(`
-                // <tr class="emp-row">
-                //     <td class="index">103</td>
-                //     <td class="name">${surname}</td>
-                //     <td class="name">${firstName}</td>
-                //     <td class="name">${email}</td>
-                //     <td class="name">${dept}</td>
-                //     <td class="name">New York</td>
-                //     <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
-                //     <button type="button" class="btn btn-danger del-btn">Delete</button></td>
-                // </tr>
-                // `) THIS AINT WORKING!
-            }
-        }) 
-    } 
+    console.log(pdlChoice);
+
+    if(pdlChoice == "personnel") {
+        const firstName = $(".p-fname").val();
+        const surname = $(".p-sname").val();
+        const email = $(".p-email").val();
+        const dept = $(".p-dept").val();
+
+        if(firstName.length > 0 && surname.length > 0 && email.length > 0 && dept.length > 0) {
+            $.ajax({
+                url: `libs/php/insertPersonnel.php?firstName=${firstName}&lastName=${surname}&email=${email}&departmentID=${dept}`,
+                type: "POST",
+                success: function(result) {
+                    console.log(result);
+                    perCount++;
+                    $(".rec-count").text(perCount);
+                    // $(".db-body").append(`
+                    // <tr class="emp-row">
+                    //     <td class="index">103</td>
+                    //     <td class="name">${surname}</td>
+                    //     <td class="name">${firstName}</td>
+                    //     <td class="name">${email}</td>
+                    //     <td class="name">${dept}</td>
+                    //     <td class="name">New York</td>
+                    //     <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
+                    //     <button type="button" class="btn btn-danger del-btn">Delete</button></td>
+                    // </tr>
+                    // `) THIS AINT WORKING - will need to make another call to getAllPersonel or getPersonnelByID and use result from that to append table
+                }
+            }) 
+        } 
+
+    } else if(pdlChoice = "department") {
+
+        // do something
+
+    } else if(pdlChoice = "location") {
+        // do something
+    }
+    
 })
 
-// need to figure out how to target specific options from select so can append card with relevent inputs
 
 
 
@@ -378,16 +409,11 @@ $(".add-new-btn").click(function() {
 
 
 
+/* TO-DO LIST
 
-
-
-// $(".add-person-btn").click(function() {
-//     const fName = $("#formControlInput1").val();
-//     const sName = $("#formControlInput2").val();
-//     const email = $("#formControlInput3").val();
-//     const dept = $("#deptForm").val();
-//     console.log(dept);
-// })
-
-
-// need to figure out how to restore original db and make a copy of this for when user refresh page, etc
+    - autoincrement id/primary key when new personnel, location, dept added
+    - make card vanish from modal when close
+    - update table without needing refresh
+    - change class for 'add to db' button depending on dropdown selection
+    - restore original database
+*/
