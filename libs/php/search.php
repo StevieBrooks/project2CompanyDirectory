@@ -1,8 +1,5 @@
 <?php
 
-	// example use from browser
-	// http://localhost/companydirectory/libs/php/getAllDepartments.php
-
 	// remove next two lines for production	
 	
 	ini_set('display_errors', 'On');
@@ -32,12 +29,20 @@
 
 	}	
 
-	// SQL does not accept parameters and so is not prepared
+	$query = 'SELECT personnel.id, personnel.firstName, personnel.lastName, personnel.email, department.name AS department
+	FROM personnel
+	INNER JOIN department ON personnel.departmentID = department.id
+	WHERE personnel.firstName LIKE ? OR personnel.lastName LIKE ? OR personnel.email LIKE ?';
 
-	// $query = 'SELECT id, name, locationID FROM department';
-	$query = 'SELECT department.id, department.name, location.name AS location FROM department INNER JOIN location ON department.locationID = location.id';
 
-	$result = $conn->query($query);
+
+
+    $param = "%" . $_REQUEST['empQuery'] . "%";
+
+	$stmt = $conn->prepare($query);
+	$stmt->bind_param("sss", $param, $param, $param);
+	$stmt->execute();
+	$result = $stmt->get_result();
 	
 	if (!$result) {
 

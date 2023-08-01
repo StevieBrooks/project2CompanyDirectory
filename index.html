@@ -41,8 +41,8 @@
             </ul>
 
             <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
+              <input class="form-control emp-search me-2" type="search" placeholder="Search Employees" aria-label="Search">
+              <button class="btn btn-light emp-search-btn" type="submit">Search</button>
             </form>
 
           </div>
@@ -50,8 +50,8 @@
       </nav>
 
       <div class="btn-group mt-3 mx-3" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-outline-primary">Count: <span class="rec-count">100</span></button>
-        <button type="button" class="btn btn-primary">Add+</button>
+        <button type="button" class="btn btn-outline-primary">Count: <span class="rec-count"></span></button>
+        <button type="button" class="btn btn-primary add-btn">Add+</button>
         <button type="button" class="btn btn-primary">Reset</button>
       </div>
 
@@ -65,7 +65,7 @@
               <th class="db-email">Email <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
               <th class="db-dept">Department <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
               <th class="db-loc">Location <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-              <th class="">Edit / Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+              <th class="db-edDel">Edit / Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
             </tr>
           </thead>
           <tbody class="db-body">
@@ -74,7 +74,36 @@
         </table>
       </div>
 
+      <div class="modal" id="addModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Add New</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
 
+              <select class="form-select" id="pdlSelect" aria-label="Default select example">
+                <option selected>Please Select</option>
+                <option value="personnel">Personnel</option>
+                <option value="department">Department</option>
+                <option value="location">Location</option>
+              </select>
+
+              <div class="card pdl-card my-3">
+                <div class="card-body pdl-card-body">
+                  
+                </div>
+              </div>
+  
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary add-new-btn">Add to Database</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
 
