@@ -346,7 +346,15 @@ $("#pdlSelect").on("change", function(e) {
             $(".pdl-card .card-body").html(`
             <input type="text" class="form-control d-name" id="formControlInput1" placeholder="Department name...">
 
-            <input type="text" class="form-control d-location" id="formControlInput2" placeholder="Department location...">
+            <select class="form-select d-location" id="deptLocForm" aria-label="Default select example">
+                <option value="" selected>Department Location</option>
+                <option value="1">London</option>
+                <option value="2">New York</option>
+                <option value="3">Paris</option>
+                <option value="4">Munich</option>
+                <option value="5">Rome</option>
+                <option value="7">Amsterdam</option>
+              </select>
             `);
             break;
 
@@ -392,12 +400,34 @@ $(".add-new-btn").click(function() {
             }) 
         } 
 
-    } else if(pdlChoice = "department") {
+    } else if(pdlChoice == "department") {
+        const deptName = $(".d-name").val();
+        const deptLocation = $(".d-location").val();
 
-        // do something
+        if(deptName.length > 0 && deptLocation.length > 0) {
+            $.ajax({
+                url: `libs/php/insertDepartment.php?name=${deptName}&locationID=${deptLocation}`,
+                type: "POST",
+                success: function(result) {
+                    console.log(result);
+                }
+            })
+        }
 
-    } else if(pdlChoice = "location") {
-        // do something
+    } else if(pdlChoice == "location") {
+        const locationName = $(".l-name").val();
+        // when creating new location, need to dynamically insert another option into addDepartment dropdown...could use ajax calls in the switch(pdlChoice) instead
+
+
+        if(locationName.length > 0) {
+            $.ajax({
+                url: `libs/php/insertLocation.php?name=${locationName}`,
+                type: "POST",
+                success: function(result) {
+                    console.log(result);
+                }
+            })
+        }
     }
     
 })
