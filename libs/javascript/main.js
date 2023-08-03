@@ -8,6 +8,7 @@ let personnelArr = null;
 let tbody = $("table tbody");
 let perCount = 0;
 let empQuery = null;
+// DOUBLE CHECK THESE VARIABLES - THINK PERCOUNT AND THE ARR VARIABLES UNNECESSARY
 
 
 
@@ -16,57 +17,8 @@ let empQuery = null;
 ========================================================*/
 
 $(document).ready(function() {
-
-    personnelArr = [];
-
-    const readyReq = new XMLHttpRequest();
-
-    readyReq.open("GET", "libs/php/getAll.php", true);
-
-    readyReq.onload = function() {
-        if(this.status == 200) {
-            let readyRes = JSON.parse(this.responseText);
-
-            console.log(readyRes);
-            readyRes.data.forEach(item => {
-                personnelArr.push(item);
-            })
-            personnelArr.forEach(function(item) {
-                perCount++;
-                $(".rec-count").text(perCount);
-
-                $(".db-body").append(`
-                <tr class="emp-row">
-                    <td class="number">${item.id}</td>
-                    <td class="surname">${item.lastName}</td>
-                    <td class="firstname">${item.firstName}</td>
-                    <td class="email">${item.email}</td>
-                    <td class="dept">${item.department}</td>
-                    <td class="location">${item.location}</td>
-                    <td class="modify"><button type="button" class="btn btn-success edit--person-btn">Edit</button>
-                    <button type="button" class="btn btn-danger del-person-btn">Delete</button></td>
-                </tr>
-                `); 
-            })
-
-        }
-    }
-
-    readyReq.send();
-    
+    getAllPersonnel();    
 })
-
-/*===================================================
-    ARRANGE DATA WITH HEADING ARROWS
-=====================================================*/
-
-// for this, need to make calls to backend to reverse things, then send back to front end to manifest
-
-$(".db-index").click(function() {
-    tbody.html($('tr',tbody).get().reverse());
-})
-
-
 
 
 /*====================================================
@@ -75,8 +27,6 @@ $(".db-index").click(function() {
 
 /*===============DELETE PERSONNEL BY ID==============*/
 tbody.on("click", ".del-person-btn", function(e) {
-    console.log(e.target.parentElement.parentElement.children[0].innerHTML);
-    console.log(e.target.parentElement.parentElement);
     let id = e.target.parentElement.parentElement.children[0].innerHTML;
     let persRow = $(e.target.parentElement.parentElement);
     
@@ -84,13 +34,44 @@ tbody.on("click", ".del-person-btn", function(e) {
     $.ajax({
         "url": `libs/php/deletePersonnelByID.php?id=${id}`,
         "type": "DELETE",
-        "success": function(result) {
-            perCount--;
-            $(".rec-count").text(perCount);
+        "success": function() {
 
-            console.log(result);
-            console.log(personnelArr);
             persRow.slideUp();
+            getAllPersonnel();
+        }
+    })
+})
+
+/*===============DELETE DEPARTMENT BY ID==============*/
+tbody.on("click", ".del-dept-btn", function(e) {
+    let id = e.target.parentElement.parentElement.children[0].innerHTML;
+    let deptRow = $(e.target.parentElement.parentElement);
+    
+
+    $.ajax({
+        "url": `libs/php/deleteDepartmentByID.php?id=${id}`,
+        "type": "DELETE",
+        "success": function() {
+
+            deptRow.slideUp();
+            getAllDepartments();
+        }
+    })
+})
+
+/*===============DELETE LOCATION BY ID==============*/
+tbody.on("click", ".del-loc-btn", function(e) {
+    let id = e.target.parentElement.parentElement.children[0].innerHTML;
+    let locRow = $(e.target.parentElement.parentElement);
+    
+
+    $.ajax({
+        "url": `libs/php/deleteLocationByID.php?id=${id}`,
+        "type": "DELETE",
+        "success": function() {
+
+            locRow.slideUp();
+            getAllLocations();
         }
     })
 })
@@ -123,8 +104,8 @@ function getAllDepartments() {
                     <td class="index">${item.id}</td>
                     <td class="name">${item.name}</td>
                     <td class="locationID">${item.location}</td>
-                    <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
-                    <button type="button" class="btn btn-danger del-btn">Delete</button></td>
+                    <td class="modify"><button type="button" class="btn btn-success edit-dept-btn">Edit</button>
+                    <button type="button" class="btn btn-danger del-dept-btn">Delete</button></td>
                 </tr>
                 `)
             })
@@ -158,8 +139,8 @@ function getAllLocations() {
                 <tr class="emp-row">
                     <td class="index">${item.id}</td>
                     <td class="name">${item.name}</td>
-                    <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
-                    <button type="button" class="btn btn-danger del-btn">Delete</button></td>
+                    <td class="modify"><button type="button" class="btn btn-success edit-loc-btn">Edit</button>
+                    <button type="button" class="btn btn-danger del-loc-btn">Delete</button></td>
                 </tr>
                 `)
             })
@@ -322,9 +303,10 @@ $("#pdlSelect").on("change", function(e) {
 
     switch(pdlChoice) {
         case "personnel":
+            
             $(".pdl-card .card-body").html(`
             <input type="text" class="form-control p-fname" id="formControlInput1" placeholder="First Name....">
-
+            
             <input type="text" class="form-control p-sname" id="formControlInput2" placeholder="Surname...">
 
             <input type="email" class="form-control p-email" id="formControlInput3" placeholder="Email">
@@ -344,7 +326,6 @@ $("#pdlSelect").on("change", function(e) {
                     })
                 }
             })
-
             
             break;
 
@@ -378,6 +359,7 @@ $("#pdlSelect").on("change", function(e) {
             break;
 
     }
+    // validatePersonnelFields(); NOT WORKING AS INTENDED YET - SEE BOTTOM OF PAGE ALSO
 })
 
 $(".add-new-btn").click(function() {
@@ -399,6 +381,9 @@ $(".add-new-btn").click(function() {
                 }
             }) 
         } 
+
+
+
 
     } else if(pdlChoice == "department") {
         const deptName = $(".d-name").val();
@@ -431,6 +416,16 @@ $(".add-new-btn").click(function() {
     }
     
 })
+
+// function validatePersonnelFields() {
+//     firstName = $(".p-fname");
+//     console.log(firstName.val());
+//     if(firstName.val().length > 1) {
+//         firstName.on("blur", function() {
+//             firstName.css("background", "red");
+//         })
+//     }
+// } NOT WORKING AS INTENDED YET
 
 
 
