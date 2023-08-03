@@ -43,8 +43,8 @@ $(document).ready(function() {
                     <td class="email">${item.email}</td>
                     <td class="dept">${item.department}</td>
                     <td class="location">${item.location}</td>
-                    <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
-                    <button type="button" class="btn btn-danger del-btn">Delete</button></td>
+                    <td class="modify"><button type="button" class="btn btn-success edit--person-btn">Edit</button>
+                    <button type="button" class="btn btn-danger del-person-btn">Delete</button></td>
                 </tr>
                 `); 
             })
@@ -74,7 +74,7 @@ $(".db-index").click(function() {
 ======================================================*/
 
 /*===============DELETE PERSONNEL BY ID==============*/
-tbody.on("click", ".del-btn", function(e) {
+tbody.on("click", ".del-person-btn", function(e) {
     console.log(e.target.parentElement.parentElement.children[0].innerHTML);
     console.log(e.target.parentElement.parentElement);
     let id = e.target.parentElement.parentElement.children[0].innerHTML;
@@ -85,7 +85,6 @@ tbody.on("click", ".del-btn", function(e) {
         "url": `libs/php/deletePersonnelByID.php?id=${id}`,
         "type": "DELETE",
         "success": function(result) {
-            // now working in real time but need to build in function to confirm user wants to delete
             perCount--;
             $(".rec-count").text(perCount);
 
@@ -97,7 +96,9 @@ tbody.on("click", ".del-btn", function(e) {
 })
 
 /*===================GET ALL DEPTS======================*/
-$(".dropdown-departments").click(function() {
+$(".dropdown-departments").click(getAllDepartments)
+
+function getAllDepartments() {
 
     $.ajax({
         "url": "libs/php/getAllDepartments.php",
@@ -130,10 +131,12 @@ $(".dropdown-departments").click(function() {
         }
     })
 
-})
+}
 
 /*===================GET ALL LOCATIONS======================*/
-$(".dropdown-locations").click(function() {
+$(".dropdown-locations").click(getAllLocations)
+
+function getAllLocations() {
 
     $.ajax({
         "url": "libs/php/getAllLocations.php",
@@ -163,10 +166,12 @@ $(".dropdown-locations").click(function() {
         }
     })
 
-})
+}
 
 /*===================GET ALL PERSONNEL======================*/
-$(".dropdown-personnel").click(function() {
+$(".dropdown-personnel").click(getAllPersonnel)
+
+function getAllPersonnel() {
 
     $.ajax({
         "url": "libs/php/getAll.php",
@@ -177,11 +182,11 @@ $(".dropdown-personnel").click(function() {
             $(".db-head").html(`
             <tr>
                 <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-name">Surname <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-name">First Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-name">Email <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-name">Department <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-name">Location <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-surname">Surname <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-firstname">First Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-email">Email <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-dept">Department <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-loc">Location <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
                 <th class="db-edDel">Edit / Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
             </tr>
             `)
@@ -189,21 +194,21 @@ $(".dropdown-personnel").click(function() {
             result.data.forEach(item => {
                 $(".db-body").append(`
                 <tr class="emp-row">
-                    <td class="index">${item.id}</td>
-                    <td class="name">${item.lastName}</td>
-                    <td class="name">${item.firstName}</td>
-                    <td class="name">${item.email}</td>
-                    <td class="name">${item.department}</td>
-                    <td class="name">${item.location}</td>
-                    <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
-                    <button type="button" class="btn btn-danger del-btn">Delete</button></td>
+                    <td>${item.id}</td>
+                    <td>${item.lastName}</td>
+                    <td>${item.firstName}</td>
+                    <td>${item.email}</td>
+                    <td>${item.department}</td>
+                    <td>${item.location}</td>
+                    <td><button type="button" class="btn btn-success edit-person-btn">Edit</button>
+                    <button type="button" class="btn btn-danger del-person-btn">Delete</button></td>
                 </tr>
                 `)
             })
         }
     })
 
-})
+}
 
 /*===================SEARCH EMPLOYEES======================*/
 $(".emp-search-btn").click(function() {
@@ -238,8 +243,8 @@ $(".emp-search-btn").click(function() {
                     <td class="name">${item.firstName}</td>
                     <td class="name">${item.email}</td>
                     <td class="name">${item.department}</td>
-                    <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
-                    <button type="button" class="btn btn-danger del-btn">Delete</button></td>
+                    <td class="modify"><button type="button" class="btn btn-success edit-person-btn">Edit</button>
+                    <button type="button" class="btn btn-danger del-person-btn">Delete</button></td>
                 </tr>
                 `)
             })
@@ -284,8 +289,8 @@ $(document).on("keydown", function(e) {
                         <td class="name">${item.firstName}</td>
                         <td class="name">${item.email}</td>
                         <td class="name">${item.department}</td>
-                        <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
-                        <button type="button" class="btn btn-danger del-btn">Delete</button></td>
+                        <td class="modify"><button type="button" class="btn btn-success edit-person-btn">Edit</button>
+                        <button type="button" class="btn btn-danger del-person-btn">Delete</button></td>
                     </tr>
                     `)
                 })
@@ -326,20 +331,21 @@ $("#pdlSelect").on("change", function(e) {
 
             <select class="form-select p-dept" id="deptForm" aria-label="Default select example">
                 <option value="" selected>Department</option>
-                <option value="1">Human Resources</option>
-                <option value="2">Sales</option>
-                <option value="3">Marketing</option>
-                <option value="4">Legal</option>
-                <option value="5">Services</option>
-                <option value="6">Research & Development</option>
-                <option value="7">Product Management</option>
-                <option value="8">Training</option>
-                <option value="9">Support</option>
-                <option value="10">Engineering</option>
-                <option value="11">Accounting</option>
-                <option value="12">Business Development</option>
+
               </select>
             `);
+
+            $.ajax({
+                url: "libs/php/getAllDepartments.php",
+                type: "GET",
+                success: function(result) {
+                    result.data.forEach(item => {
+                        $(".p-dept").append(`<option value="${item.id}">${item.name}</option>`)
+                    })
+                }
+            })
+
+            
             break;
 
         case "department":
@@ -348,14 +354,21 @@ $("#pdlSelect").on("change", function(e) {
 
             <select class="form-select d-location" id="deptLocForm" aria-label="Default select example">
                 <option value="" selected>Department Location</option>
-                <option value="1">London</option>
-                <option value="2">New York</option>
-                <option value="3">Paris</option>
-                <option value="4">Munich</option>
-                <option value="5">Rome</option>
-                <option value="7">Amsterdam</option>
+
               </select>
             `);
+
+            $.ajax({
+                url: "libs/php/getAllLocations.php",
+                type: "GET",
+                success: function(result) {
+                    console.log(result);
+                    result.data.forEach(item => {
+                        $(".d-location").append(`<option value="${item.id}">${item.name}</option>`)
+                    })
+                }
+            })
+
             break;
 
         case "location":
@@ -382,20 +395,7 @@ $(".add-new-btn").click(function() {
                 type: "POST",
                 success: function(result) {
                     console.log(result);
-                    perCount++;
-                    $(".rec-count").text(perCount);
-                    // $(".db-body").append(`
-                    // <tr class="emp-row">
-                    //     <td class="index">103</td>
-                    //     <td class="name">${surname}</td>
-                    //     <td class="name">${firstName}</td>
-                    //     <td class="name">${email}</td>
-                    //     <td class="name">${dept}</td>
-                    //     <td class="name">New York</td>
-                    //     <td class="modify"><button type="button" class="btn btn-success edit-btn">Edit</button>
-                    //     <button type="button" class="btn btn-danger del-btn">Delete</button></td>
-                    // </tr>
-                    // `) THIS AINT WORKING - will need to make another call to getAllPersonel or getPersonnelByID and use result from that to append table
+                    getAllPersonnel();
                 }
             }) 
         } 
@@ -410,14 +410,13 @@ $(".add-new-btn").click(function() {
                 type: "POST",
                 success: function(result) {
                     console.log(result);
+                    getAllDepartments();
                 }
             })
         }
 
     } else if(pdlChoice == "location") {
         const locationName = $(".l-name").val();
-        // when creating new location, need to dynamically insert another option into addDepartment dropdown...could use ajax calls in the switch(pdlChoice) instead
-
 
         if(locationName.length > 0) {
             $.ajax({
@@ -425,6 +424,7 @@ $(".add-new-btn").click(function() {
                 type: "POST",
                 success: function(result) {
                     console.log(result);
+                    getAllLocations();
                 }
             })
         }
@@ -437,13 +437,11 @@ $(".add-new-btn").click(function() {
 
 
 
-
-
 /* TO-DO LIST
 
+    - fix counts for real-time stuff, eg: after row deleted
+    - confirmation box for changes like delete & edit
+    - conditionals to check that no duplicates are added to personnel/location/dept
     - autoincrement id/primary key when new personnel, location, dept added
     - make card vanish from modal when close
-    - update table without needing refresh
-    - change class for 'add to db' button depending on dropdown selection
-    - restore original database
 */
