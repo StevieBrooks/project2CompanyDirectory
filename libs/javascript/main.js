@@ -287,10 +287,10 @@ let pdlChoice = null;
 
 $(".add-btn").click(function() {
     $("#addModal").modal("show");
+    $("#pdlSelect").val("Please Select");
+    $(".pdl-card").first().css("display", "none");
 })
 
-
-$(".pdl-card").first().css("display", "none");
 
 $("#pdlSelect").on("change", function(e) {
     pdlChoice = e.target.value;
@@ -386,46 +386,101 @@ $(".add-new-btn").click(function() {
 
 
     } else if(pdlChoice == "department") {
-        const deptName = $(".d-name").val();
-        const deptLocation = $(".d-location").val();
-
-        if(deptName.length > 0 && deptLocation.length > 0) {
-            $.ajax({
-                url: `libs/php/insertDepartment.php?name=${deptName}&locationID=${deptLocation}`,
-                type: "POST",
-                success: function(result) {
-                    console.log(result);
-                    getAllDepartments();
-                }
-            })
-        }
+        pdlChoiceDepartment();
 
     } else if(pdlChoice == "location") {
-        const locationName = $(".l-name").val();
-
-        if(locationName.length > 0) {
-            $.ajax({
-                url: `libs/php/insertLocation.php?name=${locationName}`,
-                type: "POST",
-                success: function(result) {
-                    console.log(result);
-                    getAllLocations();
-                }
-            })
-        }
+        pdlChoiceLocation();
     }
     
 })
 
-// function validatePersonnelFields() {
-//     firstName = $(".p-fname");
-//     console.log(firstName.val());
-//     if(firstName.val().length > 1) {
-//         firstName.on("blur", function() {
-//             firstName.css("background", "red");
-//         })
-//     }
-// } NOT WORKING AS INTENDED YET
+function pdlChoiceDepartment() {
+
+    const deptName = $(".d-name").val();
+    const deptLocation = $(".d-location").val();
+    let deptPresent = false;
+    console.log(deptLocation);
+
+    $.ajax({
+        url: "libs/php/getAllDepartments.php",
+        type: "GET",
+        success: function(result) {
+            console.log(result);
+            for(item of result.data) {
+                // need convert item.location into integer for below to work
+                if(deptName == item.name && deptLocation == item.location) {
+                    deptPresent = true;
+                    $("#deptDenyModal").modal("show");
+                    $("#addModal").modal("hide");
+                    $("#addModal .pdl-card").css("display", "none");
+                    break;
+                }
+            }
+            // if(!deptPresent) {
+            //     $.ajax({
+            //         url: `libs/php/insertDepartment.php?name=${deptName}&locationID=${deptLocation}`,
+            //         type: "POST",
+            //         success: function(result) {
+            //             console.log(result);
+            //             getAllDepartments();
+            //         }
+            //     })
+            // }
+            // also need to validate department name longer than 0 and highlight box if not
+        }
+    })
+
+        // if(deptName.length > 0 && deptLocation.length > 0) {
+        //     $.ajax({
+        //         url: `libs/php/insertDepartment.php?name=${deptName}&locationID=${deptLocation}`,
+        //         type: "POST",
+        //         success: function(result) {
+        //             console.log(result);
+        //             getAllDepartments();
+        //         }
+        //     })
+        // }
+
+}
+
+function pdlChoiceLocation() {
+
+    const locationName = $(".l-name").val();
+    let locationPresent = false;
+
+    $.ajax({
+        url: "libs/php/getAllLocations.php",
+        type: "GET",
+        success: function(result) {
+            for(item of result.data) {
+                if(locationName == item.name) {
+                    console.log(item.name);
+                    locationPresent = true;
+                    $("#locDenyModal").modal("show");
+                    $("#addModal").modal("hide");
+                    $("#addModal .pdl-card").css("display", "none");
+                    break;
+                } else {
+                    console.log("This item does not exist");
+                }
+            }
+            if(!locationPresent) {
+                $.ajax({
+                    url: `libs/php/insertLocation.php?name=${locationName}`,
+                    type: "POST",
+                    success: function(result) {
+                        console.log(result);
+                        getAllLocations();
+                    }
+                })
+            }
+            // also need to validate location longer than 0 and highlight box if not
+        }
+    })
+
+
+}
+
 
 
 
