@@ -296,7 +296,7 @@ $("#pdlSelect").on("change", function(e) {
     pdlChoice = e.target.value;
     console.log(pdlChoice);
     if(pdlChoice.length > 0) {
-        console.log($(".pdl-card").first());
+        // console.log($(".pdl-card").first());
         $(".pdl-card").first().css("display", "block");
         
     }
@@ -343,7 +343,7 @@ $("#pdlSelect").on("change", function(e) {
                 url: "libs/php/getAllLocations.php",
                 type: "GET",
                 success: function(result) {
-                    console.log(result);
+                    // console.log(result);
                     result.data.forEach(item => {
                         $(".d-location").append(`<option value="${item.id}">${item.name}</option>`)
                     })
@@ -359,7 +359,6 @@ $("#pdlSelect").on("change", function(e) {
             break;
 
     }
-    // validatePersonnelFields(); NOT WORKING AS INTENDED YET - SEE BOTTOM OF PAGE ALSO
 })
 
 $(".add-new-btn").click(function() {
@@ -398,48 +397,55 @@ function pdlChoiceDepartment() {
 
     const deptName = $(".d-name").val();
     const deptLocation = $(".d-location").val();
+    let deptLocConvert = null;
     let deptPresent = false;
     console.log(deptLocation);
 
     $.ajax({
-        url: "libs/php/getAllDepartments.php",
+        url: "libs/php/getAllLocations.php",
         type: "GET",
         success: function(result) {
-            console.log(result);
+            console.log(result.data);
             for(item of result.data) {
-                // need convert item.location into integer for below to work
-                if(deptName == item.name && deptLocation == item.location) {
-                    deptPresent = true;
-                    $("#deptDenyModal").modal("show");
-                    $("#addModal").modal("hide");
-                    $("#addModal .pdl-card").css("display", "none");
+                if(item.id == deptLocation) {
+                    deptLocConvert = item.name;
+                    console.log(deptLocConvert);
                     break;
                 }
             }
-            // if(!deptPresent) {
-            //     $.ajax({
-            //         url: `libs/php/insertDepartment.php?name=${deptName}&locationID=${deptLocation}`,
-            //         type: "POST",
-            //         success: function(result) {
-            //             console.log(result);
-            //             getAllDepartments();
-            //         }
-            //     })
-            // }
-            // also need to validate department name longer than 0 and highlight box if not
         }
     })
 
-        // if(deptName.length > 0 && deptLocation.length > 0) {
-        //     $.ajax({
-        //         url: `libs/php/insertDepartment.php?name=${deptName}&locationID=${deptLocation}`,
-        //         type: "POST",
-        //         success: function(result) {
-        //             console.log(result);
-        //             getAllDepartments();
-        //         }
-        //     })
-        // }
+    setTimeout(function() {
+
+        $.ajax({
+            url: "libs/php/getAllDepartments.php",
+            type: "GET",
+            success: function(result) {
+                console.log(deptLocConvert);
+                for(item of result.data) {
+                    if(deptName == item.name && deptLocConvert == item.location) {
+                        deptPresent = true;
+                        $("#deptDenyModal").modal("show");
+                        $("#addModal").modal("hide");
+                        $("#addModal .pdl-card").css("display", "none");
+                        break;
+                    }
+                }
+                if(!deptPresent) {
+                    $.ajax({
+                        url: `libs/php/insertDepartment.php?name=${deptName}&locationID=${deptLocation}`,
+                        type: "POST",
+                        success: function(result) {
+                            console.log(result);
+                            getAllDepartments();
+                        }
+                    })
+                }
+                // also need to validate department name longer than 0 and highlight box if not
+            }
+        })
+    }, 0o01)
 
 }
 
@@ -489,9 +495,10 @@ function pdlChoiceLocation() {
 
 /* TO-DO LIST
 
+- conditionals to check that no duplicates are added to personnel (MONDAY)
+
     - fix counts for real-time stuff, eg: after row deleted
     - confirmation box for changes like delete & edit
-    - conditionals to check that no duplicates are added to personnel/location/dept
     - autoincrement id/primary key when new personnel, location, dept added
     - make card vanish from modal when close
 */
