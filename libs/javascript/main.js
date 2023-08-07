@@ -29,17 +29,23 @@ $(document).ready(function() {
 tbody.on("click", ".del-person-btn", function(e) {
     let id = e.target.parentElement.parentElement.children[0].innerHTML;
     let persRow = $(e.target.parentElement.parentElement);
-    
 
-    $.ajax({
-        "url": `libs/php/deletePersonnelByID.php?id=${id}`,
-        "type": "DELETE",
-        "success": function() {
+    $("#deleteModal").modal("show");
 
-            persRow.slideUp();
-            getAllPersonnel();
-        }
+    $(".delete-yes").click(function() {
+        
+        $.ajax({
+            "url": `libs/php/deletePersonnelByID.php?id=${id}`,
+            "type": "DELETE",
+            "success": function() {
+
+                persRow.slideUp();
+                getAllPersonnel();
+            }
+        })
+
     })
+
 })
 
 /*===============DELETE DEPARTMENT BY ID==============*/
@@ -47,16 +53,22 @@ tbody.on("click", ".del-dept-btn", function(e) {
     let id = e.target.parentElement.parentElement.children[0].innerHTML;
     let deptRow = $(e.target.parentElement.parentElement);
     
+    $("#deleteModal").modal("show");
 
-    $.ajax({
-        "url": `libs/php/deleteDepartmentByID.php?id=${id}`,
-        "type": "DELETE",
-        "success": function() {
+    $(".delete-yes").click(function() {
 
-            deptRow.slideUp();
-            getAllDepartments();
-        }
+        $.ajax({
+            "url": `libs/php/deleteDepartmentByID.php?id=${id}`,
+            "type": "DELETE",
+            "success": function() {
+    
+                deptRow.slideUp();
+                getAllDepartments();
+            }
+        })
+
     })
+
 })
 
 /*===============DELETE LOCATION BY ID==============*/
@@ -64,16 +76,23 @@ tbody.on("click", ".del-loc-btn", function(e) {
     let id = e.target.parentElement.parentElement.children[0].innerHTML;
     let locRow = $(e.target.parentElement.parentElement);
     
+    $("#deleteModal").modal("show");
 
-    $.ajax({
-        "url": `libs/php/deleteLocationByID.php?id=${id}`,
-        "type": "DELETE",
-        "success": function() {
+    $(".delete-yes").click(function() {
 
-            locRow.slideUp();
-            getAllLocations();
-        }
+        $.ajax({
+            "url": `libs/php/deleteLocationByID.php?id=${id}`,
+            "type": "DELETE",
+            "success": function() {
+    
+                locRow.slideUp();
+                getAllLocations();
+            }
+        })
+
     })
+
+    
 })
 
 /*===================GET ALL DEPTS======================*/
@@ -230,6 +249,10 @@ $(".emp-search-btn").click(function() {
                 `)
             })
 
+            setTimeout(function() {
+                $('.emp-search').val("");
+            }, 0o10)
+
         }
     })
 
@@ -365,33 +388,57 @@ $(".add-new-btn").click(function() {
     console.log(pdlChoice);
 
     if(pdlChoice == "personnel") {
-        const firstName = $(".p-fname").val();
-        const surname = $(".p-sname").val();
-        const email = $(".p-email").val();
-        const dept = $(".p-dept").val();
 
-        if(firstName.length > 0 && surname.length > 0 && email.length > 0 && dept.length > 0) {
-            $.ajax({
-                url: `libs/php/insertPersonnel.php?firstName=${firstName}&lastName=${surname}&email=${email}&departmentID=${dept}`,
-                type: "POST",
-                success: function(result) {
-                    console.log(result);
-                    getAllPersonnel();
-                }
-            }) 
-        } 
-
-
-
+        pdlChoicePersonnel();
 
     } else if(pdlChoice == "department") {
+
         pdlChoiceDepartment();
 
     } else if(pdlChoice == "location") {
+
         pdlChoiceLocation();
+
     }
     
 })
+
+function pdlChoicePersonnel() {
+    const firstName = $(".p-fname").val();
+    const surname = $(".p-sname").val();
+    const email = $(".p-email").val();
+    const dept = $(".p-dept").val();
+    let personPresent = false;
+
+    $.ajax({
+        url: "libs/php/getAllPersonnel.php",
+        type: "GET",
+        success: function(result) {
+            console.log(result);
+            for(item of result.data) {
+                if(item.firstName == firstName && item.lastName == surname && item.email == email) {
+                     personPresent = true;
+                     $("#personDenyModal").modal("show");
+                     $("#addModal").modal("hide");
+                     break;
+                } 
+            }
+            if(!personPresent && firstName.length > 0 && surname.length > 0 && email.length > 0 && dept.length > 0) {
+                $.ajax({
+                    url: `libs/php/insertPersonnel.php?firstName=${firstName}&lastName=${surname}&email=${email}&departmentID=${dept}`,
+                    type: "POST",
+                    success: function(result) {
+                        $("#addModal").modal("hide");
+                        getAllPersonnel();
+                    }
+                })
+            } else if (firstName.length == 0 || surname.length == 0 || email.length == 0 || dept.length == 0) {
+                $("#formWarningModal").modal("show");
+            }
+        }
+    })
+
+}
 
 function pdlChoiceDepartment() {
 
@@ -432,17 +479,19 @@ function pdlChoiceDepartment() {
                         break;
                     }
                 }
-                if(!deptPresent) {
+                if(!deptPresent && deptName.length > 0 && deptLocation.length > 0) {
                     $.ajax({
                         url: `libs/php/insertDepartment.php?name=${deptName}&locationID=${deptLocation}`,
                         type: "POST",
                         success: function(result) {
                             console.log(result);
+                            $("#addModal").modal("hide");
                             getAllDepartments();
                         }
                     })
+                } else if (deptName.length == 0 || deptLocation.length == 0) {
+                    $("#formWarningModal").modal("show");
                 }
-                // also need to validate department name longer than 0 and highlight box if not
             }
         })
     }, 0o01)
@@ -470,17 +519,19 @@ function pdlChoiceLocation() {
                     console.log("This item does not exist");
                 }
             }
-            if(!locationPresent) {
+            if(!locationPresent && locationName.length > 0) {
                 $.ajax({
                     url: `libs/php/insertLocation.php?name=${locationName}`,
                     type: "POST",
                     success: function(result) {
                         console.log(result);
+                        $("#addModal").modal("hide");
                         getAllLocations();
                     }
                 })
+            } else if (locationName.length == 0) {
+                $("#formWarningModal").modal("show");
             }
-            // also need to validate location longer than 0 and highlight box if not
         }
     })
 
@@ -495,10 +546,6 @@ function pdlChoiceLocation() {
 
 /* TO-DO LIST
 
-- conditionals to check that no duplicates are added to personnel (MONDAY)
-
-    - fix counts for real-time stuff, eg: after row deleted
     - confirmation box for changes like delete & edit
     - autoincrement id/primary key when new personnel, location, dept added
-    - make card vanish from modal when close
 */
