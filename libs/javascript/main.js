@@ -52,22 +52,42 @@ tbody.on("click", ".del-person-btn", function(e) {
 tbody.on("click", ".del-dept-btn", function(e) {
     let id = e.target.parentElement.parentElement.children[0].innerHTML;
     let deptRow = $(e.target.parentElement.parentElement);
-    
-    $("#deleteModal").modal("show");
+    let deptActive = false;
+    console.log(id);
 
-    $(".delete-yes").click(function() {
-
-        $.ajax({
-            "url": `libs/php/deleteDepartmentByID.php?id=${id}`,
-            "type": "DELETE",
-            "success": function() {
-    
-                deptRow.slideUp();
-                getAllDepartments();
+    $.ajax({
+        url: "libs/php/getAllPersonnel.php",
+        type: "GET",
+        success: function(result) {
+            console.log(result);
+            for(item of result.data) {
+                if(id == item.departmentID) {
+                    $("#deleteDeptModal").modal("show");
+                    deptActive = true;
+                    break;
+                }
             }
-        })
+            if(!deptActive) {
+                $("#deleteModal").modal("show");
 
+                $(".delete-yes").click(function() {
+
+                    $.ajax({
+                        "url": `libs/php/deleteDepartmentByID.php?id=${id}`,
+                        "type": "DELETE",
+                        "success": function() {
+                
+                            deptRow.slideUp();
+                            getAllDepartments();
+                        }
+                    })
+
+                })
+            }
+        }
     })
+    
+    
 
 })
 
@@ -546,6 +566,8 @@ function pdlChoiceLocation() {
 
 /* TO-DO LIST
 
-    - confirmation box for changes like delete & edit
+    - delete buttons for locations and departments: need to make sure locations have no depts assigned to them and departments have no personnel assigned to them
+    - edit buttons, need to validate that row can be edited 
+    - confirmation box for changes like edit
     - autoincrement id/primary key when new personnel, location, dept added
 */
