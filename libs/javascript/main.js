@@ -92,25 +92,77 @@ tbody.on("click", ".del-dept-btn", function(e) {
 })
 
 /*===============DELETE LOCATION BY ID==============*/
+
+// funny behaviour: add new locations, click delete and then no, then click delete and yes on another. wierd!
 tbody.on("click", ".del-loc-btn", function(e) {
     let id = e.target.parentElement.parentElement.children[0].innerHTML;
     let locRow = $(e.target.parentElement.parentElement);
+    let locNameConvert = null;
+    let locActive = false;
+    console.log(locActive);
     
-    $("#deleteModal").modal("show");
 
-    $(".delete-yes").click(function() {
+    $.ajax({
+        url: "libs/php/getAllLocations.php",
+        type: "GET",
+        success: function(result) {
+            for(item of result.data) {
+                if(id == item.id) {
+                    locNameConvert = item.name;
+                    console.log(locNameConvert);
+                    break;
+                }
+            }
+        }
+    })
 
+    setTimeout(function() {
         $.ajax({
-            "url": `libs/php/deleteLocationByID.php?id=${id}`,
-            "type": "DELETE",
-            "success": function() {
-    
-                locRow.slideUp();
-                getAllLocations();
+            url: "libs/php/getAllDepartments.php",
+            type: "GET",
+            success: function(result) {
+                for(item of result.data) {
+                    if(locNameConvert == item.location) {
+                        console.log(locNameConvert);
+                        $("#deleteLocModal").modal("show");
+                        locActive = true;
+                        break;
+                    }
+                }
+                if(!locActive) {
+                    $("#deleteModal").modal("show");
+                    
+                    $(".delete-yes").click(function() {
+
+                        console.log(locRow);
+                
+                        $.ajax({
+                            "url": `libs/php/deleteLocationByID.php?id=${id}`,
+                            "type": "DELETE",
+                            "success": function() {
+                    
+                                locRow.slideUp();
+                                getAllLocations();
+                            }
+                        })
+                
+                    })
+
+                    $(".delete-no").click(function() {
+                        id = null;
+                        locRow = null;
+                        console.log(id);
+                        console.log(locRow);
+                    })
+
+                }
             }
         })
+    }, 0o10)
 
-    })
+
+    
+
 
     
 })
@@ -544,7 +596,6 @@ function pdlChoiceLocation() {
                     url: `libs/php/insertLocation.php?name=${locationName}`,
                     type: "POST",
                     success: function(result) {
-                        console.log(result);
                         $("#addModal").modal("hide");
                         getAllLocations();
                     }
