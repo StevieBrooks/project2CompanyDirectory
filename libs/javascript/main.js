@@ -25,147 +25,49 @@ $(document).ready(function() {
                 CALLS TO PHP
 ======================================================*/
 
-/*===============DELETE PERSONNEL BY ID==============*/
-tbody.on("click", ".del-person-btn", function(e) {
-    let id = e.target.parentElement.parentElement.children[0].innerHTML;
-    let persRow = $(e.target.parentElement.parentElement);
 
-    $("#deleteModal").modal("show");
+/*===================GET ALL PERSONNEL======================*/
+$(".dropdown-personnel").click(getAllPersonnel)
 
-    $(".delete-yes").click(function() {
-        
-        $.ajax({
-            "url": `libs/php/deletePersonnelByID.php?id=${id}`,
-            "type": "DELETE",
-            "success": function() {
-
-                persRow.slideUp();
-                getAllPersonnel();
-            }
-        })
-
-    })
-
-})
-
-/*===============DELETE DEPARTMENT BY ID==============*/
-tbody.on("click", ".del-dept-btn", function(e) {
-    let id = e.target.parentElement.parentElement.children[0].innerHTML;
-    let deptRow = $(e.target.parentElement.parentElement);
-    let deptActive = false;
-    console.log(id);
+function getAllPersonnel() {
 
     $.ajax({
-        url: "libs/php/getAllPersonnel.php",
-        type: "GET",
-        success: function(result) {
-            console.log(result);
-            for(item of result.data) {
-                if(id == item.departmentID) {
-                    $("#deleteDeptModal").modal("show");
-                    deptActive = true;
-                    break;
-                }
-            }
-            if(!deptActive) {
-                $("#deleteModal").modal("show");
+        "url": "libs/php/getAll.php",
+        "type": "GET",
+        "success": function(result) {
+            $(".rec-count").text(result.data.length);
 
-                $(".delete-yes").click(function() {
-
-                    $.ajax({
-                        "url": `libs/php/deleteDepartmentByID.php?id=${id}`,
-                        "type": "DELETE",
-                        "success": function() {
-                
-                            deptRow.slideUp();
-                            getAllDepartments();
-                        }
-                    })
-
-                })
-            }
-        }
-    })
-    
-    
-
-})
-
-/*===============DELETE LOCATION BY ID==============*/
-
-// funny behaviour: add new locations, click delete and then no, then click delete and yes on another. wierd!
-tbody.on("click", ".del-loc-btn", function(e) {
-    let id = e.target.parentElement.parentElement.children[0].innerHTML;
-    let locRow = $(e.target.parentElement.parentElement);
-    let locNameConvert = null;
-    let locActive = false;
-    console.log(locActive);
-    
-
-    $.ajax({
-        url: "libs/php/getAllLocations.php",
-        type: "GET",
-        success: function(result) {
-            for(item of result.data) {
-                if(id == item.id) {
-                    locNameConvert = item.name;
-                    console.log(locNameConvert);
-                    break;
-                }
-            }
+            $(".db-head").html(`
+            <tr>
+                <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-surname">Surname <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-firstname">First Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-email">Email <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-dept">Department <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-loc">Location <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-edDel">Edit / Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+            </tr>
+            `)
+            $(".db-body").html("");
+            result.data.forEach(item => {
+                $(".db-body").append(`
+                <tr class="emp-row">
+                    <td>${item.id}</td>
+                    <td>${item.lastName}</td>
+                    <td>${item.firstName}</td>
+                    <td>${item.email}</td>
+                    <td>${item.department}</td>
+                    <td>${item.location}</td>
+                    <td><button type="button" class="btn btn-success edit-person-btn">Edit</button>
+                    <button type="button" class="btn btn-danger del-person-btn">Delete</button></td>
+                </tr>
+                `)
+            })
         }
     })
 
-    setTimeout(function() {
-        $.ajax({
-            url: "libs/php/getAllDepartments.php",
-            type: "GET",
-            success: function(result) {
-                for(item of result.data) {
-                    if(locNameConvert == item.location) {
-                        console.log(locNameConvert);
-                        $("#deleteLocModal").modal("show");
-                        locActive = true;
-                        break;
-                    }
-                }
-                if(!locActive) {
-                    $("#deleteModal").modal("show");
-                    
-                    $(".delete-yes").click(function() {
+}
 
-                        console.log(locRow);
-                
-                        $.ajax({
-                            "url": `libs/php/deleteLocationByID.php?id=${id}`,
-                            "type": "DELETE",
-                            "success": function() {
-                    
-                                locRow.slideUp();
-                                getAllLocations();
-                            }
-                        })
-                
-                    })
-
-                    $(".delete-no").click(function() {
-                        id = null;
-                        locRow = null;
-                        console.log(id);
-                        console.log(locRow);
-                    })
-
-                }
-            }
-        })
-    }, 0o10)
-
-
-    
-
-
-    
-})
 
 /*===================GET ALL DEPTS======================*/
 $(".dropdown-departments").click(getAllDepartments)
@@ -240,47 +142,6 @@ function getAllLocations() {
 
 }
 
-/*===================GET ALL PERSONNEL======================*/
-$(".dropdown-personnel").click(getAllPersonnel)
-
-function getAllPersonnel() {
-
-    $.ajax({
-        "url": "libs/php/getAll.php",
-        "type": "GET",
-        "success": function(result) {
-            $(".rec-count").text(result.data.length);
-
-            $(".db-head").html(`
-            <tr>
-                <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-surname">Surname <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-firstname">First Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-email">Email <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-dept">Department <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-loc">Location <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-edDel">Edit / Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-            </tr>
-            `)
-            $(".db-body").html("");
-            result.data.forEach(item => {
-                $(".db-body").append(`
-                <tr class="emp-row">
-                    <td>${item.id}</td>
-                    <td>${item.lastName}</td>
-                    <td>${item.firstName}</td>
-                    <td>${item.email}</td>
-                    <td>${item.department}</td>
-                    <td>${item.location}</td>
-                    <td><button type="button" class="btn btn-success edit-person-btn">Edit</button>
-                    <button type="button" class="btn btn-danger del-person-btn">Delete</button></td>
-                </tr>
-                `)
-            })
-        }
-    })
-
-}
 
 /*===================SEARCH EMPLOYEES======================*/
 $(".emp-search-btn").click(function() {
@@ -606,8 +467,156 @@ function pdlChoiceLocation() {
         }
     })
 
-
 }
+
+/*===============EDIT PERSONNEL==============*/
+
+
+
+
+
+
+
+/*===============DELETE PERSONNEL BY ID==============*/
+
+persID = null;
+persRow = null;
+
+tbody.on("click", ".del-person-btn", function(e) {
+    persID = e.target.parentElement.parentElement.children[0].innerHTML;
+    persRow = $(e.target.parentElement.parentElement);
+
+    $("#deletePModal").modal("show");
+
+})
+
+$(".delete-p-yes").click(function() {
+        
+    $.ajax({
+        "url": `libs/php/deletePersonnelByID.php?id=${persID}`,
+        "type": "DELETE",
+        "success": function() {
+
+            persRow.slideUp();
+            getAllPersonnel();
+        }
+    })
+
+})
+
+/*===============DELETE DEPARTMENT BY ID==============*/
+
+let deptID = null;
+let deptRow = null;
+
+tbody.on("click", ".del-dept-btn", function(e) {
+    deptID = e.target.parentElement.parentElement.children[0].innerHTML;
+    deptRow = $(e.target.parentElement.parentElement);
+    let deptActive = false;
+
+    $.ajax({
+        url: "libs/php/getAllPersonnel.php",
+        type: "GET",
+        success: function(result) {
+            console.log(result);
+            for(item of result.data) {
+                if(deptID == item.departmentID) {
+                    $("#deleteDeptModal").modal("show");
+                    deptActive = true;
+                    break;
+                }
+            }
+            if(!deptActive) {
+                $("#deleteDModal").modal("show");
+
+            }
+        }
+    })
+    
+})
+
+$(".delete-d-yes").click(function() {
+
+    $.ajax({
+        "url": `libs/php/deleteDepartmentByID.php?id=${deptID}`,
+        "type": "DELETE",
+        "success": function() {
+
+            deptRow.slideUp();
+            getAllDepartments();
+        }
+    })
+
+})
+
+/*===============DELETE LOCATION BY ID==============*/
+
+let locID = null;
+let locRow = null;
+let locActive = null;
+
+tbody.on("click", ".del-loc-btn", function(e) {
+    locID = e.target.parentElement.parentElement.children[0].innerHTML;
+    locRow = $(e.target.parentElement.parentElement);
+    let locNameConvert = null;
+    locActive = false;
+    console.log(locActive);
+    
+
+    $.ajax({
+        url: "libs/php/getAllLocations.php",
+        type: "GET",
+        success: function(result) {
+            for(item of result.data) {
+                if(locID == item.id) {
+                    locNameConvert = item.name;
+                    console.log(locNameConvert);
+                    break;
+                }
+            }
+        }
+    })
+
+    setTimeout(function() {
+        $.ajax({
+            url: "libs/php/getAllDepartments.php",
+            type: "GET",
+            success: function(result) {
+                for(item of result.data) {
+                    if(locNameConvert == item.location) {
+                        console.log(locNameConvert);
+                        $("#deleteLocModal").modal("show");
+                        locActive = true;
+                        break;
+                    }
+                }
+                if(!locActive) {
+                    $("#deleteLModal").modal("show");
+                    
+
+                }
+            }
+        })
+    }, 0o10)
+ 
+})
+
+
+$(".delete-l-yes").click(function() {
+
+    console.log(locRow);
+
+    $.ajax({
+        "url": `libs/php/deleteLocationByID.php?id=${locID}`,
+        "type": "DELETE",
+        "success": function() {
+
+            locRow.slideUp();
+            getAllLocations();
+        }
+    })
+
+})
 
 
 
@@ -617,7 +626,6 @@ function pdlChoiceLocation() {
 
 /* TO-DO LIST
 
-    - delete buttons for locations and departments: need to make sure locations have no depts assigned to them and departments have no personnel assigned to them
     - edit buttons, need to validate that row can be edited 
     - confirmation box for changes like edit
     - autoincrement id/primary key when new personnel, location, dept added
