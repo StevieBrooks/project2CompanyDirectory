@@ -471,16 +471,94 @@ function pdlChoiceLocation() {
 
 /*===============EDIT PERSONNEL==============*/
 
+let persID4Edit = null;
+let persSName4Edit = null;
+let persFName4Edit = null;
+let persEmail4Edit = null;
+let persDept4Edit = null;
+let persLoc4Edit = null;
+let deptEditChoice = null;
+let locDropdown4PersonEdit = null;
 
 
+tbody.on("click", ".edit-person-btn", function(e) {
+    persID = e.target.parentElement.parentElement.children[0].innerHTML;
+    persSName4Edit = e.target.parentElement.parentElement.children[1].innerHTML;
+    persFName4Edit = e.target.parentElement.parentElement.children[2].innerHTML;
+    persEmail4Edit = e.target.parentElement.parentElement.children[3].innerHTML;
+    persDept4Edit = e.target.parentElement.parentElement.children[4].innerHTML;
+    persLoc4Edit = e.target.parentElement.parentElement.children[5].innerHTML;
+    $("#editPModal").modal("show");
+    $("#editPLoc").css("display", "none");
+
+    $.ajax({
+        url: "libs/php/getAllDepartments.php",
+        type: "GET",
+        success: function(result) {
+            result.data.forEach(item => {
+                $("#editPDept").append(`
+                <option value="${item.id}">${item.name}</option>
+                `)
+            })
+        }
+    })
+})
+
+$("#editPDept").on("change", function(e) {
+    
+    deptEditChoice = e.target.value;
+
+    $.ajax({
+        url: "libs/php/getAllDepartments.php",
+        type: "GET",
+        success: function(result) {
+            console.log(result);
+            result.data.forEach(item => {
+                if(deptEditChoice == item.id) {
+                    deptEditChoice = item.name;
+                    setTimeout(populateLocDropdown, 0o01);
+                }
+            })
+        }
+    })
+})
+
+function populateLocDropdown() {
+    locDropdown4PersonEdit = [];
+    console.log(deptEditChoice);
+    $.ajax({
+        url: "libs/php/getAllDepartments.php",
+        type: "GET",
+        success: function(result) {
+            result.data.forEach(item => {
+                if(deptEditChoice == item.name) {
+                    locDropdown4PersonEdit.push(item.location);
+                    console.log(locDropdown4PersonEdit);
+                    if(locDropdown4PersonEdit.length > 1) {
+                        $("#editPLoc").css("display", "block");
+                        locDropdown4PersonEdit.forEach(item => {
+                            $("#editPLoc").append(`
+                                <option value="${item}">${item}</option>
+                            `)
+                        })
+                    } else {
+                        $("#editPLoc").css("display", "none");
+                    }
+                }
+            })
+        }
+    })
+}
+
+// need to autofill inputs with current info, then do checks to make sure new inputs ain't duplicates
 
 
 
 
 /*===============DELETE PERSONNEL BY ID==============*/
 
-persID = null;
-persRow = null;
+let persID = null;
+let persRow = null;
 
 tbody.on("click", ".del-person-btn", function(e) {
     persID = e.target.parentElement.parentElement.children[0].innerHTML;
