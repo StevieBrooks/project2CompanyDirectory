@@ -171,7 +171,7 @@
               <input class="edit-firstname" type="text" placeholder="First Name">
               <input class="edit-email" type="email" placeholder="Email">
               <!--FOR DROPDOWNS, NEEDS TO BE DYNAMIC AS MORE CAN BE ADDED-->
-              <select name="editPDept" id="editPDept">
+              <select name="editPDept" id="editPDept" class="edit-dept">
                 <option value="">Select Department</option>
               </select>
               <select name="editPLoc" id="editPLoc">
@@ -179,6 +179,7 @@
               </select>
             </div>
             <div class="modal-footer">
+              <button type="button" class="btn btn-primary edit-p-update" data-bs-dismiss="modal">Update</button>
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
