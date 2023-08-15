@@ -87,7 +87,7 @@ function getAllDepartments() {
                 <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
                 <th class="db-name">Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
                 <th class="db-locationID">Location <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-edDel">Edit / Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-edDel">Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
             </tr>
             `)
             $(".db-body").html("");
@@ -97,8 +97,7 @@ function getAllDepartments() {
                     <td class="index">${item.id}</td>
                     <td class="name">${item.name}</td>
                     <td class="locationID">${item.location}</td>
-                    <td class="modify"><button type="button" class="btn btn-success edit-dept-btn">Edit</button>
-                    <button type="button" class="btn btn-danger del-dept-btn">Delete</button></td>
+                    <td class="modify"><button type="button" class="btn btn-danger del-dept-btn">Delete</button></td>
                 </tr>
                 `)
             })
@@ -123,7 +122,7 @@ function getAllLocations() {
             <tr>
                 <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
                 <th class="db-name">Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-edDel">Edit / Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-edDel">Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
             </tr>
             `)
             $(".db-body").html("");
@@ -132,8 +131,7 @@ function getAllLocations() {
                 <tr class="emp-row">
                     <td class="index">${item.id}</td>
                     <td class="name">${item.name}</td>
-                    <td class="modify"><button type="button" class="btn btn-success edit-loc-btn">Edit</button>
-                    <button type="button" class="btn btn-danger del-loc-btn">Delete</button></td>
+                    <td class="modify"><button type="button" class="btn btn-danger del-loc-btn">Delete</button></td>
                 </tr>
                 `)
             })
@@ -479,6 +477,7 @@ let persDept4Edit = null;
 let persLoc4Edit = null;
 let deptEditChoice = null;
 let locDropdown4PersonEdit = null;
+let editPDeptID = null;
 
 
 tbody.on("click", ".edit-person-btn", function(e) {
@@ -488,8 +487,12 @@ tbody.on("click", ".edit-person-btn", function(e) {
     persEmail4Edit = e.target.parentElement.parentElement.children[3].innerHTML;
     persDept4Edit = e.target.parentElement.parentElement.children[4].innerHTML;
     persLoc4Edit = e.target.parentElement.parentElement.children[5].innerHTML;
-    $("#editPModal").modal("show");
-    $("#editPLoc").css("display", "none");
+    
+
+    $("#editPModal .edit-surname")[0].attributes[2].value = persSName4Edit;
+    $("#editPModal .edit-firstname")[0].attributes[2].value = persFName4Edit;
+    $("#editPModal .edit-email")[0].attributes[2].value = persEmail4Edit;
+
 
     $.ajax({
         url: "libs/php/getAllDepartments.php",
@@ -499,14 +502,30 @@ tbody.on("click", ".edit-person-btn", function(e) {
                 $("#editPDept").append(`
                 <option value="${item.id}">${item.name}</option>
                 `)
+                if(item.name == persDept4Edit) {
+                    editPDeptID = item.id;
+                    setTimeout(popPDeptChoice, 0o10);
+                }
             })
         }
     })
+
 })
+
+function popPDeptChoice() {
+    
+    $("#editPModal .edit-dept").val(editPDeptID);
+    console.log($("#editPModal .edit-dept").val())
+    // need to do dept later, don't forget!
+        
+    $("#editPModal").modal("show");
+    $("#editPLoc").css("display", "none");
+
+}
 
 $("#editPDept").on("change", function(e) {
     
-    deptEditChoice = e.target.value;
+    choice = e.target.value;
 
     $.ajax({
         url: "libs/php/getAllDepartments.php",
@@ -514,41 +533,16 @@ $("#editPDept").on("change", function(e) {
         success: function(result) {
             console.log(result);
             result.data.forEach(item => {
-                if(deptEditChoice == item.id) {
-                    deptEditChoice = item.name;
-                    setTimeout(populateLocDropdown, 0o01);
+                if(choice == item.id) {
+                    choice = item.location;
+                    console.log(choice);
                 }
             })
         }
     })
 })
 
-function populateLocDropdown() {
-    locDropdown4PersonEdit = [];
-    console.log(deptEditChoice);
-    $.ajax({
-        url: "libs/php/getAllDepartments.php",
-        type: "GET",
-        success: function(result) {
-            result.data.forEach(item => {
-                if(deptEditChoice == item.name) {
-                    locDropdown4PersonEdit.push(item.location);
-                    console.log(locDropdown4PersonEdit);
-                    if(locDropdown4PersonEdit.length > 1) {
-                        $("#editPLoc").css("display", "block");
-                        locDropdown4PersonEdit.forEach(item => {
-                            $("#editPLoc").append(`
-                                <option value="${item}">${item}</option>
-                            `)
-                        })
-                    } else {
-                        $("#editPLoc").css("display", "none");
-                    }
-                }
-            })
-        }
-    })
-}
+
 
 // need to autofill inputs with current info, then do checks to make sure new inputs ain't duplicates
 
