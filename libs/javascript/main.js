@@ -554,11 +554,20 @@ $(".edit-p-update").click(function() {
         persFName4Edit = $("#editPModal .edit-firstname").val();
     }
 
-    if($("#editPModal .edit-email").val().length > 4) {
-        persEmail4Edit = $("#editPModal .edit-email").val();
+    const enteredEmail = $("#editPModal .edit-email").val();
+
+    if(isValidEmail(enteredEmail)) {
+        persEmail4Edit = enteredEmail;
+    } else if(enteredEmail.length == 0) {
+        persEmail4Edit = persEmail4Edit;
+        console.log(persEmail4Edit);
+    } else {
+        alert("Please enter a valid email address.");
     }
-    // make function to validate email format
+    
     // make function to check if email exists in db already
+
+
 
     persDept4Edit = $("#editPModal .edit-dept").val();
     
@@ -572,10 +581,12 @@ $(".edit-p-update").click(function() {
         }
     })
 
-    // need to change dept to an integer with ajax call
 })
 
-
+function isValidEmail(email) {
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailPattern.test(email);
+}
 
 
 
