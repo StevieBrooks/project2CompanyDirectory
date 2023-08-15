@@ -474,19 +474,20 @@ let persSName4Edit = null;
 let persFName4Edit = null;
 let persEmail4Edit = null;
 let persDept4Edit = null;
-let persLoc4Edit = null;
+// let persLoc4Edit = null;
 let deptEditChoice = null;
 let locDropdown4PersonEdit = null;
 let editPDeptID = null;
 
 
 tbody.on("click", ".edit-person-btn", function(e) {
-    persID = e.target.parentElement.parentElement.children[0].innerHTML;
+    persID4Edit = e.target.parentElement.parentElement.children[0].innerHTML;
     persSName4Edit = e.target.parentElement.parentElement.children[1].innerHTML;
     persFName4Edit = e.target.parentElement.parentElement.children[2].innerHTML;
     persEmail4Edit = e.target.parentElement.parentElement.children[3].innerHTML;
     persDept4Edit = e.target.parentElement.parentElement.children[4].innerHTML;
-    persLoc4Edit = e.target.parentElement.parentElement.children[5].innerHTML;
+    // persLoc4Edit = e.target.parentElement.parentElement.children[5].innerHTML;
+    $("#editPModal .dept-location").css("display", "none");
     
 
     $("#editPModal .edit-surname")[0].attributes[2].value = persSName4Edit;
@@ -516,7 +517,6 @@ function popPDeptChoice() {
     
     $("#editPModal .edit-dept").val(editPDeptID);
     console.log($("#editPModal .edit-dept").val())
-    // need to do dept later, don't forget!
         
     $("#editPModal").modal("show");
     $("#editPLoc").css("display", "none");
@@ -536,15 +536,46 @@ $("#editPDept").on("change", function(e) {
                 if(choice == item.id) {
                     choice = item.location;
                     console.log(choice);
+                    $("#editPModal .dept-location").css("display", "block");
+                    $("#editPModal .dept-location")[0].attributes[2].value = choice;
                 }
             })
         }
     })
 })
 
+$(".edit-p-update").click(function() {
+
+    if($("#editPModal .edit-surname").val().length > 0) {
+        persSName4Edit = $("#editPModal .edit-surname").val();
+    }
+
+    if($("#editPModal .edit-firstname").val().length > 0) {
+        persFName4Edit = $("#editPModal .edit-firstname").val();
+    }
+
+    if($("#editPModal .edit-email").val().length > 4) {
+        persEmail4Edit = $("#editPModal .edit-email").val();
+    }
+    // make function to validate email format
+    // make function to check if email exists in db already
+
+    persDept4Edit = $("#editPModal .edit-dept").val();
+    
+
+    $.ajax({
+        url: `libs/php/editPersonnel.php?firstName=${persFName4Edit}&lastName=${persSName4Edit}&email=${persEmail4Edit}&departmentID=${persDept4Edit}&id=${persID4Edit}`,
+        type: "POST",
+        success: function(result) {
+            console.log(result);
+            getAllPersonnel();
+        }
+    })
+
+    // need to change dept to an integer with ajax call
+})
 
 
-// need to autofill inputs with current info, then do checks to make sure new inputs ain't duplicates
 
 
 
