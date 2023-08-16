@@ -478,6 +478,8 @@ let persDept4Edit = null;
 let deptEditChoice = null;
 let locDropdown4PersonEdit = null;
 let editPDeptID = null;
+let enteredEmail = null;
+let ajaxCall = null;
 
 
 tbody.on("click", ".edit-person-btn", function(e) {
@@ -546,6 +548,8 @@ $("#editPDept").on("change", function(e) {
 
 $(".edit-p-update").click(function() {
 
+    // need to final check with yes/no modal
+
     if($("#editPModal .edit-surname").val().length > 0) {
         persSName4Edit = $("#editPModal .edit-surname").val();
     }
@@ -554,7 +558,9 @@ $(".edit-p-update").click(function() {
         persFName4Edit = $("#editPModal .edit-firstname").val();
     }
 
-    const enteredEmail = $("#editPModal .edit-email").val();
+    enteredEmail = $("#editPModal .edit-email").val();
+    
+    checkExistingEmail(enteredEmail);
 
     if(isValidEmail(enteredEmail)) {
         persEmail4Edit = enteredEmail;
@@ -562,15 +568,17 @@ $(".edit-p-update").click(function() {
         persEmail4Edit = persEmail4Edit;
         console.log(persEmail4Edit);
     } else {
-        alert("Please enter a valid email address.");
+        $("#editPDeny1").modal("show");
     }
-    
-    // make function to check if email exists in db already
-
 
 
     persDept4Edit = $("#editPModal .edit-dept").val();
     
+
+
+})
+
+ajaxCall = function() {
 
     $.ajax({
         url: `libs/php/editPersonnel.php?firstName=${persFName4Edit}&lastName=${persSName4Edit}&email=${persEmail4Edit}&departmentID=${persDept4Edit}&id=${persID4Edit}`,
@@ -581,12 +589,36 @@ $(".edit-p-update").click(function() {
         }
     })
 
-})
+}
 
 function isValidEmail(email) {
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return emailPattern.test(email);
 }
+
+function checkExistingEmail(emailAddy) {
+    console.log(emailAddy);
+    $.ajax({
+        url: "libs/php/getAllPersonnel.php",
+        type: "GET",
+        success: function(result) {
+            let emailExists = false;
+            for (item of result.data) {
+                if (item.email === emailAddy) {
+                    emailExists = true;
+                    break; 
+                }
+            }
+
+            if (emailExists) {
+                $("#editPDeny2").modal("show");
+            } else {
+                ajaxCall();
+            }
+        }
+    });
+}
+
 
 
 
