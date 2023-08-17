@@ -25,6 +25,8 @@ $(document).ready(function() {
                 CALLS TO PHP
 ======================================================*/
 
+$(".navbar-brand").click(getAllPersonnel);
+
 
 /*===================GET ALL PERSONNEL======================*/
 $(".dropdown-personnel").click(getAllPersonnel)
@@ -45,7 +47,7 @@ function getAllPersonnel() {
                 <th class="db-email">Email <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
                 <th class="db-dept">Department <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
                 <th class="db-loc">Location <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-edDel">Edit / Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-edDel">Edit / Delete</th>
             </tr>
             `)
             $(".db-body").html("");
@@ -56,10 +58,10 @@ function getAllPersonnel() {
                     <td>${item.lastName}</td>
                     <td>${item.firstName}</td>
                     <td>${item.email}</td>
-                    <td>${item.department}</td>
-                    <td>${item.location}</td>
-                    <td><button type="button" class="btn btn-success edit-person-btn">Edit</button>
-                    <button type="button" class="btn btn-danger del-person-btn">Delete</button></td>
+                    <td class="db-dept-item">${item.department}</td>
+                    <td class="db-loc-item">${item.location}</td>
+                    <td><button type="button" class="btn btn-success edit-person-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button type="button" class="btn btn-danger del-person-btn"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
                 `)
             })
@@ -87,7 +89,7 @@ function getAllDepartments() {
                 <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
                 <th class="db-name">Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
                 <th class="db-locationID">Location <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-edDel">Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-edDel">Delete</th>
             </tr>
             `)
             $(".db-body").html("");
@@ -97,7 +99,7 @@ function getAllDepartments() {
                     <td class="index">${item.id}</td>
                     <td class="name">${item.name}</td>
                     <td class="locationID">${item.location}</td>
-                    <td class="modify"><button type="button" class="btn btn-danger del-dept-btn">Delete</button></td>
+                    <td class="modify"><button type="button" class="btn btn-danger del-dept-btn"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
                 `)
             })
@@ -122,7 +124,7 @@ function getAllLocations() {
             <tr>
                 <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
                 <th class="db-name">Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-edDel">Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-edDel">Delete</th>
             </tr>
             `)
             $(".db-body").html("");
@@ -131,7 +133,7 @@ function getAllLocations() {
                 <tr class="emp-row">
                     <td class="index">${item.id}</td>
                     <td class="name">${item.name}</td>
-                    <td class="modify"><button type="button" class="btn btn-danger del-loc-btn">Delete</button></td>
+                    <td class="modify"><button type="button" class="btn btn-danger del-loc-btn"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
                 `)
             })
