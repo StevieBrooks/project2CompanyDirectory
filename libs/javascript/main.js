@@ -54,10 +54,10 @@ function getAllPersonnel() {
             result.data.forEach(item => {
                 $(".db-body").append(`
                 <tr class="emp-row">
-                    <td>${item.id}</td>
+                    <td class="db-index-item">${item.id}</td>
                     <td>${item.lastName}</td>
                     <td>${item.firstName}</td>
-                    <td>${item.email}</td>
+                    <td class="db-email-item">${item.email}</td>
                     <td class="db-dept-item">${item.department}</td>
                     <td class="db-loc-item">${item.location}</td>
                     <td><button type="button" class="btn btn-success edit-person-btn"><i class="fa-solid fa-pen-to-square"></i></button>

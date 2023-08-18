@@ -3,13 +3,24 @@
     top: 4rem;
 }
 
+
+
+
+/*========================TABLE====================*/
+
 .table-container {
     top: 5rem;
     margin: 0;
 }
 
 @media(max-width: 800px) {
-    .db-dept, .db-loc, .db-dept-item, .db-loc-item {
+    .db-email, .db-email-item, .db-dept, .db-dept-item, .db-loc, .db-loc-item {
+        display: none;
+    }
+}
+
+@media(max-width: 400px) {
+    .db-index, .db-index-item {
         display: none;
     }
 }
