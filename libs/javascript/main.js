@@ -29,7 +29,7 @@ $(".navbar-brand").click(getAllPersonnel);
 
 
 /*===================GET ALL PERSONNEL======================*/
-$(".dropdown-personnel").click(getAllPersonnel)
+$(".personnel-btn").click(getAllPersonnel)
 
 function getAllPersonnel() {
 
@@ -41,12 +41,12 @@ function getAllPersonnel() {
 
             $(".db-head").html(`
             <tr>
-                <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-surname">Surname <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-firstname">First Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-email">Email <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-dept">Department <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-loc">Location <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-index">ID</th>
+                <th class="db-surname">Surname</th>
+                <th class="db-firstname">First Name</th>
+                <th class="db-email">Email</th>
+                <th class="db-dept">Department</th>
+                <th class="db-loc">Location</th>
                 <th class="db-edDel">Edit / Delete</th>
             </tr>
             `)
@@ -72,7 +72,7 @@ function getAllPersonnel() {
 
 
 /*===================GET ALL DEPTS======================*/
-$(".dropdown-departments").click(getAllDepartments)
+$(".department-btn").click(getAllDepartments)
 
 function getAllDepartments() {
 
@@ -86,9 +86,9 @@ function getAllDepartments() {
             // console.log(departmentArr);
             $(".db-head").html(`
             <tr>
-                <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-name">Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-locationID">Location <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-index">ID</th>
+                <th class="db-name">Name</th>
+                <th class="db-locationID">Location</th>
                 <th class="db-edDel">Delete</th>
             </tr>
             `)
@@ -109,7 +109,7 @@ function getAllDepartments() {
 }
 
 /*===================GET ALL LOCATIONS======================*/
-$(".dropdown-locations").click(getAllLocations)
+$(".location-btn").click(getAllLocations)
 
 function getAllLocations() {
 
@@ -122,8 +122,8 @@ function getAllLocations() {
             // console.log(locationArr);
             $(".db-head").html(`
             <tr>
-                <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-name">Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-index">ID</th>
+                <th class="db-name">Name</th>
                 <th class="db-edDel">Delete</th>
             </tr>
             `)
@@ -158,12 +158,12 @@ $(".emp-search-btn").click(function() {
             
             $(".db-head").html(`
             <tr>
-                <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-name">Surname <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-name">First Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-name">Email <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-name">Department <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                <th class="db-edDel">Edit / Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                <th class="db-index">ID</th>
+                <th class="db-name">Surname</th>
+                <th class="db-name">First Name</th>
+                <th class="db-name">Email</th>
+                <th class="db-name">Department</th>
+                <th class="db-edDel">Edit / Delete</th>
             </tr>
             `)
 
@@ -197,7 +197,7 @@ $(document).on("keydown", function(e) {
 
     if(e.originalEvent.keyCode == 13 && empQuery.length > 0) {
 
-        console.log(empQuery.length);
+        console.log(empQuery);
 
         $.ajax({
             "url": `libs/php/search.php?empQuery=${empQuery}`,
@@ -208,12 +208,12 @@ $(document).on("keydown", function(e) {
                 
                 $(".db-head").html(`
                 <tr>
-                    <th class="db-index">ID <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                    <th class="db-name">Surname <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                    <th class="db-name">First Name <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                    <th class="db-name">Email <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                    <th class="db-name">Department <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
-                    <th class="db-edDel">Edit / Delete <span><i class="fa-solid fa-caret-down fa-sm"></i></span></th>
+                    <th class="db-index">ID</th>
+                    <th class="db-name">Surname</th>
+                    <th class="db-name">First Name</th>
+                    <th class="db-name">Email</th>
+                    <th class="db-name">Department</th>
+                    <th class="db-edDel">Edit / Delete</th>
                 </tr>
                 `)
     
