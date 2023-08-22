@@ -41,7 +41,6 @@ function getAllPersonnel() {
 
             $(".db-head").html(`
             <tr>
-                <th class="db-index">ID</th>
                 <th class="db-surname">Surname</th>
                 <th class="db-firstname">First Name</th>
                 <th class="db-email">Email</th>
@@ -54,14 +53,13 @@ function getAllPersonnel() {
             result.data.forEach(item => {
                 $(".db-body").append(`
                 <tr class="emp-row">
-                    <td class="db-index-item">${item.id}</td>
                     <td>${item.lastName}</td>
                     <td>${item.firstName}</td>
                     <td class="db-email-item">${item.email}</td>
                     <td class="db-dept-item">${item.department}</td>
                     <td class="db-loc-item">${item.location}</td>
-                    <td><button type="button" class="btn btn-success edit-person-btn"><i class="fa-solid fa-pen-to-square"></i></button>
-                    <button type="button" class="btn btn-danger del-person-btn"><i class="fa-solid fa-trash"></i></button></td>
+                    <td><button type="button" class="btn btn-success edit-person-btn">Edit</button>
+                    <button type="button" class="btn btn-danger del-person-btn">Delete</button></td>
                 </tr>
                 `)
             })
@@ -158,7 +156,6 @@ $(".emp-search-btn").click(function() {
             
             $(".db-head").html(`
             <tr>
-                <th class="db-index">ID</th>
                 <th class="db-name">Surname</th>
                 <th class="db-name">First Name</th>
                 <th class="db-name">Email</th>
@@ -171,7 +168,6 @@ $(".emp-search-btn").click(function() {
             result.data.forEach(item => {
                 $(".db-body").append(`
                 <tr class="emp-row">
-                    <td class="index">${item.id}</td>
                     <td class="name">${item.lastName}</td>
                     <td class="name">${item.firstName}</td>
                     <td class="name">${item.email}</td>
@@ -208,7 +204,6 @@ $(document).on("keydown", function(e) {
                 
                 $(".db-head").html(`
                 <tr>
-                    <th class="db-index">ID</th>
                     <th class="db-name">Surname</th>
                     <th class="db-name">First Name</th>
                     <th class="db-name">Email</th>
@@ -221,7 +216,6 @@ $(document).on("keydown", function(e) {
                 result.data.forEach(item => {
                     $(".db-body").append(`
                     <tr class="emp-row">
-                        <td class="index">${item.id}</td>
                         <td class="name">${item.lastName}</td>
                         <td class="name">${item.firstName}</td>
                         <td class="name">${item.email}</td>
@@ -550,8 +544,6 @@ $("#editPDept").on("change", function(e) {
 
 $(".edit-p-update").click(function() {
 
-    // need to final check with yes/no modal
-
     if($("#editPModal .edit-surname").val().length > 0) {
         persSName4Edit = $("#editPModal .edit-surname").val();
     }
@@ -627,11 +619,12 @@ function checkExistingEmail(emailAddy) {
 
 /*===============DELETE PERSONNEL BY ID==============*/
 
-let persID = null;
+let persEmail = null;
 let persRow = null;
 
 tbody.on("click", ".del-person-btn", function(e) {
-    persID = e.target.parentElement.parentElement.children[0].innerHTML;
+    persEmail = e.target.parentElement.parentElement.children[2].innerHTML;
+    console.log(e.target.parentElement.parentElement.children[2].innerHTML);
     persRow = $(e.target.parentElement.parentElement);
 
     $("#deletePModal").modal("show");
@@ -641,7 +634,7 @@ tbody.on("click", ".del-person-btn", function(e) {
 $(".delete-p-yes").click(function() {
         
     $.ajax({
-        "url": `libs/php/deletePersonnelByID.php?id=${persID}`,
+        "url": `libs/php/deletePersonnelByID.php?email=${persEmail}`,
         "type": "DELETE",
         "success": function() {
 
