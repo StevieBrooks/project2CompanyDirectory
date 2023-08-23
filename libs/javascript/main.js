@@ -470,7 +470,6 @@ let persSName4Edit = null;
 let persFName4Edit = null;
 let persEmail4Edit = null;
 let persDept4Edit = null;
-// let persLoc4Edit = null;
 let deptEditChoice = null;
 let locDropdown4PersonEdit = null;
 let editPDeptID = null;
@@ -479,20 +478,27 @@ let ajaxCall = null;
 
 
 tbody.on("click", ".edit-person-btn", function(e) {
-    persID4Edit = e.target.parentElement.parentElement.children[0].innerHTML;
-    persSName4Edit = e.target.parentElement.parentElement.children[1].innerHTML;
-    persFName4Edit = e.target.parentElement.parentElement.children[2].innerHTML;
-    persEmail4Edit = e.target.parentElement.parentElement.children[3].innerHTML;
-    persDept4Edit = e.target.parentElement.parentElement.children[4].innerHTML;
-    // persLoc4Edit = e.target.parentElement.parentElement.children[5].innerHTML;
+    persSName4Edit = e.target.parentElement.parentElement.children[0].innerHTML;
+    persFName4Edit = e.target.parentElement.parentElement.children[1].innerHTML;
+    persEmail4Edit = e.target.parentElement.parentElement.children[2].innerHTML;
+    persDept4Edit = e.target.parentElement.parentElement.children[3].innerHTML;
+    console.log(persEmail4Edit);
+    enteredEmail = persEmail4Edit;
     $("#editPModal .dept-location").css("display", "none");
     
 
     $("#editPModal .edit-surname")[0].attributes[2].value = persSName4Edit;
     $("#editPModal .edit-firstname")[0].attributes[2].value = persFName4Edit;
     $("#editPModal .edit-email")[0].attributes[2].value = persEmail4Edit;
+    console.log($("#editPModal .edit-email")[0].attributes[2].value);
 
+    popPDeptMenu();
+    getPersonnelID();
 
+})
+
+function popPDeptMenu() {
+    
     $.ajax({
         url: "libs/php/getAllDepartments.php",
         type: "GET",
@@ -509,12 +515,23 @@ tbody.on("click", ".edit-person-btn", function(e) {
         }
     })
 
-})
+}
+
+function getPersonnelID() {
+
+    $.ajax({
+        url: `libs/php/getPersonnelByEmail.php?email=${persEmail4Edit}`,
+        type: "GET",
+        success: function(result) {
+            persID4Edit = result.data.personnel[0].id;
+            console.log(persID4Edit);
+        }
+    })
+}
 
 function popPDeptChoice() {
     
     $("#editPModal .edit-dept").val(editPDeptID);
-    console.log($("#editPModal .edit-dept").val())
         
     $("#editPModal").modal("show");
     $("#editPLoc").css("display", "none");
@@ -524,6 +541,7 @@ function popPDeptChoice() {
 $("#editPDept").on("change", function(e) {
     
     choice = e.target.value;
+    console.log(choice);
 
     $.ajax({
         url: "libs/php/getAllDepartments.php",
@@ -552,7 +570,12 @@ $(".edit-p-update").click(function() {
         persFName4Edit = $("#editPModal .edit-firstname").val();
     }
 
-    enteredEmail = $("#editPModal .edit-email").val();
+    if($("#editPModal .edit-email").val().length > 4) {
+
+        enteredEmail = $("#editPModal .edit-email").val();
+    }
+
+    console.log(enteredEmail);
     
     checkExistingEmail(enteredEmail);
 
