@@ -52,14 +52,14 @@ function getAllPersonnel() {
             $(".db-body").html("");
             result.data.forEach(item => {
                 $(".db-body").append(`
-                <tr class="emp-row">
+                <tr class="emp-row" data-empid="${item.id}">
                     <td>${item.lastName}</td>
                     <td>${item.firstName}</td>
                     <td class="db-email-item">${item.email}</td>
                     <td class="db-dept-item">${item.department}</td>
                     <td class="db-loc-item">${item.location}</td>
-                    <td><button type="button" class="btn btn-success edit-person-btn">Edit</button>
-                    <button type="button" class="btn btn-danger del-person-btn">Delete</button></td>
+                    <td><button type="button" class="btn btn-success edit-person-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button type="button" class="btn btn-danger del-person-btn"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
                 `)
             })
@@ -84,7 +84,6 @@ function getAllDepartments() {
             // console.log(departmentArr);
             $(".db-head").html(`
             <tr>
-                <th class="db-index">ID</th>
                 <th class="db-name">Name</th>
                 <th class="db-locationID">Location</th>
                 <th class="db-edDel">Delete</th>
@@ -93,8 +92,7 @@ function getAllDepartments() {
             $(".db-body").html("");
             result.data.forEach(item => {
                 $(".db-body").append(`
-                <tr class="emp-row">
-                    <td class="index">${item.id}</td>
+                <tr class="emp-row" data-deptid="${item.id}">
                     <td class="name">${item.name}</td>
                     <td class="locationID">${item.location}</td>
                     <td class="modify"><button type="button" class="btn btn-danger del-dept-btn"><i class="fa-solid fa-trash"></i></button></td>
@@ -120,7 +118,6 @@ function getAllLocations() {
             // console.log(locationArr);
             $(".db-head").html(`
             <tr>
-                <th class="db-index">ID</th>
                 <th class="db-name">Name</th>
                 <th class="db-edDel">Delete</th>
             </tr>
@@ -128,8 +125,7 @@ function getAllLocations() {
             $(".db-body").html("");
             result.data.forEach(item => {
                 $(".db-body").append(`
-                <tr class="emp-row">
-                    <td class="index">${item.id}</td>
+                <tr class="emp-row" data-locid="${item.id}">
                     <td class="name">${item.name}</td>
                     <td class="modify"><button type="button" class="btn btn-danger del-loc-btn"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
@@ -178,9 +174,9 @@ $(".emp-search-btn").click(function() {
                 `)
             })
 
-            setTimeout(function() {
-                $('.emp-search').val("");
-            }, 0o10)
+            // setTimeout(function() {
+            //     $('.emp-search').val("");
+            // }, 0o10)
 
         }
     })
@@ -478,27 +474,21 @@ let ajaxCall = null;
 
 
 tbody.on("click", ".edit-person-btn", function(e) {
-    persSName4Edit = e.target.parentElement.parentElement.children[0].innerHTML;
-    persFName4Edit = e.target.parentElement.parentElement.children[1].innerHTML;
-    persEmail4Edit = e.target.parentElement.parentElement.children[2].innerHTML;
-    persDept4Edit = e.target.parentElement.parentElement.children[3].innerHTML;
-    console.log(persEmail4Edit);
-    enteredEmail = persEmail4Edit;
+    persID4Edit = this.parentElement.parentElement.attributes[1].nodeValue;
+    console.log(persID4Edit);
+    persSName4Edit = this.parentElement.parentElement.children[0].innerHTML;
+    persFName4Edit = this.parentElement.parentElement.children[1].innerHTML;
+    persEmail4Edit = this.parentElement.parentElement.children[2].innerHTML;
+    persDept4Edit = this.parentElement.parentElement.children[3].innerHTML;
+    $("#editPModal").modal("show");
     $("#editPModal .dept-location").css("display", "none");
     
 
     $("#editPModal .edit-surname")[0].attributes[2].value = persSName4Edit;
     $("#editPModal .edit-firstname")[0].attributes[2].value = persFName4Edit;
     $("#editPModal .edit-email")[0].attributes[2].value = persEmail4Edit;
-    console.log($("#editPModal .edit-email")[0].attributes[2].value);
 
-    popPDeptMenu();
-    getPersonnelID();
 
-})
-
-function popPDeptMenu() {
-    
     $.ajax({
         url: "libs/php/getAllDepartments.php",
         type: "GET",
@@ -515,19 +505,7 @@ function popPDeptMenu() {
         }
     })
 
-}
-
-function getPersonnelID() {
-
-    $.ajax({
-        url: `libs/php/getPersonnelByEmail.php?email=${persEmail4Edit}`,
-        type: "GET",
-        success: function(result) {
-            persID4Edit = result.data.personnel[0].id;
-            console.log(persID4Edit);
-        }
-    })
-}
+})
 
 function popPDeptChoice() {
     
@@ -541,7 +519,6 @@ function popPDeptChoice() {
 $("#editPDept").on("change", function(e) {
     
     choice = e.target.value;
-    console.log(choice);
 
     $.ajax({
         url: "libs/php/getAllDepartments.php",
@@ -570,12 +547,7 @@ $(".edit-p-update").click(function() {
         persFName4Edit = $("#editPModal .edit-firstname").val();
     }
 
-    if($("#editPModal .edit-email").val().length > 4) {
-
-        enteredEmail = $("#editPModal .edit-email").val();
-    }
-
-    console.log(enteredEmail);
+    enteredEmail = $("#editPModal .edit-email").val();
     
     checkExistingEmail(enteredEmail);
 
@@ -642,12 +614,12 @@ function checkExistingEmail(emailAddy) {
 
 /*===============DELETE PERSONNEL BY ID==============*/
 
-let persEmail = null;
+let persID = null;
 let persRow = null;
 
 tbody.on("click", ".del-person-btn", function(e) {
-    persEmail = e.target.parentElement.parentElement.children[2].innerHTML;
-    console.log(e.target.parentElement.parentElement.children[2].innerHTML);
+    persID = this.parentElement.parentElement.attributes[1].nodeValue;
+    // console.log(this.parentElement.parentElement.attributes);
     persRow = $(e.target.parentElement.parentElement);
 
     $("#deletePModal").modal("show");
@@ -657,7 +629,7 @@ tbody.on("click", ".del-person-btn", function(e) {
 $(".delete-p-yes").click(function() {
         
     $.ajax({
-        "url": `libs/php/deletePersonnelByID.php?email=${persEmail}`,
+        "url": `libs/php/deletePersonnelByID.php?id=${persID}`,
         "type": "DELETE",
         "success": function() {
 
@@ -674,7 +646,7 @@ let deptID = null;
 let deptRow = null;
 
 tbody.on("click", ".del-dept-btn", function(e) {
-    deptID = e.target.parentElement.parentElement.children[0].innerHTML;
+    deptID = this.parentElement.parentElement.attributes[1].nodeValue;
     deptRow = $(e.target.parentElement.parentElement);
     let deptActive = false;
 
@@ -720,7 +692,7 @@ let locRow = null;
 let locActive = null;
 
 tbody.on("click", ".del-loc-btn", function(e) {
-    locID = e.target.parentElement.parentElement.children[0].innerHTML;
+    locID = this.parentElement.parentElement.attributes[1].nodeValue;
     locRow = $(e.target.parentElement.parentElement);
     let locNameConvert = null;
     locActive = false;

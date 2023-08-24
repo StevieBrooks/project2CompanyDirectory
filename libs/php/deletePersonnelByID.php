@@ -37,9 +37,9 @@
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
-	$query = $conn->prepare('DELETE FROM personnel WHERE email = ?');
+	$query = $conn->prepare('DELETE FROM personnel WHERE id = ?');
 	
-	$query->bind_param("s", $_REQUEST['email']);
+	$query->bind_param("i", $_REQUEST['id']);
 
 	$query->execute();
 	
