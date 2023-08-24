@@ -138,10 +138,11 @@ function getAllLocations() {
 
 
 /*===================SEARCH EMPLOYEES======================*/
-$(".emp-search-btn").click(function() {
+$(".emp-search-btn").click(function(e) {
+
+    e.preventDefault();
 
     empQuery = $(".emp-search").val();
-    console.log(empQuery);
 
     $.ajax({
         "url": `libs/php/search.php?empQuery=${empQuery}`,
@@ -163,21 +164,21 @@ $(".emp-search-btn").click(function() {
             $(".db-body").html("");
             result.data.forEach(item => {
                 $(".db-body").append(`
-                <tr class="emp-row">
+                <tr class="emp-row" data-empid="${item.id}">
                     <td class="name">${item.lastName}</td>
                     <td class="name">${item.firstName}</td>
                     <td class="name">${item.email}</td>
                     <td class="name">${item.department}</td>
-                    <td class="modify"><button type="button" class="btn btn-success edit-person-btn">Edit</button>
-                    <button type="button" class="btn btn-danger del-person-btn">Delete</button></td>
+                    <td class="modify"><button type="button" class="btn btn-success edit-person-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button type="button" class="btn btn-danger del-person-btn"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
                 `)
             })
 
-            // setTimeout(function() {
-            //     $('.emp-search').val("");
-            // }, 0o10)
-
+            
+            setTimeout(function() {
+                $('.emp-search').val("");
+            }, 0o10)
         }
     })
 
@@ -188,8 +189,6 @@ $(document).on("keydown", function(e) {
     empQuery = $(".emp-search").val();
 
     if(e.originalEvent.keyCode == 13 && empQuery.length > 0) {
-
-        console.log(empQuery);
 
         $.ajax({
             "url": `libs/php/search.php?empQuery=${empQuery}`,
@@ -216,8 +215,8 @@ $(document).on("keydown", function(e) {
                         <td class="name">${item.firstName}</td>
                         <td class="name">${item.email}</td>
                         <td class="name">${item.department}</td>
-                        <td class="modify"><button type="button" class="btn btn-success edit-person-btn">Edit</button>
-                        <button type="button" class="btn btn-danger del-person-btn">Delete</button></td>
+                        <td class="modify"><button type="button" class="btn btn-success edit-person-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button type="button" class="btn btn-danger del-person-btn"><i class="fa-solid fa-trash"></i></button></td>
                     </tr>
                     `)
                 })
