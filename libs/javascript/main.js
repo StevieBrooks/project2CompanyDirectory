@@ -153,10 +153,10 @@ $(".emp-search-btn").click(function(e) {
             
             $(".db-head").html(`
             <tr>
-                <th class="db-name">Surname</th>
-                <th class="db-name">First Name</th>
-                <th class="db-name">Email</th>
-                <th class="db-name">Department</th>
+                <th class="db-surname">Surname</th>
+                <th class="db-firstname">First Name</th>
+                <th class="db-email">Email</th>
+                <th class="db-dept">Department</th>
                 <th class="db-edDel">Edit / Delete</th>
             </tr>
             `)
@@ -165,10 +165,10 @@ $(".emp-search-btn").click(function(e) {
             result.data.forEach(item => {
                 $(".db-body").append(`
                 <tr class="emp-row" data-empid="${item.id}">
-                    <td class="name">${item.lastName}</td>
-                    <td class="name">${item.firstName}</td>
-                    <td class="name">${item.email}</td>
-                    <td class="name">${item.department}</td>
+                    <td>${item.lastName}</td>
+                    <td>${item.firstName}</td>
+                    <td class="db-email-item">${item.email}</td>
+                    <td class="db-dept-item">${item.department}</td>
                     <td class="modify"><button type="button" class="btn btn-success edit-person-btn"><i class="fa-solid fa-pen-to-square"></i></button>
                     <button type="button" class="btn btn-danger del-person-btn"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
@@ -199,10 +199,10 @@ $(document).on("keydown", function(e) {
                 
                 $(".db-head").html(`
                 <tr>
-                    <th class="db-name">Surname</th>
-                    <th class="db-name">First Name</th>
-                    <th class="db-name">Email</th>
-                    <th class="db-name">Department</th>
+                    <th class="db-surname">Surname</th>
+                    <th class="db-firstname">First Name</th>
+                    <th class="db-email">Email</th>
+                    <th class="db-dept">Department</th>
                     <th class="db-edDel">Edit / Delete</th>
                 </tr>
                 `)
@@ -210,11 +210,11 @@ $(document).on("keydown", function(e) {
                 $(".db-body").html("");
                 result.data.forEach(item => {
                     $(".db-body").append(`
-                    <tr class="emp-row">
-                        <td class="name">${item.lastName}</td>
-                        <td class="name">${item.firstName}</td>
-                        <td class="name">${item.email}</td>
-                        <td class="name">${item.department}</td>
+                    <tr class="emp-row"data-empid="${item.id}">
+                        <td>${item.lastName}</td>
+                        <td>${item.firstName}</td>
+                        <td class="db-email-item">${item.email}</td>
+                        <td class="db-dept-item">${item.department}</td>
                         <td class="modify"><button type="button" class="btn btn-success edit-person-btn"><i class="fa-solid fa-pen-to-square"></i></button>
                         <button type="button" class="btn btn-danger del-person-btn"><i class="fa-solid fa-trash"></i></button></td>
                     </tr>
