@@ -561,6 +561,12 @@ $(".edit-p-update").click(function() {
 
 
     persDept4Edit = $("#editPModal .edit-dept").val();
+
+    setTimeout(function() {
+        $("#editPModal .edit-surname").val("");
+        $("#editPModal .edit-firstname").val("");
+        $("#editPModal .edit-email").val("");
+    }, 1000)
     
 
 
