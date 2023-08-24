@@ -20,6 +20,10 @@
     top: 5rem;
     margin: 0;
 }
+/* 
+.db-index, .db-index-item {
+    display: none;
+} */
 
 @media(max-width: 992px) {
     .db-email, .db-email-item {

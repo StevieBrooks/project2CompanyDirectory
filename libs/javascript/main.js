@@ -250,13 +250,13 @@ $("#pdlSelect").on("change", function(e) {
         case "personnel":
             
             $(".pdl-card .card-body").html(`
-            <input type="text" class="form-control p-fname" id="formControlInput1" placeholder="First Name....">
+            <input type="text" class="form-control p-fname my-2" id="formControlInput1" placeholder="First Name....">
             
-            <input type="text" class="form-control p-sname" id="formControlInput2" placeholder="Surname...">
+            <input type="text" class="form-control p-sname my-2" id="formControlInput2" placeholder="Surname...">
 
-            <input type="email" class="form-control p-email" id="formControlInput3" placeholder="Email">
+            <input type="email" class="form-control p-email my-2" id="formControlInput3" placeholder="Email">
 
-            <select class="form-select p-dept" id="deptForm" aria-label="Default select example">
+            <select class="form-select p-dept my-2" id="deptForm" aria-label="Default select example">
                 <option value="" selected>Department</option>
 
               </select>
@@ -276,9 +276,9 @@ $("#pdlSelect").on("change", function(e) {
 
         case "department":
             $(".pdl-card .card-body").html(`
-            <input type="text" class="form-control d-name" id="formControlInput1" placeholder="Department name...">
+            <input type="text" class="form-control d-name my-2" id="formControlInput1" placeholder="Department name...">
 
-            <select class="form-select d-location" id="deptLocForm" aria-label="Default select example">
+            <select class="form-select d-location my-2" id="deptLocForm" aria-label="Default select example">
                 <option value="" selected>Department Location</option>
 
               </select>
