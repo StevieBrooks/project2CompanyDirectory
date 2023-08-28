@@ -13,17 +13,31 @@
 
     <link rel="stylesheet" href="libs/css/style.css">
 
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
 
     <title>Company Directory</title>
 </head>
 <body>
     
-    <nav class="navbar navbar-expand-lg bg-primary position-fixed w-100 z-3">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">Company X</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <nav class="navbar navbar-expand-lg bg-primary position-fixed w-100 top-0 z-3">
+        <div class="container-fluid d-flex justify-content-between">
+
+          <a class="navbar-brand" href="#"><button type="button" class="btn btn-primary border border-light">Company X</button></a>
+
+          <div class="btn-group alter-buttons mx-3 z-2" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-primary border border-light">Count: <span class="rec-count"></span></button>
+            <button type="button" class="btn btn-primary border border-light personnel-btn"><i class="fa-solid fa-users"></i></button>
+            <button type="button" class="btn btn-primary border border-light department-btn"><i class="fa-solid fa-building"></i></button>
+            <button type="button" class="btn btn-primary border border-light location-btn"><i class="fa-solid fa-earth-americas"></i></button>
+            <button type="button" class="btn btn-primary border border-light add-btn">Add+</button>
+          </div>
+
+          <button class="navbar-toggler btn-primary border border-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
+
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
             <form class="d-flex search-bar" role="search">
@@ -35,13 +49,7 @@
         </div>
       </nav>
 
-      <div class="btn-group alter-buttons mt-3 mx-3 z-2" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-info">Count: <span class="rec-count"></span></button>
-        <button type="button" class="btn btn-primary personnel-btn"><i class="fa-solid fa-users"></i></button>
-        <button type="button" class="btn btn-primary department-btn"><i class="fa-solid fa-building"></i></button>
-        <button type="button" class="btn btn-primary location-btn"><i class="fa-solid fa-earth-americas"></i></button>
-        <button type="button" class="btn btn-primary add-btn">Add+</button>
-      </div>
+      
 
       <div class="container table-container my-3 position-relative mx-auto">
         <table class="table table-primary table-hover">
