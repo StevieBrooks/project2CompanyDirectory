@@ -8,6 +8,9 @@ let personnelArr = null;
 let tbody = $("table tbody");
 let perCount = 0;
 let empQuery = null;
+const navItemPers = $(".nav-item-pers");
+const navItemDept = $(".nav-item-dept");
+const navItemLoc = $(".nav-item-loc");
 // DOUBLE CHECK THESE VARIABLES - THINK PERCOUNT AND THE ARR VARIABLES UNNECESSARY
 
 
@@ -18,6 +21,8 @@ let empQuery = null;
 
 $(document).ready(function() {
     getAllPersonnel();    
+    navItemPers.addClass("show");
+    console.log(navItemPers);
 })
 
 
@@ -29,9 +34,13 @@ $(".navbar-brand").click(getAllPersonnel);
 
 
 /*===================GET ALL PERSONNEL======================*/
-$(".personnel-btn").click(getAllPersonnel)
+$("#personnelBtn").click(getAllPersonnel)
 
 function getAllPersonnel() {
+
+    navItemPers.addClass("show");
+    navItemDept.removeClass("show");
+    navItemLoc.removeClass("show");
 
     $.ajax({
         "url": "libs/php/getAll.php",
@@ -44,6 +53,7 @@ function getAllPersonnel() {
                 <th class="db-surname">Surname</th>
                 <th class="db-firstname">First Name</th>
                 <th class="db-email">Email</th>
+                <th class="db-jobtitle">Job Title</th>
                 <th class="db-dept">Department</th>
                 <th class="db-loc">Location</th>
                 <th class="db-edDel">Edit / Delete</th>
@@ -56,6 +66,7 @@ function getAllPersonnel() {
                     <td>${item.lastName}</td>
                     <td>${item.firstName}</td>
                     <td class="db-email-item">${item.email}</td>
+                    <td class="db-jobtitle-item">${item.jobTitle}</td>
                     <td class="db-dept-item">${item.department}</td>
                     <td class="db-loc-item">${item.location}</td>
                     <td><button type="button" class="btn btn-success edit-person-btn"><i class="fa-solid fa-pen-to-square"></i></button>
@@ -70,9 +81,14 @@ function getAllPersonnel() {
 
 
 /*===================GET ALL DEPTS======================*/
-$(".department-btn").click(getAllDepartments)
+$("#departmentsBtn").click(getAllDepartments)
+
 
 function getAllDepartments() {
+
+    navItemPers.removeClass("show");
+    navItemDept.addClass("show");
+    navItemLoc.removeClass("show");
 
     $.ajax({
         "url": "libs/php/getAllDepartments.php",
@@ -105,9 +121,13 @@ function getAllDepartments() {
 }
 
 /*===================GET ALL LOCATIONS======================*/
-$(".location-btn").click(getAllLocations)
+$("#locationsBtn").click(getAllLocations)
 
 function getAllLocations() {
+
+    navItemPers.removeClass("show");
+    navItemDept.removeClass("show");
+    navItemLoc.addClass("show");
 
     $.ajax({
         "url": "libs/php/getAllLocations.php",
@@ -148,6 +168,7 @@ $(".emp-search-btn").click(function(e) {
         "url": `libs/php/search.php?empQuery=${empQuery}`,
         "type": "GET",
         "success": function(result) {
+
             console.log(result);
             $(".rec-count").text(result.data.length);
             
@@ -156,6 +177,7 @@ $(".emp-search-btn").click(function(e) {
                 <th class="db-surname">Surname</th>
                 <th class="db-firstname">First Name</th>
                 <th class="db-email">Email</th>
+                <th class="db-jobtitle">Job Title</th>
                 <th class="db-dept">Department</th>
                 <th class="db-edDel">Edit / Delete</th>
             </tr>
@@ -168,6 +190,7 @@ $(".emp-search-btn").click(function(e) {
                     <td>${item.lastName}</td>
                     <td>${item.firstName}</td>
                     <td class="db-email-item">${item.email}</td>
+                    <td class="db-jobtitle-item">${item.jobTitle}</td>
                     <td class="db-dept-item">${item.department}</td>
                     <td class="modify"><button type="button" class="btn btn-success edit-person-btn"><i class="fa-solid fa-pen-to-square"></i></button>
                     <button type="button" class="btn btn-danger del-person-btn"><i class="fa-solid fa-trash"></i></button></td>
@@ -194,6 +217,7 @@ $(document).on("keydown", function(e) {
             "url": `libs/php/search.php?empQuery=${empQuery}`,
             "type": "GET",
             "success": function(result) {
+                console.log(result);
 
                 $(".rec-count").text(result.data.length);
                 
@@ -202,6 +226,7 @@ $(document).on("keydown", function(e) {
                     <th class="db-surname">Surname</th>
                     <th class="db-firstname">First Name</th>
                     <th class="db-email">Email</th>
+                    <th class="db-jobtitle">Job Title</th>
                     <th class="db-dept">Department</th>
                     <th class="db-edDel">Edit / Delete</th>
                 </tr>
@@ -214,6 +239,7 @@ $(document).on("keydown", function(e) {
                         <td>${item.lastName}</td>
                         <td>${item.firstName}</td>
                         <td class="db-email-item">${item.email}</td>
+                        <td class="db-jobtitle-item">${item.jobTitle}</td>
                         <td class="db-dept-item">${item.department}</td>
                         <td class="modify"><button type="button" class="btn btn-success edit-person-btn"><i class="fa-solid fa-pen-to-square"></i></button>
                         <button type="button" class="btn btn-danger del-person-btn"><i class="fa-solid fa-trash"></i></button></td>
@@ -227,97 +253,90 @@ $(document).on("keydown", function(e) {
 })
 
 /*===================ADD NEW======================*/
-let pdlChoice = null;
 
+$("#addBtn").click(function() {
 
-$(".add-btn").click(function() {
+    if(navItemPers[0].classList[2] == "show") {
+
+        $("#addModal .modal-title").html("Add New Personnel");
+
+        $("#addModal .modal-body").html(`
+        <input type="text" class="form-control p-fname my-2" id="formControlInput1" placeholder="First Name....">
+            
+        <input type="text" class="form-control p-sname my-2" id="formControlInput2" placeholder="Surname...">
+
+        <input type="email" class="form-control p-email my-2" id="formControlInput3" placeholder="Email">
+
+        <input type="text" class="form-control p-jobtitle my-2" id="formControlInput3" placeholder="Job Title">
+
+        <select class="form-select p-dept my-2" id="deptForm" aria-label="Default select example">
+            <option value="" selected>Department</option>
+
+          </select>
+        `)
+
+        $.ajax({
+            url: "libs/php/getAllDepartments.php",
+            type: "GET",
+            success: function(result) {
+                result.data.forEach(item => {
+                    $(".p-dept").append(`<option value="${item.id}">${item.name}</option>`)
+                })
+            }
+        })
+
+    } else if(navItemDept[0].classList[2] == "show") {
+
+        $("#addModal .modal-title").html("Add New Department");
+
+        $("#addModal .modal-body").html(`
+        <input type="text" class="form-control d-name my-2" id="formControlInput1" placeholder="Department name...">
+
+        <select class="form-select d-location my-2" id="deptLocForm" aria-label="Default select example">
+            <option value="" selected>Department Location</option>
+
+          </select>
+        `)
+
+        $.ajax({
+            url: "libs/php/getAllLocations.php",
+            type: "GET",
+            success: function(result) {
+                // console.log(result);
+                result.data.forEach(item => {
+                    $(".d-location").append(`<option value="${item.id}">${item.name}</option>`)
+                })
+            }
+        })
+
+    } else {
+
+        $("#addModal .modal-title").html("Add New Location");
+
+        $("#addModal .modal-body").html(`
+        <input type="text" class="form-control l-name" id="formControlInput1" placeholder="Location name...">
+        `)
+
+    }
+
     $("#addModal").modal("show");
-    $("#pdlSelect").val("Please Select");
-    $(".pdl-card").first().css("display", "none");
+
 })
 
 
-$("#pdlSelect").on("change", function(e) {
-    pdlChoice = e.target.value;
-    console.log(pdlChoice);
-    if(pdlChoice.length > 0) {
-        // console.log($(".pdl-card").first());
-        $(".pdl-card").first().css("display", "block");
-        
-    }
-
-    switch(pdlChoice) {
-        case "personnel":
-            
-            $(".pdl-card .card-body").html(`
-            <input type="text" class="form-control p-fname my-2" id="formControlInput1" placeholder="First Name....">
-            
-            <input type="text" class="form-control p-sname my-2" id="formControlInput2" placeholder="Surname...">
-
-            <input type="email" class="form-control p-email my-2" id="formControlInput3" placeholder="Email">
-
-            <select class="form-select p-dept my-2" id="deptForm" aria-label="Default select example">
-                <option value="" selected>Department</option>
-
-              </select>
-            `);
-
-            $.ajax({
-                url: "libs/php/getAllDepartments.php",
-                type: "GET",
-                success: function(result) {
-                    result.data.forEach(item => {
-                        $(".p-dept").append(`<option value="${item.id}">${item.name}</option>`)
-                    })
-                }
-            })
-            
-            break;
-
-        case "department":
-            $(".pdl-card .card-body").html(`
-            <input type="text" class="form-control d-name my-2" id="formControlInput1" placeholder="Department name...">
-
-            <select class="form-select d-location my-2" id="deptLocForm" aria-label="Default select example">
-                <option value="" selected>Department Location</option>
-
-              </select>
-            `);
-
-            $.ajax({
-                url: "libs/php/getAllLocations.php",
-                type: "GET",
-                success: function(result) {
-                    // console.log(result);
-                    result.data.forEach(item => {
-                        $(".d-location").append(`<option value="${item.id}">${item.name}</option>`)
-                    })
-                }
-            })
-
-            break;
-
-        case "location":
-            $(".pdl-card .card-body").html(`
-            <input type="text" class="form-control l-name" id="formControlInput1" placeholder="Location name...">
-            `);
-            break;
-
-    }
-})
 
 $(".add-new-btn").click(function() {
-    console.log(pdlChoice);
+    console.log($("#addModal .modal-title"));
 
-    if(pdlChoice == "personnel") {
+    if($("#addModal .modal-title")[0].innerHTML == "Add New Personnel") {
 
         pdlChoicePersonnel();
 
-    } else if(pdlChoice == "department") {
+    } else if($("#addModal .modal-title")[0].innerHTML == "Add New Department") {
 
         pdlChoiceDepartment();
 
-    } else if(pdlChoice == "location") {
+    } else if($("#addModal .modal-title")[0].innerHTML == "Add New Location") {
 
         pdlChoiceLocation();
 
@@ -473,6 +492,7 @@ let ajaxCall = null;
 
 
 tbody.on("click", ".edit-person-btn", function(e) {
+
     persID4Edit = this.parentElement.parentElement.attributes[1].nodeValue;
     console.log(persID4Edit);
     persSName4Edit = this.parentElement.parentElement.children[0].innerHTML;
@@ -482,6 +502,7 @@ tbody.on("click", ".edit-person-btn", function(e) {
     $("#editPModal").modal("show");
     $("#editPModal .dept-location").css("display", "none");
     
+    console.log($("#editPModal .edit-surname"));
 
     $("#editPModal .edit-surname")[0].attributes[2].value = persSName4Edit;
     $("#editPModal .edit-firstname")[0].attributes[2].value = persFName4Edit;
@@ -620,13 +641,18 @@ function checkExistingEmail(emailAddy) {
 /*===============DELETE PERSONNEL BY ID==============*/
 
 let persID = null;
+let persName = null;
 let persRow = null;
 
 tbody.on("click", ".del-person-btn", function(e) {
+
+
     persID = this.parentElement.parentElement.attributes[1].nodeValue;
+    persName = e.target.parentElement.parentElement.children[1].innerHTML;
     // console.log(this.parentElement.parentElement.attributes);
     persRow = $(e.target.parentElement.parentElement);
 
+    $("#deletePModal .modal-title").html(`Delete ${persName}`);
     $("#deletePModal").modal("show");
 
 })

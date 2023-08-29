@@ -21,43 +21,66 @@
 </head>
 <body>
     
-    <nav class="navbar navbar-expand-lg bg-primary position-fixed w-100 top-0 z-3">
+    <nav class="navbar navbar-expand-lg bg-primary position-fixed w-100 top-0 z-3 pb-0">
         <div class="container-fluid d-flex justify-content-between">
 
           <a class="navbar-brand" href="#"><button type="button" class="btn btn-primary border border-light">Company X</button></a>
 
-          <div class="btn-group alter-buttons mx-3 z-2" role="group" aria-label="Basic example">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+            <li class="nav-item nav-item-pers" role="presentation">
+              <button class="nav-link active" id="personnelBtn" data-bs-toggle="tab" data-bs-target="#personnel-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">
+                <i class="fa-solid fa-users"></i><span class="d-none d-sm-block">Personnel</span>
+              </button>
+            </li>
+
+            <li class="nav-item nav-item-dept" role="presentation">
+              <button class="nav-link" id="departmentsBtn" data-bs-toggle="tab" data-bs-target="#departments-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">
+                <i class="fa-solid fa-building"></i><span class="d-none d-sm-block">Departments</span>
+              </button>
+            </li>
+
+            <li class="nav-item nav-item-loc" role="presentation">
+              <button class="nav-link" id="locationsBtn" data-bs-toggle="tab" data-bs-target="#locations-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">
+                <i class="fa-solid fa-earth-americas"></i><span class="d-none d-sm-block">Locations</span>
+              </button>
+            </li>
+
+            <li class="nav-item nav-item-add" role="presentation">
+              <button class="nav-link" id="addBtn" data-bs-toggle="tab" data-bs-target="#locations-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">
+                <i class="fa-solid fa-folder-plus"></i><span class="d-none d-sm-block">Add New</span>
+              </button>
+            </li>
+    
+          </ul>
+
+          <!-- <div class="btn-group alter-buttons mx-3 z-2" role="group" aria-label="Basic example">
             <button type="button" class="btn btn-primary border border-light">Count: <span class="rec-count"></span></button>
             <button type="button" class="btn btn-primary border border-light personnel-btn"><i class="fa-solid fa-users"></i></button>
             <button type="button" class="btn btn-primary border border-light department-btn"><i class="fa-solid fa-building"></i></button>
             <button type="button" class="btn btn-primary border border-light location-btn"><i class="fa-solid fa-earth-americas"></i></button>
             <button type="button" class="btn btn-primary border border-light add-btn">Add+</button>
-          </div>
+          </div> -->
 
-          <button class="navbar-toggler btn-primary border border-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-            <form class="d-flex search-bar" role="search">
-              <input class="form-control emp-search me-2" type="search" placeholder="Search Employees" aria-label="Search">
-              <button class="btn btn-light emp-search-btn" type="submit">Search</button>
-            </form>
-
-          </div>
         </div>
       </nav>
 
       
 
-      <div class="container table-container my-3 position-relative mx-auto">
+      <div class="container table-container position-relative mx-auto">
+
+        <form class="d-flex search-bar my-2" role="search">
+          <input class="form-control emp-search me-2" type="search" placeholder="Search Employees" aria-label="Search">
+          <button class="btn btn-light emp-search-btn" type="submit">Search</button>
+        </form>
+
         <table class="table table-primary table-hover">
           <thead class="db-head">
             <tr>
               <th class="db-surname">Surname</th>
               <th class="db-firstname">First Name</th>
               <th class="db-email">Email</th>
+              <th class="db-jobtitle">Job Title</th>
               <th class="db-dept">Department</th>
               <th class="db-loc">Location</th>
               <th class="db-edDel">Edit / Delete</th>
@@ -73,23 +96,10 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Add New</h5>
+              <h5 class="modal-title"></h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
-              <select class="form-select" id="pdlSelect" aria-label="Default select example">
-                <option selected>Please Select</option>
-                <option value="personnel">Personnel</option>
-                <option value="department">Department</option>
-                <option value="location">Location</option>
-              </select>
-
-              <div class="card pdl-card my-3">
-                <div class="card-body pdl-card-body">
-                  
-                </div>
-              </div>
   
             </div>
             <div class="modal-footer">
