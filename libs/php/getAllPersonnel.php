@@ -34,7 +34,7 @@
 
 	// SQL does not accept parameters and so is not prepared
 
-	$query = 'SELECT id, firstName, lastName, email, departmentID FROM personnel';
+	$query = 'SELECT id, firstName, lastName, jobTitle, email, departmentID FROM personnel';
 
 	$result = $conn->query($query);
 	

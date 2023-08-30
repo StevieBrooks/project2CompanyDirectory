@@ -279,7 +279,8 @@ $("#addBtn").click(function() {
             url: "libs/php/getAllDepartments.php",
             type: "GET",
             success: function(result) {
-                result.data.forEach(item => {
+                const alphabeticalDepts = result.data.sort((a, b) => a.name.localeCompare(b.name));
+                alphabeticalDepts.forEach(item => {
                     $(".p-dept").append(`<option value="${item.id}">${item.name}</option>`)
                 })
             }
@@ -302,8 +303,8 @@ $("#addBtn").click(function() {
             url: "libs/php/getAllLocations.php",
             type: "GET",
             success: function(result) {
-                // console.log(result);
-                result.data.forEach(item => {
+                const alphabeticalLocs = result.data.sort((a, b) => a.name.localeCompare(b.name));
+                alphabeticalLocs.forEach(item => {
                     $(".d-location").append(`<option value="${item.id}">${item.name}</option>`)
                 })
             }
@@ -348,6 +349,7 @@ function pdlChoicePersonnel() {
     const firstName = $(".p-fname").val();
     const surname = $(".p-sname").val();
     const email = $(".p-email").val();
+    const jobTitle = $(".p-jobtitle").val();
     const dept = $(".p-dept").val();
     let personPresent = false;
 
@@ -357,7 +359,7 @@ function pdlChoicePersonnel() {
         success: function(result) {
             console.log(result);
             for(item of result.data) {
-                if(item.firstName == firstName && item.lastName == surname && item.email == email) {
+                if(item.firstName == firstName && item.lastName == surname && item.email == email && item.jobTitle == jobTitle) {
                      personPresent = true;
                      $("#personDenyModal").modal("show");
                      $("#addModal").modal("hide");
@@ -366,7 +368,7 @@ function pdlChoicePersonnel() {
             }
             if(!personPresent && firstName.length > 0 && surname.length > 0 && email.length > 0 && dept.length > 0) {
                 $.ajax({
-                    url: `libs/php/insertPersonnel.php?firstName=${firstName}&lastName=${surname}&email=${email}&departmentID=${dept}`,
+                    url: `libs/php/insertPersonnel.php?firstName=${firstName}&lastName=${surname}&jobTitle=${jobTitle}&email=${email}&departmentID=${dept}`,
                     type: "POST",
                     success: function(result) {
                         $("#addModal").modal("hide");
@@ -483,6 +485,7 @@ let persID4Edit = null;
 let persSName4Edit = null;
 let persFName4Edit = null;
 let persEmail4Edit = null;
+let persJobTitle4Edit = null;
 let persDept4Edit = null;
 let deptEditChoice = null;
 let locDropdown4PersonEdit = null;
@@ -498,21 +501,23 @@ tbody.on("click", ".edit-person-btn", function(e) {
     persSName4Edit = this.parentElement.parentElement.children[0].innerHTML;
     persFName4Edit = this.parentElement.parentElement.children[1].innerHTML;
     persEmail4Edit = this.parentElement.parentElement.children[2].innerHTML;
-    persDept4Edit = this.parentElement.parentElement.children[3].innerHTML;
-    $("#editPModal").modal("show");
-    $("#editPModal .dept-location").css("display", "none");
+    persJobTitle4Edit = this.parentElement.parentElement.children[3].innerHTML;
+    persDept4Edit = this.parentElement.parentElement.children[4].innerHTML;
+    
     
     console.log($("#editPModal .edit-surname"));
 
-    $("#editPModal .edit-surname")[0].attributes[2].value = persSName4Edit;
-    $("#editPModal .edit-firstname")[0].attributes[2].value = persFName4Edit;
-    $("#editPModal .edit-email")[0].attributes[2].value = persEmail4Edit;
+    $("#editPModal .edit-surname").attr("value", persSName4Edit);
+    $("#editPModal .edit-firstname").attr("value", persFName4Edit);
+    $("#editPModal .edit-email").attr("value", persEmail4Edit);
+    $("#editPModal .edit-jobtitle").attr("value", persJobTitle4Edit);
 
 
     $.ajax({
         url: "libs/php/getAllDepartments.php",
         type: "GET",
         success: function(result) {
+            const alphabeticalDepts = result.data.sort((a, b) => a.name.localeCompare(b.name));
             result.data.forEach(item => {
                 $("#editPDept").append(`
                 <option value="${item.id}">${item.name}</option>
@@ -524,6 +529,9 @@ tbody.on("click", ".edit-person-btn", function(e) {
             })
         }
     })
+
+    $("#editPModal").modal("show");
+    $("#editPModal .dept-location").css("display", "none");
 
 })
 
@@ -580,6 +588,10 @@ $(".edit-p-update").click(function() {
         $("#editPDeny1").modal("show");
     }
 
+    if($("#editPModal .edit-jobtitle").val().length > 0) {
+        persJobTitle4Edit = $("#editPModal .edit-jobtitle").val();
+    }
+
 
     persDept4Edit = $("#editPModal .edit-dept").val();
 
@@ -587,6 +599,7 @@ $(".edit-p-update").click(function() {
         $("#editPModal .edit-surname").val("");
         $("#editPModal .edit-firstname").val("");
         $("#editPModal .edit-email").val("");
+        $("#editPModal .edit-jobtitle").val("");
     }, 1000)
     
 
@@ -596,7 +609,7 @@ $(".edit-p-update").click(function() {
 ajaxCall = function() {
 
     $.ajax({
-        url: `libs/php/editPersonnel.php?firstName=${persFName4Edit}&lastName=${persSName4Edit}&email=${persEmail4Edit}&departmentID=${persDept4Edit}&id=${persID4Edit}`,
+        url: `libs/php/editPersonnel.php?firstName=${persFName4Edit}&lastName=${persSName4Edit}&jobTitle=${persJobTitle4Edit}&email=${persEmail4Edit}&departmentID=${persDept4Edit}&id=${persID4Edit}`,
         type: "POST",
         success: function(result) {
             console.log(result);
@@ -636,8 +649,6 @@ function checkExistingEmail(emailAddy) {
 
 
 
-
-
 /*===============DELETE PERSONNEL BY ID==============*/
 
 let persID = null;
@@ -648,8 +659,7 @@ tbody.on("click", ".del-person-btn", function(e) {
 
 
     persID = this.parentElement.parentElement.attributes[1].nodeValue;
-    persName = e.target.parentElement.parentElement.children[1].innerHTML;
-    // console.log(this.parentElement.parentElement.attributes);
+    persName = this.parentElement.parentElement.children[1].innerHTML + " " + this.parentElement.parentElement.children[0].innerHTML;
     persRow = $(e.target.parentElement.parentElement);
 
     $("#deletePModal .modal-title").html(`Delete ${persName}`);
@@ -674,12 +684,16 @@ $(".delete-p-yes").click(function() {
 /*===============DELETE DEPARTMENT BY ID==============*/
 
 let deptID = null;
+let deptName = null;
 let deptRow = null;
 
 tbody.on("click", ".del-dept-btn", function(e) {
     deptID = this.parentElement.parentElement.attributes[1].nodeValue;
+    deptName = this.parentElement.parentElement.children[0].innerHTML;
     deptRow = $(e.target.parentElement.parentElement);
     let deptActive = false;
+
+    $("#deleteDModal .modal-title").html(`Delete ${deptName} Department`);
 
     $.ajax({
         url: "libs/php/getAllPersonnel.php",
@@ -689,6 +703,7 @@ tbody.on("click", ".del-dept-btn", function(e) {
             for(item of result.data) {
                 if(deptID == item.departmentID) {
                     $("#deleteDeptModal").modal("show");
+                    $("#deleteDeptModal .modal-title").html(`Issue Deleting ${deptName} Department`);
                     deptActive = true;
                     break;
                 }
@@ -719,15 +734,19 @@ $(".delete-d-yes").click(function() {
 /*===============DELETE LOCATION BY ID==============*/
 
 let locID = null;
+let locName = null;
 let locRow = null;
 let locActive = null;
 
 tbody.on("click", ".del-loc-btn", function(e) {
     locID = this.parentElement.parentElement.attributes[1].nodeValue;
+    locName = this.parentElement.parentElement.children[0].innerHTML;
     locRow = $(e.target.parentElement.parentElement);
     let locNameConvert = null;
     locActive = false;
     console.log(locActive);
+
+    $("#deleteLModal .modal-title").html(`Delete ${locName} `);
     
 
     $.ajax({
@@ -753,6 +772,7 @@ tbody.on("click", ".del-loc-btn", function(e) {
                     if(locNameConvert == item.location) {
                         console.log(locNameConvert);
                         $("#deleteLocModal").modal("show");
+                        $("#deleteLocModal .modal-title").html(`Issue Deleting ${locName}`);
                         locActive = true;
                         break;
                     }

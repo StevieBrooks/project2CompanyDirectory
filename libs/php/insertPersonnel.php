@@ -30,11 +30,11 @@ error_reporting(E_ALL);
 // SQL statement accepts parameters and so is prepared to avoid SQL injection.
 // $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
-$query = $conn->prepare('INSERT INTO Personnel (firstName, lastName, email, departmentID ) VALUES(?,?,?,?)');
+$query = $conn->prepare('INSERT INTO Personnel (firstName, lastName, jobTitle, email, departmentID ) VALUES(?,?,?,?,?)');
 
 // may need input validation - can do on front end
 
-$query->bind_param("sssi", $_REQUEST['firstName'], $_REQUEST['lastName'], $_REQUEST['email'], $_REQUEST['departmentID']);
+$query->bind_param("ssssi", $_REQUEST['firstName'], $_REQUEST['lastName'], $_REQUEST['jobTitle'], $_REQUEST['email'], $_REQUEST['departmentID']);
 
 $query->execute();
 
