@@ -64,7 +64,7 @@ $("#addBtn").click(function() {
     if(personnelBtn.hasClass("active")) {
 
         $("#addPersonnelModal .modal-body").html(`
-        <form action="" id="addPersonnelForm">
+        <form id="addPersonnelForm">
 
             <input type="hidden" id="addPersonnelID">
 
@@ -141,40 +141,40 @@ $("#addPersonnelForm").on("submit", function(e) {
 
     console.log("hi");
 
-    // const firstName = $(".p-fname").val();
-    // const surname = $(".p-sname").val();
-    // const email = $(".p-email").val();
-    // const jobTitle = $(".p-jobtitle").val();
-    // const dept = $(".p-dept").val();
-    // let personPresent = false;
+    const firstName = $(".p-fname").val();
+    const surname = $(".p-sname").val();
+    const email = $(".p-email").val();
+    const jobTitle = $(".p-jobtitle").val();
+    const dept = $(".p-dept").val();
+    let personPresent = false;
 
-    // $.ajax({
-    //     url: "libs/php/getAllPersonnel.php",
-    //     type: "GET",
-    //     success: function(result) {
-    //         console.log(result);
-    //         for(item of result.data) {
-    //             if(item.firstName == firstName && item.lastName == surname && item.email == email && item.jobTitle == jobTitle) {
-    //                  personPresent = true;
-    //                  $("#personDenyModal").modal("show");
-    //                  $("#addModal").modal("hide");
-    //                  break;
-    //             } 
-    //         }
-    //         if(!personPresent && firstName.length > 0 && surname.length > 0 && email.length > 0 && dept.length > 0) {
-    //             $.ajax({
-    //                 url: `libs/php/insertPersonnel.php?firstName=${firstName}&lastName=${surname}&jobTitle=${jobTitle}&email=${email}&departmentID=${dept}`,
-    //                 type: "POST",
-    //                 success: function(result) {
-    //                     $("#addModal").modal("hide");
-    //                     getAllPersonnel();
-    //                 }
-    //             })
-    //         } else if (firstName.length == 0 || surname.length == 0 || email.length == 0 || dept.length == 0) {
-    //             $("#formWarningModal").modal("show");
-    //         }
-    //     }
-    // })
+    $.ajax({
+        url: "libs/php/getAllPersonnel.php",
+        type: "GET",
+        success: function(result) {
+            console.log(result);
+            for(item of result.data) {
+                if(item.firstName == firstName && item.lastName == surname && item.email == email && item.jobTitle == jobTitle) {
+                     personPresent = true;
+                     $("#personDenyModal").modal("show");
+                     $("#addModal").modal("hide");
+                     break;
+                } 
+            }
+            if(!personPresent && firstName.length > 0 && surname.length > 0 && email.length > 0 && dept.length > 0) {
+                $.ajax({
+                    url: `libs/php/insertPersonnel.php?firstName=${firstName}&lastName=${surname}&jobTitle=${jobTitle}&email=${email}&departmentID=${dept}`,
+                    type: "POST",
+                    success: function(result) {
+                        $("#addModal").modal("hide");
+                        getAllPersonnel();
+                    }
+                })
+            } else if (firstName.length == 0 || surname.length == 0 || email.length == 0 || dept.length == 0) {
+                $("#formWarningModal").modal("show");
+            }
+        }
+    })
 
 })
 
