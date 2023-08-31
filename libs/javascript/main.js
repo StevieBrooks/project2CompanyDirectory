@@ -1,6 +1,4 @@
-/*=======================================================
-                        VARIABLES
-========================================================*/
+/*==================GLOBAL VARIABLES======================*/
 
 let departmentArr = null;
 let locationArr = null;
@@ -11,156 +9,24 @@ let empQuery = null;
 const navItemPers = $(".nav-item-pers");
 const navItemDept = $(".nav-item-dept");
 const navItemLoc = $(".nav-item-loc");
-// DOUBLE CHECK THESE VARIABLES - THINK PERCOUNT AND THE ARR VARIABLES UNNECESSARY
+const personnelBtn = $("#personnelBtn");
+const departmentsBtn = $("#departmentsBtn");
+const locationsBtn = $("#locationsBtn");
 
 
 
-/*======================================================
-                    DOCUMENT ONLOAD
-========================================================*/
+/*==================DOCUMENT ONLOAD=====================*/
 
 $(document).ready(function() {
     getAllPersonnel();    
     navItemPers.addClass("show");
-    console.log(navItemPers);
 })
 
 
-/*====================================================
-                CALLS TO PHP
-======================================================*/
-
-$(".navbar-brand").click(getAllPersonnel);
-
-
-/*===================GET ALL PERSONNEL======================*/
-$("#personnelBtn").click(getAllPersonnel)
-
-function getAllPersonnel() {
-
-    navItemPers.addClass("show");
-    navItemDept.removeClass("show");
-    navItemLoc.removeClass("show");
-
-    $.ajax({
-        "url": "libs/php/getAll.php",
-        "type": "GET",
-        "success": function(result) {
-            $(".rec-count").text(result.data.length);
-
-            $(".db-head").html(`
-            <tr>
-                <th class="db-surname">Surname</th>
-                <th class="db-firstname">First Name</th>
-                <th class="db-email">Email</th>
-                <th class="db-jobtitle">Job Title</th>
-                <th class="db-dept">Department</th>
-                <th class="db-loc">Location</th>
-                <th class="db-edDel">Edit / Delete</th>
-            </tr>
-            `)
-            $(".db-body").html("");
-            result.data.forEach(item => {
-                $(".db-body").append(`
-                <tr class="emp-row" data-empid="${item.id}">
-                    <td>${item.lastName}</td>
-                    <td>${item.firstName}</td>
-                    <td class="db-email-item">${item.email}</td>
-                    <td class="db-jobtitle-item">${item.jobTitle}</td>
-                    <td class="db-dept-item">${item.department}</td>
-                    <td class="db-loc-item">${item.location}</td>
-                    <td><button type="button" class="btn btn-success edit-person-btn"><i class="fa-solid fa-pen-to-square"></i></button>
-                    <button type="button" class="btn btn-danger del-person-btn"><i class="fa-solid fa-trash"></i></button></td>
-                </tr>
-                `)
-            })
-        }
-    })
-
-}
-
-
-/*===================GET ALL DEPTS======================*/
-$("#departmentsBtn").click(getAllDepartments)
-
-
-function getAllDepartments() {
-
-    navItemPers.removeClass("show");
-    navItemDept.addClass("show");
-    navItemLoc.removeClass("show");
-
-    $.ajax({
-        "url": "libs/php/getAllDepartments.php",
-        "type": "GET",
-        "success": function(result) {
-            console.log(result);
-            $(".rec-count").text(result.data.length);
-            // departmentArr = result.data;
-            // console.log(departmentArr);
-            $(".db-head").html(`
-            <tr>
-                <th class="db-name">Name</th>
-                <th class="db-locationID">Location</th>
-                <th class="db-edDel">Delete</th>
-            </tr>
-            `)
-            $(".db-body").html("");
-            result.data.forEach(item => {
-                $(".db-body").append(`
-                <tr class="emp-row" data-deptid="${item.id}">
-                    <td class="name">${item.name}</td>
-                    <td class="locationID">${item.location}</td>
-                    <td class="modify"><button type="button" class="btn btn-danger del-dept-btn"><i class="fa-solid fa-trash"></i></button></td>
-                </tr>
-                `)
-            })
-        }
-    })
-
-}
-
-/*===================GET ALL LOCATIONS======================*/
-$("#locationsBtn").click(getAllLocations)
-
-function getAllLocations() {
-
-    navItemPers.removeClass("show");
-    navItemDept.removeClass("show");
-    navItemLoc.addClass("show");
-
-    $.ajax({
-        "url": "libs/php/getAllLocations.php",
-        "type": "GET",
-        "success": function(result) {
-            $(".rec-count").text(result.data.length);
-            // locationArr = result.data;
-            // console.log(locationArr);
-            $(".db-head").html(`
-            <tr>
-                <th class="db-name">Name</th>
-                <th class="db-edDel">Delete</th>
-            </tr>
-            `)
-            $(".db-body").html("");
-            result.data.forEach(item => {
-                $(".db-body").append(`
-                <tr class="emp-row" data-locid="${item.id}">
-                    <td class="name">${item.name}</td>
-                    <td class="modify"><button type="button" class="btn btn-danger del-loc-btn"><i class="fa-solid fa-trash"></i></button></td>
-                </tr>
-                `)
-            })
-        }
-    })
-
-}
-
 
 /*===================SEARCH EMPLOYEES======================*/
-$(".emp-search-btn").click(function(e) {
 
-    e.preventDefault();
+$("#empSearch").on("keyup", function() {
 
     empQuery = $(".emp-search").val();
 
@@ -170,22 +36,10 @@ $(".emp-search-btn").click(function(e) {
         "success": function(result) {
 
             console.log(result);
-            $(".rec-count").text(result.data.length);
-            
-            $(".db-head").html(`
-            <tr>
-                <th class="db-surname">Surname</th>
-                <th class="db-firstname">First Name</th>
-                <th class="db-email">Email</th>
-                <th class="db-jobtitle">Job Title</th>
-                <th class="db-dept">Department</th>
-                <th class="db-edDel">Edit / Delete</th>
-            </tr>
-            `)
 
             $(".db-body").html("");
             result.data.forEach(item => {
-                $(".db-body").append(`
+                $("#personnel-tab-pane .db-body").append(`
                 <tr class="emp-row" data-empid="${item.id}">
                     <td>${item.lastName}</td>
                     <td>${item.firstName}</td>
@@ -198,81 +52,35 @@ $(".emp-search-btn").click(function(e) {
                 `)
             })
 
-            
-            setTimeout(function() {
-                $('.emp-search').val("");
-            }, 0o10)
         }
     })
-
 })
 
-$(document).on("keydown", function(e) {
-
-    empQuery = $(".emp-search").val();
-
-    if(e.originalEvent.keyCode == 13 && empQuery.length > 0) {
-
-        $.ajax({
-            "url": `libs/php/search.php?empQuery=${empQuery}`,
-            "type": "GET",
-            "success": function(result) {
-                console.log(result);
-
-                $(".rec-count").text(result.data.length);
-                
-                $(".db-head").html(`
-                <tr>
-                    <th class="db-surname">Surname</th>
-                    <th class="db-firstname">First Name</th>
-                    <th class="db-email">Email</th>
-                    <th class="db-jobtitle">Job Title</th>
-                    <th class="db-dept">Department</th>
-                    <th class="db-edDel">Edit / Delete</th>
-                </tr>
-                `)
-    
-                $(".db-body").html("");
-                result.data.forEach(item => {
-                    $(".db-body").append(`
-                    <tr class="emp-row"data-empid="${item.id}">
-                        <td>${item.lastName}</td>
-                        <td>${item.firstName}</td>
-                        <td class="db-email-item">${item.email}</td>
-                        <td class="db-jobtitle-item">${item.jobTitle}</td>
-                        <td class="db-dept-item">${item.department}</td>
-                        <td class="modify"><button type="button" class="btn btn-success edit-person-btn"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button type="button" class="btn btn-danger del-person-btn"><i class="fa-solid fa-trash"></i></button></td>
-                    </tr>
-                    `)
-                })
-    
-            }
-        })
-    }
-})
 
 /*===================ADD NEW======================*/
 
 $("#addBtn").click(function() {
 
-    if(navItemPers[0].classList[2] == "show") {
+    if(personnelBtn.hasClass("active")) {
 
-        $("#addModal .modal-title").html("Add New Personnel");
+        $("#addPersonnelModal .modal-body").html(`
+        <form action="" id="addPersonnelForm">
 
-        $("#addModal .modal-body").html(`
-        <input type="text" class="form-control p-fname my-2" id="formControlInput1" placeholder="First Name....">
+            <input type="hidden" id="addPersonnelID">
+
+            <input type="text" class="form-control p-fname my-2" id="addFirstName" placeholder="First Name....">
             
-        <input type="text" class="form-control p-sname my-2" id="formControlInput2" placeholder="Surname...">
+            <input type="text" class="form-control p-sname my-2" id="addLastName" placeholder="Surname...">
 
-        <input type="email" class="form-control p-email my-2" id="formControlInput3" placeholder="Email">
+            <input type="text" class="form-control p-jobtitle my-2" id="addJobTitle" placeholder="Job Title">
 
-        <input type="text" class="form-control p-jobtitle my-2" id="formControlInput3" placeholder="Job Title">
+            <input type="email" class="form-control p-email my-2" id="addEmail" placeholder="Email">
 
-        <select class="form-select p-dept my-2" id="deptForm" aria-label="Default select example">
-            <option value="" selected>Department</option>
+            <select class="form-select p-dept my-2" id="addDept" aria-label="Default select example">
+                <option value="" selected>Department</option>
+              </select>
 
-          </select>
+        </form>
         `)
 
         $.ajax({
@@ -286,7 +94,9 @@ $("#addBtn").click(function() {
             }
         })
 
-    } else if(navItemDept[0].classList[2] == "show") {
+        $("#addPersonnelModal").modal("show");
+
+    } else if(departmentsBtn.hasClass("active")) {
 
         $("#addModal .modal-title").html("Add New Department");
 
@@ -325,63 +135,49 @@ $("#addBtn").click(function() {
 })
 
 
+$("#addPersonnelForm").on("submit", function(e) {
 
-$(".add-new-btn").click(function() {
-    console.log($("#addModal .modal-title"));
+    e.preventDefault();
 
-    if($("#addModal .modal-title")[0].innerHTML == "Add New Personnel") {
+    console.log("hi");
 
-        pdlChoicePersonnel();
+    // const firstName = $(".p-fname").val();
+    // const surname = $(".p-sname").val();
+    // const email = $(".p-email").val();
+    // const jobTitle = $(".p-jobtitle").val();
+    // const dept = $(".p-dept").val();
+    // let personPresent = false;
 
-    } else if($("#addModal .modal-title")[0].innerHTML == "Add New Department") {
+    // $.ajax({
+    //     url: "libs/php/getAllPersonnel.php",
+    //     type: "GET",
+    //     success: function(result) {
+    //         console.log(result);
+    //         for(item of result.data) {
+    //             if(item.firstName == firstName && item.lastName == surname && item.email == email && item.jobTitle == jobTitle) {
+    //                  personPresent = true;
+    //                  $("#personDenyModal").modal("show");
+    //                  $("#addModal").modal("hide");
+    //                  break;
+    //             } 
+    //         }
+    //         if(!personPresent && firstName.length > 0 && surname.length > 0 && email.length > 0 && dept.length > 0) {
+    //             $.ajax({
+    //                 url: `libs/php/insertPersonnel.php?firstName=${firstName}&lastName=${surname}&jobTitle=${jobTitle}&email=${email}&departmentID=${dept}`,
+    //                 type: "POST",
+    //                 success: function(result) {
+    //                     $("#addModal").modal("hide");
+    //                     getAllPersonnel();
+    //                 }
+    //             })
+    //         } else if (firstName.length == 0 || surname.length == 0 || email.length == 0 || dept.length == 0) {
+    //             $("#formWarningModal").modal("show");
+    //         }
+    //     }
+    // })
 
-        pdlChoiceDepartment();
-
-    } else if($("#addModal .modal-title")[0].innerHTML == "Add New Location") {
-
-        pdlChoiceLocation();
-
-    }
-    
 })
 
-function pdlChoicePersonnel() {
-    const firstName = $(".p-fname").val();
-    const surname = $(".p-sname").val();
-    const email = $(".p-email").val();
-    const jobTitle = $(".p-jobtitle").val();
-    const dept = $(".p-dept").val();
-    let personPresent = false;
-
-    $.ajax({
-        url: "libs/php/getAllPersonnel.php",
-        type: "GET",
-        success: function(result) {
-            console.log(result);
-            for(item of result.data) {
-                if(item.firstName == firstName && item.lastName == surname && item.email == email && item.jobTitle == jobTitle) {
-                     personPresent = true;
-                     $("#personDenyModal").modal("show");
-                     $("#addModal").modal("hide");
-                     break;
-                } 
-            }
-            if(!personPresent && firstName.length > 0 && surname.length > 0 && email.length > 0 && dept.length > 0) {
-                $.ajax({
-                    url: `libs/php/insertPersonnel.php?firstName=${firstName}&lastName=${surname}&jobTitle=${jobTitle}&email=${email}&departmentID=${dept}`,
-                    type: "POST",
-                    success: function(result) {
-                        $("#addModal").modal("hide");
-                        getAllPersonnel();
-                    }
-                })
-            } else if (firstName.length == 0 || surname.length == 0 || email.length == 0 || dept.length == 0) {
-                $("#formWarningModal").modal("show");
-            }
-        }
-    })
-
-}
 
 function pdlChoiceDepartment() {
 
@@ -478,6 +274,91 @@ function pdlChoiceLocation() {
     })
 
 }
+
+
+/*===================GET ALL PERSONNEL======================*/
+$("#personnelBtn").click(getAllPersonnel)
+
+function getAllPersonnel() {
+
+    $.ajax({
+        "url": "libs/php/getAll.php",
+        "type": "GET",
+        "success": function(result) {
+
+            $(".db-body").html("");
+            result.data.forEach(item => {
+                $("#personnel-tab-pane .db-body").append(`
+                <tr class="emp-row" data-empid="${item.id}">
+                    <td>${item.lastName}</td>
+                    <td>${item.firstName}</td>
+                    <td class="db-email-item">${item.email}</td>
+                    <td class="db-jobtitle-item">${item.jobTitle}</td>
+                    <td class="db-dept-item">${item.department}</td>
+                    <td class="db-loc-item">${item.location}</td>
+                    <td><button type="button" class="btn btn-success edit-person-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button type="button" class="btn btn-danger del-person-btn"><i class="fa-solid fa-trash"></i></button></td>
+                </tr>
+                `)
+            })
+        }
+    })
+
+}
+
+
+/*===================GET ALL DEPTS======================*/
+$("#departmentsBtn").click(getAllDepartments)
+
+
+function getAllDepartments() {
+
+    $.ajax({
+        "url": "libs/php/getAllDepartments.php",
+        "type": "GET",
+        "success": function(result) {
+            console.log(result);
+
+            $(".db-body").html("");
+            result.data.forEach(item => {
+                $("#departments-tab-pane .db-body").append(`
+                <tr class="emp-row" data-deptid="${item.id}">
+                    <td class="name">${item.name}</td>
+                    <td class="locationID">${item.location}</td>
+                    <td class="modify"><button type="button" class="btn btn-danger del-dept-btn"><i class="fa-solid fa-trash"></i></button></td>
+                </tr>
+                `)
+            })
+        }
+    })
+
+}
+
+/*===================GET ALL LOCATIONS======================*/
+$("#locationsBtn").click(getAllLocations)
+
+function getAllLocations() {
+
+    $.ajax({
+        "url": "libs/php/getAllLocations.php",
+        "type": "GET",
+        "success": function(result) {
+            $(".db-body").html("");
+            result.data.forEach(item => {
+                $("#locations-tab-pane .db-body").append(`
+                <tr class="emp-row" data-locid="${item.id}">
+                    <td class="name">${item.name}</td>
+                    <td class="modify"><button type="button" class="btn btn-danger del-loc-btn"><i class="fa-solid fa-trash"></i></button></td>
+                </tr>
+                `)
+            })
+        }
+    })
+
+}
+
+
+
 
 /*===============EDIT PERSONNEL==============*/
 

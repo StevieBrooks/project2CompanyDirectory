@@ -20,336 +20,374 @@
     <title>Company Directory</title>
 </head>
 <body>
-    
-    <nav class="navbar navbar-expand-lg bg-primary position-fixed w-100 top-0 z-3 pb-0">
-        <div class="container-fluid d-flex justify-content-between">
 
-          <a class="navbar-brand" href="#"><button type="button" class="btn btn-primary border border-light">Company X</button></a>
+  <!------------------DATABASE HEADER----------------->
 
-          <ul class="nav nav-tabs" id="myTab" role="tablist">
+  <div class="db-header position-relative top-0 w-100">
 
-            <li class="nav-item nav-item-pers" role="presentation">
-              <button class="nav-link active" id="personnelBtn" data-bs-toggle="tab" data-bs-target="#personnel-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">
-                <i class="fa-solid fa-users"></i><span class="d-none d-sm-block">Personnel</span>
-              </button>
-            </li>
+    <div class="row">
 
-            <li class="nav-item nav-item-dept" role="presentation">
-              <button class="nav-link" id="departmentsBtn" data-bs-toggle="tab" data-bs-target="#departments-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">
-                <i class="fa-solid fa-building"></i><span class="d-none d-sm-block">Departments</span>
-              </button>
-            </li>
+      <div class="col">
 
-            <li class="nav-item nav-item-loc" role="presentation">
-              <button class="nav-link" id="locationsBtn" data-bs-toggle="tab" data-bs-target="#locations-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">
-                <i class="fa-solid fa-earth-americas"></i><span class="d-none d-sm-block">Locations</span>
-              </button>
-            </li>
+          <input class="form-control emp-search me-2" id="empSearch" type="search" placeholder="Search Employees" aria-label="Search">
+          <!-- <button class="btn btn-light emp-search-btn" type="submit">Search</button> -->
 
-            <li class="nav-item nav-item-add" role="presentation">
-              <button class="nav-link" id="addBtn" data-bs-toggle="tab" data-bs-target="#locations-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">
-                <i class="fa-solid fa-folder-plus"></i><span class="d-none d-sm-block">Add New</span>
-              </button>
-            </li>
-    
-          </ul>
+      </div>
 
-          <!-- <div class="btn-group alter-buttons mx-3 z-2" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-primary border border-light">Count: <span class="rec-count"></span></button>
-            <button type="button" class="btn btn-primary border border-light personnel-btn"><i class="fa-solid fa-users"></i></button>
-            <button type="button" class="btn btn-primary border border-light department-btn"><i class="fa-solid fa-building"></i></button>
-            <button type="button" class="btn btn-primary border border-light location-btn"><i class="fa-solid fa-earth-americas"></i></button>
-            <button type="button" class="btn btn-primary border border-light add-btn">Add+</button>
-          </div> -->
+      <div class="col">
+
+        <div class="btn--group" role="group" aria-label="buttons">
+
+          <button id="addBtn" class="btn btn-primary"><i class="fa-solid fa-folder-plus"></i></button>
 
         </div>
-      </nav>
 
-      
+      </div>
 
-      <div class="container table-container position-relative mx-auto">
+    </div>
 
-        <form class="d-flex search-bar my-2" role="search">
-          <input class="form-control emp-search me-2" type="search" placeholder="Search Employees" aria-label="Search">
-          <button class="btn btn-light emp-search-btn" type="submit">Search</button>
-        </form>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid d-flex justify-content-between">
 
-        <table class="table table-primary table-hover">
-          <thead class="db-head">
-            <tr>
-              <th class="db-surname">Surname</th>
-              <th class="db-firstname">First Name</th>
-              <th class="db-email">Email</th>
-              <th class="db-jobtitle">Job Title</th>
-              <th class="db-dept">Department</th>
-              <th class="db-loc">Location</th>
-              <th class="db-edDel">Edit / Delete</th>
-            </tr>
-          </thead>
-          <tbody class="db-body">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+          <li class="nav-item nav-item-pers" role="presentation">
+            <button class="nav-link active" id="personnelBtn" data-bs-toggle="tab" data-bs-target="#personnel-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">
+              <i class="fa-solid fa-users"></i><span class="d-none d-sm-block">Personnel</span>
+            </button>
+          </li>
+
+          <li class="nav-item nav-item-dept" role="presentation">
+            <button class="nav-link" id="departmentsBtn" data-bs-toggle="tab" data-bs-target="#departments-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">
+              <i class="fa-solid fa-building"></i><span class="d-none d-sm-block">Departments</span>
+            </button>
+          </li>
+
+          <li class="nav-item nav-item-loc" role="presentation">
+            <button class="nav-link" id="locationsBtn" data-bs-toggle="tab" data-bs-target="#locations-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">
+              <i class="fa-solid fa-earth-americas"></i><span class="d-none d-sm-block">Locations</span>
+            </button>
+          </li>
   
-          </tbody>
-        </table>
-      </div>
+        </ul>
 
-      <div class="modal" id="addModal" tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title"></h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+      </div>
+    </nav>
+
+  </div>
+
+
+  <!------------------DATABASE BODY----------------->
+
+  <div class="container table-container mx-auto">
+
+    <div class="tab-pane show active" id="personnel-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+
+      <table class="table table-hover">
+    
+        <tbody class="db-body">
   
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary add-new-btn">Add to Database</button>
-            </div>
-          </div>
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="tab-pane" id="departments-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+
+      <table class="table table-hover">
+
+        <tbody class="db-body">
+  
+        </tbody>
+        
+      </table>
+
+    </div>
+
+    <div class="tab-pane" id="locations-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+
+      <table class="table table-hover">
+
+        <tbody class="db-body">
+  
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+    
+  </div>
+
+  <!------------------DATABASE FOOTER----------------->
+
+  <div class="db-footer text-center">
+
+    <p class="fw-light my-3">Company Directory (v2.2) built by Brooks[ode</p>
+
+  </div>
+
+
+  <div class="modal" id="addPersonnelModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add New Personnel</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" form="addPersonnelForm" class="btn btn-primary add-new-btn">Add to Database</button>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div class="modal" id="personDenyModal" tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Unable to Execute</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <p>Apologies! This person exists within our database already and therefore cannot be added again.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-          </div>
+  <div class="modal" id="personDenyModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Unable to Execute</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Apologies! This person exists within our database already and therefore cannot be added again.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div class="modal" id="deptDenyModal" tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Unable to Execute</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <p>Apologies! This department cannot be added as it already exists in the location you have selected.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-          </div>
+  <div class="modal" id="deptDenyModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Unable to Execute</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Apologies! This department cannot be added as it already exists in the location you have selected.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div class="modal" id="locDenyModal" tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Unable to Execute</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <p>Apologies! This location cannot be added as it already exists.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-          </div>
+  <div class="modal" id="locDenyModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Unable to Execute</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Apologies! This location cannot be added as it already exists.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
+    </div>
+  </div>
 
 
 
 
-      <div class="modal" id="editPModal" tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Edit Item</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body d-flex flex-column ">
-              <input class="edit-surname m-2" type="text" placeholder="Surname">
-              <input class="edit-firstname m-2" type="text" placeholder="First Name">
-              <input class="edit-email m-2" type="email" placeholder="Email">
-              <input class="edit-jobtitle m-2" type="text" placeholder="Job Title">
-              <!--FOR DROPDOWNS, NEEDS TO BE DYNAMIC AS MORE CAN BE ADDED-->
-              <select name="editPDept" id="editPDept" class="edit-dept m-2 py-1">
-                <option value="">Select Department</option>
-              </select>
-              <input type="text" class="dept-location m-2 py-1" placeholder="" readonly>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-primary edit-p-update" data-bs-dismiss="modal">Update</button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-          </div>
+  <div class="modal" id="editPModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Item</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body d-flex flex-column ">
+          <input class="edit-surname m-2" type="text" placeholder="Surname">
+          <input class="edit-firstname m-2" type="text" placeholder="First Name">
+          <input class="edit-email m-2" type="email" placeholder="Email">
+          <input class="edit-jobtitle m-2" type="text" placeholder="Job Title">
+          <!--FOR DROPDOWNS, NEEDS TO BE DYNAMIC AS MORE CAN BE ADDED-->
+          <select name="editPDept" id="editPDept" class="edit-dept m-2 py-1">
+            <option value="">Select Department</option>
+          </select>
+          <input type="text" class="dept-location m-2 py-1" placeholder="" readonly>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary edit-p-update" data-bs-dismiss="modal">Update</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div class="modal" id="editPCheck" tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Confirm Update</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <p>Are you absolutely sure you want to update information for this member of personnel?</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary edit-p-yes" data-bs-dismiss="modal">Yes</button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-            </div>
-          </div>
+  <div class="modal" id="editPCheck" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm Update</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you absolutely sure you want to update information for this member of personnel?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary edit-p-yes" data-bs-dismiss="modal">Yes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div class="modal" id="editPDeny1" tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Issue Editing Item</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <p>Apologies! But please enter a valid email address.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-          </div>
+  <div class="modal" id="editPDeny1" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Issue Editing Item</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Apologies! But please enter a valid email address.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div class="modal" id="editPDeny2" tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Issue Editing Item</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <p>Apologies! But this email already exists. Please double check and try again.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-          </div>
+  <div class="modal" id="editPDeny2" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Issue Editing Item</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Apologies! But this email already exists. Please double check and try again.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
+    </div>
+  </div>
 
 
 
 
 
-      <div class="modal" id="deletePModal" tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Delete Item</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <p>This action cannot be undone. Are you sure you want to delete this item?</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary delete-p-yes" data-bs-dismiss="modal">Yes</button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-            </div>
-          </div>
+  <div class="modal" id="deletePModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete Item</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>This action cannot be undone. Are you sure you want to delete this item?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary delete-p-yes" data-bs-dismiss="modal">Yes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div class="modal" id="deleteDModal" tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Delete Item</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <p>This action cannot be undone. Are you sure you want to delete this item?</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary delete-d-yes" data-bs-dismiss="modal">Yes</button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-            </div>
-          </div>
+  <div class="modal" id="deleteDModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete Item</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>This action cannot be undone. Are you sure you want to delete this item?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary delete-d-yes" data-bs-dismiss="modal">Yes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div class="modal" id="deleteLModal" tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Delete Item</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <p>This action cannot be undone. Are you sure you want to delete this item?</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary delete-l-yes" data-bs-dismiss="modal">Yes</button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-            </div>
-          </div>
+  <div class="modal" id="deleteLModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete Item</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>This action cannot be undone. Are you sure you want to delete this item?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary delete-l-yes" data-bs-dismiss="modal">Yes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div class="modal" id="deleteDeptModal" tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Issue Deleting Department</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <p>Apologies! But personnel are still assigned to this department and therefore it cannot be deleted at this time.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary delete-yes" data-bs-dismiss="modal">Close</button>
-            </div>
-          </div>
+  <div class="modal" id="deleteDeptModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Issue Deleting Department</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Apologies! But personnel are still assigned to this department and therefore it cannot be deleted at this time.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary delete-yes" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div class="modal" id="deleteLocModal" tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Issue Deleting Location</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <p>Apologies! But departments are still assigned to this location and therefore it cannot be deleted at this time.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-          </div>
+  <div class="modal" id="deleteLocModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Issue Deleting Location</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Apologies! But departments are still assigned to this location and therefore it cannot be deleted at this time.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div class="modal" id="formWarningModal" tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Incomplete Inputs</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <p>Please complete all sections of the form before submitting.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-          </div>
+  <div class="modal" id="formWarningModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Incomplete Inputs</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Please complete all sections of the form before submitting.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
+    </div>
+  </div>
 
 
 
