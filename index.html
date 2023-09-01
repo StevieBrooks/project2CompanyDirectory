@@ -275,26 +275,56 @@
 
 
 
-  <div class="modal" id="editPModal" tabindex="-1">
+  <div class="modal" id="editPersonnelModal" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Edit Item</h5>
+          <h5 class="modal-title">Edit Personnel</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body d-flex flex-column ">
-          <input class="edit-surname m-2" type="text" placeholder="Surname">
-          <input class="edit-firstname m-2" type="text" placeholder="First Name">
-          <input class="edit-email m-2" type="email" placeholder="Email">
-          <input class="edit-jobtitle m-2" type="text" placeholder="Job Title">
-          <!--FOR DROPDOWNS, NEEDS TO BE DYNAMIC AS MORE CAN BE ADDED-->
-          <select name="editPDept" id="editPDept" class="edit-dept m-2 py-1">
-            <option value="">Select Department</option>
-          </select>
-          <input type="text" class="dept-location m-2 py-1" placeholder="" readonly>
+
+          <form action="" id="editPersonnelForm">
+
+            <input type="hidden" id="editPersonnelID">
+
+            <div class="form-floating m-2">
+              <input class="form-control edit-surname" id="editPersonnelLastName" type="text" placeholder="Surname" required>
+              <label for="editPersonnelLastName">Surname</label>
+            </div>
+
+            <div class="form-floating m-2">
+              <input class="form-control edit-firstname" id="editPersonnelFirstName" type="text" placeholder="First Name" required>
+              <label for="editPersonnelFirstName">First Name</label>
+            </div>
+
+            <div class="form-floating m-2">
+              <input class="form-control edit-jobtitle" id="editPersonnelJobTitle" type="text" placeholder="Job Title" required>
+              <label for="editPersonnelJobTitle">Job Title</label>
+            </div>
+
+            <div class="form-floating m-2">
+              <input class="form-control edit-email" id="editPersonnelEmail" type="email" placeholder="Email" required>
+              <label for="editPersonnelEmail">Email</label>
+            </div>
+
+            <div class="form-floating m-2">
+              <select id="editPDept" class="form-select edit-p-dept pt-4">
+                <option value="">Department</option>
+              </select>
+              <label for="editPDept">Department</label>
+            </div>
+
+            <div class="form-floating m-2">
+              <input type="text" class="form-control dept-location m-2 py-1" id="departmentLocation" placeholder="Department location" readonly>
+              <label for="departmentLocation">Location</label>
+            </div>
+            
+          </form>
+
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary edit-p-update" data-bs-dismiss="modal">Update</button>
+          <button type="submit" class="btn btn-primary edit-p-update" form="editPersonnelForm" data-bs-dismiss="modal">Update</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>

@@ -1,10 +1,6 @@
 /*==================GLOBAL VARIABLES======================*/
 
-let departmentArr = null;
-let locationArr = null;
-let personnelArr = null;
 let tbody = $("table tbody");
-let perCount = 0;
 let empQuery = null;
 const navItemPers = $(".nav-item-pers");
 const navItemDept = $(".nav-item-dept");
@@ -265,14 +261,14 @@ function getAllPersonnel() {
             $(".db-body").html("");
             result.data.forEach(item => {
                 $("#personnel-tab-pane .db-body").append(`
-                <tr class="emp-row" data-empid="${item.id}">
+                <tr class="emp-row">
                     <td>${item.lastName}</td>
                     <td>${item.firstName}</td>
                     <td class="db-email-item">${item.email}</td>
                     <td class="db-jobtitle-item">${item.jobTitle}</td>
                     <td class="db-dept-item">${item.department}</td>
                     <td class="db-loc-item">${item.location}</td>
-                    <td><button type="button" class="btn btn-success edit-person-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <td><button type="button" class="btn btn-success edit-person-btn" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
                     <button type="button" class="btn btn-danger del-person-btn"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
                 `)
@@ -310,6 +306,7 @@ function getAllDepartments() {
 
 }
 
+
 /*===================GET ALL LOCATIONS======================*/
 $("#locationsBtn").click(getAllLocations)
 
@@ -335,7 +332,6 @@ function getAllLocations() {
 
 
 
-
 /*===============EDIT PERSONNEL==============*/
 
 let persID4Edit = null;
@@ -344,126 +340,76 @@ let persFName4Edit = null;
 let persEmail4Edit = null;
 let persJobTitle4Edit = null;
 let persDept4Edit = null;
-let deptEditChoice = null;
-let locDropdown4PersonEdit = null;
-let editPDeptID = null;
-let enteredEmail = null;
-let ajaxCall = null;
+// let deptEditChoice = null;
+// let locDropdown4PersonEdit = null;
+// let editPDeptID = null;
+// let enteredEmail = null;
+// let ajaxCall = null;
+
+$("#editPersonnelModal").on("show.bs.modal", function (e) {
+  
+    $.ajax({
+      url:
+        "libs/php/getPersonnelByID.php",
+      type: "POST",
+      dataType: "json",
+      data: {
+        id: persID4Edit 
+      },
+      success: function (result) {
+        console.log(result);
+  
+        if (result.status.code == "200") {
+  
+          $("#editPersonnelID").val(result.data.personnel[0].id);
+  
+          persSName4Edit = $("#editPersonnelLastName").val(result.data.personnel[0].lastName);
+          persFName4Edit = $("#editPersonnelFirstName").val(result.data.personnel[0].firstName);
+          persJobTitle4Edit = $("#editPersonnelJobTitle").val(result.data.personnel[0].jobTitle);
+          persEmail4Edit = $("#editPersonnelEmail").val(result.data.personnel[0].email);
+  
+          $("#editPersonnelDepartment").html("");
+  
+          $.each(result.data.department, function () {
+            $("#editPDept").append(
+              $("<option>", {
+                value: this.id,
+                text: this.name
+              })
+            );
+          });
+  
+          persDept4Edit = $("#editPDept").val(result.data.personnel[0].departmentID);
+          
+        } else {
+          $("#editPersonnelModal .modal-title").replaceWith(
+            "Error retrieving data"
+          );
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        $("#editPersonnelModal .modal-title").replaceWith(
+          "Error retrieving data"
+        );
+      }
+    });
+  });
 
 
 tbody.on("click", ".edit-person-btn", function(e) {
 
-    persID4Edit = this.parentElement.parentElement.attributes[1].nodeValue;
+    persID4Edit = e.currentTarget.dataset.empid;
+
+    $("#editPersonnelModal").modal("show");
+    $("#editPersonnelModal .dept-location").css("display", "none");
+
+})
+
+$("#editPersonnelModal").on("submit", function(e) {
+
+    e.preventDefault();
+
     console.log(persID4Edit);
-    persSName4Edit = this.parentElement.parentElement.children[0].innerHTML;
-    persFName4Edit = this.parentElement.parentElement.children[1].innerHTML;
-    persEmail4Edit = this.parentElement.parentElement.children[2].innerHTML;
-    persJobTitle4Edit = this.parentElement.parentElement.children[3].innerHTML;
-    persDept4Edit = this.parentElement.parentElement.children[4].innerHTML;
-    
-    
-    console.log($("#editPModal .edit-surname"));
-
-    $("#editPModal .edit-surname").attr("value", persSName4Edit);
-    $("#editPModal .edit-firstname").attr("value", persFName4Edit);
-    $("#editPModal .edit-email").attr("value", persEmail4Edit);
-    $("#editPModal .edit-jobtitle").attr("value", persJobTitle4Edit);
-
-
-    $.ajax({
-        url: "libs/php/getAllDepartments.php",
-        type: "GET",
-        success: function(result) {
-            const alphabeticalDepts = result.data.sort((a, b) => a.name.localeCompare(b.name));
-            result.data.forEach(item => {
-                $("#editPDept").append(`
-                <option value="${item.id}">${item.name}</option>
-                `)
-                if(item.name == persDept4Edit) {
-                    editPDeptID = item.id;
-                    setTimeout(popPDeptChoice, 0o10);
-                }
-            })
-        }
-    })
-
-    $("#editPModal").modal("show");
-    $("#editPModal .dept-location").css("display", "none");
-
-})
-
-function popPDeptChoice() {
-    
-    $("#editPModal .edit-dept").val(editPDeptID);
-        
-    $("#editPModal").modal("show");
-    $("#editPLoc").css("display", "none");
-
-}
-
-$("#editPDept").on("change", function(e) {
-    
-    choice = e.target.value;
-
-    $.ajax({
-        url: "libs/php/getAllDepartments.php",
-        type: "GET",
-        success: function(result) {
-            console.log(result);
-            result.data.forEach(item => {
-                if(choice == item.id) {
-                    choice = item.location;
-                    console.log(choice);
-                    $("#editPModal .dept-location").css("display", "block");
-                    $("#editPModal .dept-location")[0].attributes[2].value = choice;
-                }
-            })
-        }
-    })
-})
-
-$(".edit-p-update").click(function() {
-
-    if($("#editPModal .edit-surname").val().length > 0) {
-        persSName4Edit = $("#editPModal .edit-surname").val();
-    }
-
-    if($("#editPModal .edit-firstname").val().length > 0) {
-        persFName4Edit = $("#editPModal .edit-firstname").val();
-    }
-
-    enteredEmail = $("#editPModal .edit-email").val();
-    
-    checkExistingEmail(enteredEmail);
-
-    if(isValidEmail(enteredEmail)) {
-        persEmail4Edit = enteredEmail;
-    } else if(enteredEmail.length == 0) {
-        persEmail4Edit = persEmail4Edit;
-        console.log(persEmail4Edit);
-    } else {
-        $("#editPDeny1").modal("show");
-    }
-
-    if($("#editPModal .edit-jobtitle").val().length > 0) {
-        persJobTitle4Edit = $("#editPModal .edit-jobtitle").val();
-    }
-
-
-    persDept4Edit = $("#editPModal .edit-dept").val();
-
-    setTimeout(function() {
-        $("#editPModal .edit-surname").val("");
-        $("#editPModal .edit-firstname").val("");
-        $("#editPModal .edit-email").val("");
-        $("#editPModal .edit-jobtitle").val("");
-    }, 1000)
-    
-
-
-})
-
-ajaxCall = function() {
 
     $.ajax({
         url: `libs/php/editPersonnel.php?firstName=${persFName4Edit}&lastName=${persSName4Edit}&jobTitle=${persJobTitle4Edit}&email=${persEmail4Edit}&departmentID=${persDept4Edit}&id=${persID4Edit}`,
@@ -473,37 +419,7 @@ ajaxCall = function() {
             getAllPersonnel();
         }
     })
-
-}
-
-function isValidEmail(email) {
-    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    return emailPattern.test(email);
-}
-
-function checkExistingEmail(emailAddy) {
-    console.log(emailAddy);
-    $.ajax({
-        url: "libs/php/getAllPersonnel.php",
-        type: "GET",
-        success: function(result) {
-            let emailExists = false;
-            for (item of result.data) {
-                if (item.email === emailAddy) {
-                    emailExists = true;
-                    break; 
-                }
-            }
-
-            if (emailExists) {
-                $("#editPDeny2").modal("show");
-            } else {
-                ajaxCall();
-            }
-        }
-    });
-}
-
+})
 
 
 /*===============DELETE PERSONNEL BY ID==============*/
