@@ -63,26 +63,6 @@ $("#addBtn").click(function() {
 
     if(personnelBtn.hasClass("active")) {
 
-        $("#addPersonnelModal .modal-body").html(`
-        <form id="addPersonnelForm">
-
-            <input type="hidden" id="addPersonnelID">
-
-            <input type="text" class="form-control p-fname my-2" id="addFirstName" placeholder="First Name....">
-            
-            <input type="text" class="form-control p-sname my-2" id="addLastName" placeholder="Surname...">
-
-            <input type="text" class="form-control p-jobtitle my-2" id="addJobTitle" placeholder="Job Title">
-
-            <input type="email" class="form-control p-email my-2" id="addEmail" placeholder="Email">
-
-            <select class="form-select p-dept my-2" id="addDept" aria-label="Default select example">
-                <option value="" selected>Department</option>
-              </select>
-
-        </form>
-        `)
-
         $.ajax({
             url: "libs/php/getAllDepartments.php",
             type: "GET",
@@ -98,17 +78,6 @@ $("#addBtn").click(function() {
 
     } else if(departmentsBtn.hasClass("active")) {
 
-        $("#addModal .modal-title").html("Add New Department");
-
-        $("#addModal .modal-body").html(`
-        <input type="text" class="form-control d-name my-2" id="formControlInput1" placeholder="Department name...">
-
-        <select class="form-select d-location my-2" id="deptLocForm" aria-label="Default select example">
-            <option value="" selected>Department Location</option>
-
-          </select>
-        `)
-
         $.ajax({
             url: "libs/php/getAllLocations.php",
             type: "GET",
@@ -120,17 +89,13 @@ $("#addBtn").click(function() {
             }
         })
 
+        $("#addDepartmentModal").modal("show");
+
     } else {
 
-        $("#addModal .modal-title").html("Add New Location");
-
-        $("#addModal .modal-body").html(`
-        <input type="text" class="form-control l-name" id="formControlInput1" placeholder="Location name...">
-        `)
+        $("#addLocationModal").modal("show");
 
     }
-
-    $("#addModal").modal("show");
 
 })
 
@@ -176,10 +141,14 @@ $("#addPersonnelForm").on("submit", function(e) {
         }
     })
 
+    $(this).trigger("reset");
+
 })
 
 
-function pdlChoiceDepartment() {
+$("#addDepartmentForm").on("submit", function(e) {
+
+    e.preventDefault();
 
     const deptName = $(".d-name").val();
     const deptLocation = $(".d-location").val();
@@ -235,13 +204,18 @@ function pdlChoiceDepartment() {
         })
     }, 0o01)
 
-}
+    $(this).trigger("reset");
 
-function pdlChoiceLocation() {
+})
+
+
+$("#addLocationForm").on("submit", function(e) {
+
+    e.preventDefault();
 
     const locationName = $(".l-name").val();
     let locationPresent = false;
-
+    
     $.ajax({
         url: "libs/php/getAllLocations.php",
         type: "GET",
@@ -273,7 +247,9 @@ function pdlChoiceLocation() {
         }
     })
 
-}
+    $(this).trigger("reset");
+
+})
 
 
 /*===================GET ALL PERSONNEL======================*/

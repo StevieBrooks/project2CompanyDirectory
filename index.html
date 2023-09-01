@@ -139,10 +139,83 @@
         </div>
         <div class="modal-body">
 
+          <form id="addPersonnelForm">
+
+            <input type="hidden" id="addPersonnelID">
+
+            <input type="text" class="form-control p-fname my-2" id="addFirstName" placeholder="First Name....">
+            
+            <input type="text" class="form-control p-sname my-2" id="addLastName" placeholder="Surname...">
+
+            <input type="text" class="form-control p-jobtitle my-2" id="addJobTitle" placeholder="Job Title">
+
+            <input type="email" class="form-control p-email my-2" id="addEmail" placeholder="Email">
+
+            <select class="form-select p-dept my-2" id="addDept" aria-label="Default select example">
+                <option value="" selected>Department</option>
+              </select>
+
+        </form>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" form="addPersonnelForm" class="btn btn-primary add-new-btn">Add to Database</button>
+          <button type="submit" form="addPersonnelForm" class="btn btn-primary add-new-btn" data-bs-dismiss="modal">Add to Database</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal" id="addDepartmentModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add New Department</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <form id="addDepartmentForm">
+
+            <input type="text" class="form-control d-name my-2" id="addDepartmentName" placeholder="Department name...">
+
+            <select class="form-select d-location my-2" id="addDeptLoc" aria-label="Default select example">
+              <option value="" selected>Department Location</option>
+
+            </select>
+
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" form="addDepartmentForm" class="btn btn-primary add-new-btn" data-bs-dismiss="modal">Add to Database</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal" id="addLocationModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add New Location</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <form id="addLocationForm">
+
+            <input type="text" class="form-control l-name" id="addLocationName" placeholder="Location name...">
+
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" form="addLocationForm" class="btn btn-primary add-new-btn" data-bs-dismiss="modal">Add to Database</button>
         </div>
       </div>
     </div>
