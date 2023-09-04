@@ -424,12 +424,10 @@ $("#editPersonnelModal").on("submit", function(e) {
 
 /*===================EDIT DEPARTMENT==================*/
 deptID4Edit = null;
-deptLoc4Edit = null;
 
 tbody.on("click", ".edit-dept-btn", function(e) {
 
     deptID4Edit = e.currentTarget.dataset.deptid;
-    console.log(e);
 
     $("#editDepartmentsModal").modal("show");
 
@@ -437,7 +435,9 @@ tbody.on("click", ".edit-dept-btn", function(e) {
 
 $("#editDepartmentsModal").on("show.bs.modal", function (e) {
 
-    console.log(e);
+    console.log($("#editDepartmentLocation"));
+
+    popDeptLocations();
   
     $.ajax({
       url:
@@ -448,14 +448,12 @@ $("#editDepartmentsModal").on("show.bs.modal", function (e) {
         id: deptID4Edit 
       },
       success: function (result) {
-        console.log(result);
   
         if (result.status.code == "200") {
 
             getDeptLocation(result);
             
-            $("#editDepartmentName").val(result.data[0].name);
-            $("#editDepartmentLocation").val();
+            $("#editDepartmentName").val(result.data[0].name);        
           
         } else {
           $("#editDepartmentsModal .modal-title").replaceWith(
@@ -471,6 +469,20 @@ $("#editDepartmentsModal").on("show.bs.modal", function (e) {
     });
 });
 
+function popDeptLocations() {
+    
+    $.ajax({
+        url: "libs/php/getAllLocations.php",
+        type: "GET",
+        success: function(result) {
+            const alphabeticalLocs = result.data.sort((a, b) => a.name.localeCompare(b.name));
+                alphabeticalLocs.forEach(item => {
+                    $("#editDepartmentLocation").append(`<option value="${item.id}">${item.name}</option>`)
+                })
+        }
+    })
+}
+
 function getDeptLocation(input) {
     $.ajax({
         url: "libs/php/getLocationByID.php",
@@ -479,11 +491,38 @@ function getDeptLocation(input) {
             id: input.data[0].locationID
         },
         success: function(result) {
-            deptLoc4Edit = result.data[0].name;
-        }
+            const deptLoc4Edit = result.data[0].name;
+            $("#editDepartmentLocation").val(deptLoc4Edit);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+        $("#editDepartmentsModal .modal-title").replaceWith(
+          "Error retrieving data"
+        );
+      }
     })
-    console.log(deptLoc4Edit); // returning null
 }
+
+$("#editDepartmentsModal").on("submit", function(e) {
+
+    e.preventDefault();
+
+    
+    const formData = $("#editDepartmentsForm").serialize();
+    console.log(formData);
+
+    $.ajax({
+        url: `libs/php/editPersonnel.php?id=${persID4Edit}`,
+        type: "POST",
+        data: formData,
+        success: function(result) {
+            console.log(result);
+            getAllDepartments();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log("Error performing operation.")
+          }
+    })
+})
 
 
 /*===============DELETE PERSONNEL BY ID==============*/

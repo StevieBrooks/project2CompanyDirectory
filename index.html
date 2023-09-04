@@ -413,7 +413,9 @@
             </div>
 
             <div class="form-floating m-2">
-              <input class="form-control edit-dept-loc" id="editDepartmentLocation" name="locationID" type="text" placeholder="Location">
+              <select id="editDepartmentLocation" class="form-select edit-d-loc pt-4" name="locationID">
+                <!-- <option value="">Location</option> -->
+              </select>
               <label for="editDepartmentLocation">Location</label>
             </div>
             
@@ -421,7 +423,7 @@
 
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary edit-p-update" form="editPersonnelForm" data-bs-dismiss="modal">Update</button>
+          <button type="submit" class="btn btn-primary edit-d-update" form="editDepartmentsForm" data-bs-dismiss="modal">Update</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
