@@ -335,16 +335,20 @@ function getAllLocations() {
 /*===============EDIT PERSONNEL==============*/
 
 let persID4Edit = null;
-let persSName4Edit = null;
-let persFName4Edit = null;
-let persEmail4Edit = null;
-let persJobTitle4Edit = null;
-let persDept4Edit = null;
 // let deptEditChoice = null;
 // let locDropdown4PersonEdit = null;
 // let editPDeptID = null;
 // let enteredEmail = null;
 // let ajaxCall = null;
+
+tbody.on("click", ".edit-person-btn", function(e) {
+
+    persID4Edit = e.currentTarget.dataset.empid;
+
+    $("#editPersonnelModal").modal("show");
+    $("#editPersonnelModal .dept-location").css("display", "none");
+
+})
 
 $("#editPersonnelModal").on("show.bs.modal", function (e) {
   
@@ -363,10 +367,10 @@ $("#editPersonnelModal").on("show.bs.modal", function (e) {
   
           $("#editPersonnelID").val(result.data.personnel[0].id);
   
-          persSName4Edit = $("#editPersonnelLastName").val(result.data.personnel[0].lastName);
-          persFName4Edit = $("#editPersonnelFirstName").val(result.data.personnel[0].firstName);
-          persJobTitle4Edit = $("#editPersonnelJobTitle").val(result.data.personnel[0].jobTitle);
-          persEmail4Edit = $("#editPersonnelEmail").val(result.data.personnel[0].email);
+          $("#editPersonnelLastName").val(result.data.personnel[0].lastName);
+          $("#editPersonnelFirstName").val(result.data.personnel[0].firstName);
+          $("#editPersonnelJobTitle").val(result.data.personnel[0].jobTitle);
+          $("#editPersonnelEmail").val(result.data.personnel[0].email);
   
           $("#editPersonnelDepartment").html("");
   
@@ -379,7 +383,7 @@ $("#editPersonnelModal").on("show.bs.modal", function (e) {
             );
           });
   
-          persDept4Edit = $("#editPDept").val(result.data.personnel[0].departmentID);
+          $("#editPDept").val(result.data.personnel[0].departmentID);
           
         } else {
           $("#editPersonnelModal .modal-title").replaceWith(
@@ -393,24 +397,14 @@ $("#editPersonnelModal").on("show.bs.modal", function (e) {
         );
       }
     });
-  });
-
-
-tbody.on("click", ".edit-person-btn", function(e) {
-
-    persID4Edit = e.currentTarget.dataset.empid;
-
-    $("#editPersonnelModal").modal("show");
-    $("#editPersonnelModal .dept-location").css("display", "none");
-
-})
+});
 
 $("#editPersonnelModal").on("submit", function(e) {
 
     e.preventDefault();
 
     
-    let formData = $("#editPersonnelForm").serialize();
+    const formData = $("#editPersonnelForm").serialize();
     console.log(formData);
 
     $.ajax({
@@ -429,8 +423,67 @@ $("#editPersonnelModal").on("submit", function(e) {
 
 
 /*===================EDIT DEPARTMENT==================*/
+deptID4Edit = null;
+deptLoc4Edit = null;
 
+tbody.on("click", ".edit-dept-btn", function(e) {
 
+    deptID4Edit = e.currentTarget.dataset.deptid;
+    console.log(e);
+
+    $("#editDepartmentsModal").modal("show");
+
+})
+
+$("#editDepartmentsModal").on("show.bs.modal", function (e) {
+
+    console.log(e);
+  
+    $.ajax({
+      url:
+        "libs/php/getDepartmentByID.php",
+      type: "POST",
+      dataType: "json",
+      data: {
+        id: deptID4Edit 
+      },
+      success: function (result) {
+        console.log(result);
+  
+        if (result.status.code == "200") {
+
+            getDeptLocation(result);
+            
+            $("#editDepartmentName").val(result.data[0].name);
+            $("#editDepartmentLocation").val();
+          
+        } else {
+          $("#editDepartmentsModal .modal-title").replaceWith(
+            "Error retrieving data"
+          );
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        $("#editDepartmentsModal .modal-title").replaceWith(
+          "Error retrieving data"
+        );
+      }
+    });
+});
+
+function getDeptLocation(input) {
+    $.ajax({
+        url: "libs/php/getLocationByID.php",
+        type: "GET",
+        data: {
+            id: input.data[0].locationID
+        },
+        success: function(result) {
+            deptLoc4Edit = result.data[0].name;
+        }
+    })
+    console.log(deptLoc4Edit); // returning null
+}
 
 
 /*===============DELETE PERSONNEL BY ID==============*/
