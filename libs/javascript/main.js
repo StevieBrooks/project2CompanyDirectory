@@ -36,13 +36,13 @@ $("#empSearch").on("keyup", function() {
             $(".db-body").html("");
             result.data.forEach(item => {
                 $("#personnel-tab-pane .db-body").append(`
-                <tr class="emp-row" data-empid="${item.id}">
+                <tr class="emp-row">
                     <td>${item.lastName}</td>
                     <td>${item.firstName}</td>
                     <td class="db-email-item">${item.email}</td>
                     <td class="db-jobtitle-item">${item.jobTitle}</td>
                     <td class="db-dept-item">${item.department}</td>
-                    <td class="modify"><button type="button" class="btn btn-success edit-person-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <td class="modify"><button type="button" class="btn btn-success edit-person-btn" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
                     <button type="button" class="btn btn-danger del-person-btn"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
                 `)
@@ -294,10 +294,10 @@ function getAllDepartments() {
             $(".db-body").html("");
             result.data.forEach(item => {
                 $("#departments-tab-pane .db-body").append(`
-                <tr class="emp-row" data-deptid="${item.id}">
+                <tr class="emp-row">
                     <td class="name">${item.name}</td>
                     <td class="locationID">${item.location}</td>
-                    <td class="modify"><button type="button" class="btn btn-danger del-dept-btn"><i class="fa-solid fa-trash"></i></button></td>
+                    <td class="modify"><td><button type="button" class="btn btn-success edit-dept-btn" data-deptid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button><button type="button" class="btn btn-danger del-dept-btn"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
                 `)
             })
@@ -409,17 +409,28 @@ $("#editPersonnelModal").on("submit", function(e) {
 
     e.preventDefault();
 
-    console.log(persID4Edit);
+    
+    let formData = $("#editPersonnelForm").serialize();
+    console.log(formData);
 
     $.ajax({
-        url: `libs/php/editPersonnel.php?firstName=${persFName4Edit}&lastName=${persSName4Edit}&jobTitle=${persJobTitle4Edit}&email=${persEmail4Edit}&departmentID=${persDept4Edit}&id=${persID4Edit}`,
+        url: `libs/php/editPersonnel.php?id=${persID4Edit}`,
         type: "POST",
+        data: formData,
         success: function(result) {
             console.log(result);
             getAllPersonnel();
-        }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log("Error performing operation.")
+          }
     })
 })
+
+
+/*===================EDIT DEPARTMENT==================*/
+
+
 
 
 /*===============DELETE PERSONNEL BY ID==============*/

@@ -130,6 +130,8 @@
   </div>
 
 
+  <!--------------------ADD PERSONNEL--------------------->
+
   <div class="modal" id="addPersonnelModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -167,6 +169,8 @@
   </div>
 
 
+  <!------------------ADD DEPARTMENT---------------------->
+
   <div class="modal" id="addDepartmentModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -197,6 +201,8 @@
   </div>
 
 
+  <!---------------------ADD LOCATION--------------------->
+
   <div class="modal" id="addLocationModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -220,6 +226,8 @@
       </div>
     </div>
   </div>
+
+  <!--------------------DENY ENTRY TO DATABASE------------------>
 
   <div class="modal" id="personDenyModal" tabindex="-1">
     <div class="modal-dialog">
@@ -273,7 +281,7 @@
   </div>
 
 
-
+  <!----------------------EDIT PERSONNEL--------------------->
 
   <div class="modal" id="editPersonnelModal" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="" aria-hidden="true">
     <div class="modal-dialog">
@@ -289,36 +297,36 @@
             <input type="hidden" id="editPersonnelID">
 
             <div class="form-floating m-2">
-              <input class="form-control edit-surname" id="editPersonnelLastName" type="text" placeholder="Surname" required>
+              <input class="form-control edit-surname" id="editPersonnelLastName" name="lastName" type="text" placeholder="Surname">
               <label for="editPersonnelLastName">Surname</label>
             </div>
 
             <div class="form-floating m-2">
-              <input class="form-control edit-firstname" id="editPersonnelFirstName" type="text" placeholder="First Name" required>
+              <input class="form-control edit-firstname" id="editPersonnelFirstName" name="firstName" type="text" placeholder="First Name">
               <label for="editPersonnelFirstName">First Name</label>
             </div>
 
             <div class="form-floating m-2">
-              <input class="form-control edit-jobtitle" id="editPersonnelJobTitle" type="text" placeholder="Job Title" required>
+              <input class="form-control edit-jobtitle" id="editPersonnelJobTitle" name="jobTitle" type="text" placeholder="Job Title">
               <label for="editPersonnelJobTitle">Job Title</label>
             </div>
 
             <div class="form-floating m-2">
-              <input class="form-control edit-email" id="editPersonnelEmail" type="email" placeholder="Email" required>
+              <input class="form-control edit-email" id="editPersonnelEmail" name="email" type="email" placeholder="Email">
               <label for="editPersonnelEmail">Email</label>
             </div>
 
             <div class="form-floating m-2">
-              <select id="editPDept" class="form-select edit-p-dept pt-4">
+              <select id="editPDept" class="form-select edit-p-dept pt-4" name="departmentID">
                 <option value="">Department</option>
               </select>
               <label for="editPDept">Department</label>
             </div>
 
-            <div class="form-floating m-2">
+            <!-- <div class="form-floating m-2">
               <input type="text" class="form-control dept-location m-2 py-1" id="departmentLocation" placeholder="Department location" readonly>
               <label for="departmentLocation">Location</label>
-            </div>
+            </div> -->
             
           </form>
 
