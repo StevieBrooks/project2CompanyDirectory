@@ -289,7 +289,6 @@ function getAllDepartments() {
         "url": "libs/php/getAllDepartments.php",
         "type": "GET",
         "success": function(result) {
-            console.log(result);
 
             $(".db-body").html("");
             result.data.forEach(item => {
@@ -428,6 +427,7 @@ deptID4Edit = null;
 tbody.on("click", ".edit-dept-btn", function(e) {
 
     deptID4Edit = e.currentTarget.dataset.deptid;
+    $("#editDepartmentsForm #id").val(deptID4Edit);
 
     $("#editDepartmentsModal").modal("show");
 
@@ -435,7 +435,7 @@ tbody.on("click", ".edit-dept-btn", function(e) {
 
 $("#editDepartmentsModal").on("show.bs.modal", function (e) {
 
-    console.log($("#editDepartmentLocation"));
+    console.log($("#editDepartmentsForm #id").val());
 
     popDeptLocations();
   
@@ -491,8 +491,12 @@ function getDeptLocation(input) {
             id: input.data[0].locationID
         },
         success: function(result) {
-            const deptLoc4Edit = result.data[0].name;
+            const deptLoc4Edit = result.data[0].id;
             $("#editDepartmentLocation").val(deptLoc4Edit);
+
+            console.log(result);
+            console.log(deptLoc4Edit);
+            console.log($("#editDepartmentLocation"));
         },
         error: function (jqXHR, textStatus, errorThrown) {
         $("#editDepartmentsModal .modal-title").replaceWith(
@@ -511,7 +515,7 @@ $("#editDepartmentsModal").on("submit", function(e) {
     console.log(formData);
 
     $.ajax({
-        url: `libs/php/editPersonnel.php?id=${persID4Edit}`,
+        url: `libs/php/editDepartment.php`,
         type: "POST",
         data: formData,
         success: function(result) {
