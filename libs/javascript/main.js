@@ -43,7 +43,7 @@ $("#empSearch").on("keyup", function() {
                     <td class="db-jobtitle-item">${item.jobTitle}</td>
                     <td class="db-dept-item">${item.department}</td>
                     <td class="modify"><button type="button" class="btn btn-success edit-person-btn" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
-                    <button type="button" class="btn btn-danger del-person-btn"><i class="fa-solid fa-trash"></i></button></td>
+                    <button type="button" class="btn btn-danger del-person-btn" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
                 `)
             })
@@ -269,7 +269,7 @@ function getAllPersonnel() {
                     <td class="db-dept-item">${item.department}</td>
                     <td class="db-loc-item">${item.location}</td>
                     <td><button type="button" class="btn btn-success edit-person-btn" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
-                    <button type="button" class="btn btn-danger del-person-btn"><i class="fa-solid fa-trash"></i></button></td>
+                    <button type="button" class="btn btn-danger del-person-btn" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
                 `)
             })
@@ -320,7 +320,7 @@ function getAllLocations() {
                 $("#locations-tab-pane .db-body").append(`
                 <tr class="emp-row" data-locid="${item.id}">
                     <td class="name">${item.name}</td>
-                    <td class="modify"><button type="button" class="btn btn-danger del-loc-btn"><i class="fa-solid fa-trash"></i></button></td>
+                    <td class="modify"><button type="button" class="btn btn-success edit-loc-btn" data-locid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button><button type="button" class="btn btn-danger del-loc-btn"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
                 `)
             })
@@ -334,13 +334,10 @@ function getAllLocations() {
 /*===============EDIT PERSONNEL==============*/
 
 let persID4Edit = null;
-// let deptEditChoice = null;
-// let locDropdown4PersonEdit = null;
-// let editPDeptID = null;
-// let enteredEmail = null;
-// let ajaxCall = null;
 
 tbody.on("click", ".edit-person-btn", function(e) {
+
+    console.log(e.currentTarget.dataset.empid);
 
     persID4Edit = e.currentTarget.dataset.empid;
 
@@ -427,7 +424,7 @@ deptID4Edit = null;
 tbody.on("click", ".edit-dept-btn", function(e) {
 
     deptID4Edit = e.currentTarget.dataset.deptid;
-    $("#editDepartmentsForm #id").val(deptID4Edit);
+    $("#editDepartmentsForm #editDepartmentsID").val(deptID4Edit);
 
     $("#editDepartmentsModal").modal("show");
 
@@ -435,7 +432,7 @@ tbody.on("click", ".edit-dept-btn", function(e) {
 
 $("#editDepartmentsModal").on("show.bs.modal", function (e) {
 
-    console.log($("#editDepartmentsForm #id").val());
+    console.log($("#editDepartmentsForm #editDepartmentsID").val());
 
     popDeptLocations();
   
@@ -529,20 +526,80 @@ $("#editDepartmentsModal").on("submit", function(e) {
 })
 
 
+/*===================EDIT LOCATION====================*/
+
+locID4Edit = null;
+
+tbody.on("click", ".edit-loc-btn", function(e) {
+
+    locID4Edit = e.currentTarget.dataset.locid;
+    $("#editLocationsForm #editLocationID").val(locID4Edit);
+
+    $("#editLocationsModal").modal("show");
+
+})
+
+$("#editLocationsModal").on("show.bs.modal", function (e) {
+  
+    $.ajax({
+      url: "libs/php/getLocationByID.php",
+      type: "POST",
+      dataType: "json",
+      data: {
+        id: locID4Edit 
+      },
+      success: function (result) {
+        console.log(result);
+
+        if(result.status.name == "ok") {
+            $("#editLocationName").val(result.data[0].name);
+        } else {
+            $("#editLocationName").val("Apologies: No info available");
+        }
+       
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        $("#editDepartmentsModal .modal-title").replaceWith(
+          "Error retrieving data"
+        );
+      }
+    });
+});
+
+$("#editLocationsModal").on("submit", function(e) {
+
+    e.preventDefault();
+
+    
+    const formData = $("#editLocationsForm").serialize();
+    console.log(formData);
+
+    $.ajax({
+        url: `libs/php/editLocation.php`,
+        type: "POST",
+        data: formData,
+        success: function(result) {
+            console.log(result);
+            getAllLocations();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log("Error performing operation.")
+          }
+    })
+})
+
+
 /*===============DELETE PERSONNEL BY ID==============*/
 
 let persID = null;
-let persName = null;
 let persRow = null;
 
 tbody.on("click", ".del-person-btn", function(e) {
 
+    console.log(e.currentTarget.dataset.empid);
 
-    persID = this.parentElement.parentElement.attributes[1].nodeValue;
-    persName = this.parentElement.parentElement.children[1].innerHTML + " " + this.parentElement.parentElement.children[0].innerHTML;
-    persRow = $(e.target.parentElement.parentElement);
+    persID = e.currentTarget.dataset.empid;
 
-    $("#deletePModal .modal-title").html(`Delete ${persName}`);
     $("#deletePModal").modal("show");
 
 })

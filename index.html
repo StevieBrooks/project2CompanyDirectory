@@ -405,7 +405,7 @@
 
           <form action="" id="editDepartmentsForm">
 
-            <input type="hidden" id="id" name="id">
+            <input type="hidden" id="editDepartmentsID" name="id">
 
             <div class="form-floating m-2">
               <input class="form-control edit-dept-name" id="editDepartmentName" name="name" type="text" placeholder="Department">
@@ -431,12 +431,45 @@
   </div>
 
 
+  <!--------------------EDIT LOCATION------------------->
+
+  <div class="modal" id="editLocationsModal" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Location</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body d-flex flex-column ">
+
+          <form action="" id="editLocationsForm">
+
+            <input type="hidden" id="editLocationID" name="id">
+
+            <div class="form-floating m-2">
+              <input class="form-control edit-loc-name" id="editLocationName" name="name" type="text" placeholder="Location">
+              <label for="editLocationName">Location</label>
+            </div>
+            
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary edit-l-update" form="editLocationsForm" data-bs-dismiss="modal">Update</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!----------------DELETE PERSONNEL-------------------->
 
   <div class="modal" id="deletePModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Delete Item</h5>
+          <h5 class="modal-title">Delete Personnel</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
