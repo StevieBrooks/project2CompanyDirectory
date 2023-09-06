@@ -296,7 +296,7 @@ function getAllDepartments() {
                 <tr class="emp-row">
                     <td class="name">${item.name}</td>
                     <td class="locationID">${item.location}</td>
-                    <td class="modify"><td><button type="button" class="btn btn-success edit-dept-btn" data-deptid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button><button type="button" class="btn btn-danger del-dept-btn"><i class="fa-solid fa-trash"></i></button></td>
+                    <td class="modify"><td><button type="button" class="btn btn-success edit-dept-btn" data-deptid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button><button type="button" class="btn btn-danger del-dept-btn" data-deptid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
                 `)
             })
@@ -320,7 +320,7 @@ function getAllLocations() {
                 $("#locations-tab-pane .db-body").append(`
                 <tr class="emp-row" data-locid="${item.id}">
                     <td class="name">${item.name}</td>
-                    <td class="modify"><button type="button" class="btn btn-success edit-loc-btn" data-locid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button><button type="button" class="btn btn-danger del-loc-btn"><i class="fa-solid fa-trash"></i></button></td>
+                    <td class="modify"><button type="button" class="btn btn-success edit-loc-btn" data-locid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button><button type="button" class="btn btn-danger del-loc-btn" data-locid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
                 `)
             })
@@ -596,9 +596,8 @@ let persRow = null;
 
 tbody.on("click", ".del-person-btn", function(e) {
 
-    console.log(e.currentTarget.dataset.empid);
-
     persID = e.currentTarget.dataset.empid;
+    persRow = $(this).closest("tr");
 
     $("#deletePModal").modal("show");
 
@@ -621,45 +620,24 @@ $(".delete-p-yes").click(function() {
 /*===============DELETE DEPARTMENT BY ID==============*/
 
 let deptID = null;
-let deptName = null;
 let deptRow = null;
 
 tbody.on("click", ".del-dept-btn", function(e) {
-    deptID = this.parentElement.parentElement.attributes[1].nodeValue;
-    deptName = this.parentElement.parentElement.children[0].innerHTML;
-    deptRow = $(e.target.parentElement.parentElement);
-    let deptActive = false;
 
-    $("#deleteDModal .modal-title").html(`Delete ${deptName} Department`);
-
-    $.ajax({
-        url: "libs/php/getAllPersonnel.php",
-        type: "GET",
-        success: function(result) {
-            console.log(result);
-            for(item of result.data) {
-                if(deptID == item.departmentID) {
-                    $("#deleteDeptModal").modal("show");
-                    $("#deleteDeptModal .modal-title").html(`Issue Deleting ${deptName} Department`);
-                    deptActive = true;
-                    break;
-                }
-            }
-            if(!deptActive) {
-                $("#deleteDModal").modal("show");
-
-            }
-        }
-    })
+    deptID = e.currentTarget.dataset.deptid;
+    deptRow = $(this).closest("tr");
     
+    $("#deleteDModal").modal("show");
+
 })
 
 $(".delete-d-yes").click(function() {
+    console.log(deptID);
 
     $.ajax({
-        "url": `libs/php/deleteDepartmentByID.php?id=${deptID}`,
-        "type": "DELETE",
-        "success": function() {
+        url: `libs/php/deleteDepartmentByID.php?id=${deptID}`,
+        type: "DELETE",
+        success: function() {
 
             deptRow.slideUp();
             getAllDepartments();
@@ -671,64 +649,19 @@ $(".delete-d-yes").click(function() {
 /*===============DELETE LOCATION BY ID==============*/
 
 let locID = null;
-let locName = null;
 let locRow = null;
-let locActive = null;
 
 tbody.on("click", ".del-loc-btn", function(e) {
-    locID = this.parentElement.parentElement.attributes[1].nodeValue;
-    locName = this.parentElement.parentElement.children[0].innerHTML;
-    locRow = $(e.target.parentElement.parentElement);
-    let locNameConvert = null;
-    locActive = false;
-    console.log(locActive);
-
-    $("#deleteLModal .modal-title").html(`Delete ${locName} `);
     
+    locID = e.currentTarget.dataset.locid;
+    locRow = $(this).closest("tr");
 
-    $.ajax({
-        url: "libs/php/getAllLocations.php",
-        type: "GET",
-        success: function(result) {
-            for(item of result.data) {
-                if(locID == item.id) {
-                    locNameConvert = item.name;
-                    console.log(locNameConvert);
-                    break;
-                }
-            }
-        }
-    })
-
-    setTimeout(function() {
-        $.ajax({
-            url: "libs/php/getAllDepartments.php",
-            type: "GET",
-            success: function(result) {
-                for(item of result.data) {
-                    if(locNameConvert == item.location) {
-                        console.log(locNameConvert);
-                        $("#deleteLocModal").modal("show");
-                        $("#deleteLocModal .modal-title").html(`Issue Deleting ${locName}`);
-                        locActive = true;
-                        break;
-                    }
-                }
-                if(!locActive) {
-                    $("#deleteLModal").modal("show");
-                    
-
-                }
-            }
-        })
-    }, 0o10)
+    $("#deleteLModal").modal("show");
  
 })
 
 
 $(".delete-l-yes").click(function() {
-
-    console.log(locRow);
 
     $.ajax({
         "url": `libs/php/deleteLocationByID.php?id=${locID}`,
@@ -745,12 +678,3 @@ $(".delete-l-yes").click(function() {
 
 
 
-
-
-
-/* TO-DO LIST
-
-    - edit buttons, need to validate that row can be edited 
-    - confirmation box for changes like edit
-    - autoincrement id/primary key when new personnel, location, dept added
-*/
