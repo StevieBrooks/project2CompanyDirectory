@@ -261,15 +261,15 @@ function getAllPersonnel() {
             $(".db-body").html("");
             result.data.forEach(item => {
                 $("#personnel-tab-pane .db-body").append(`
-                <tr class="emp-row">
-                    <td>${item.lastName}</td>
-                    <td>${item.firstName}</td>
-                    <td class="db-email-item">${item.email}</td>
-                    <td class="db-jobtitle-item">${item.jobTitle}</td>
-                    <td class="db-dept-item">${item.department}</td>
-                    <td class="db-loc-item">${item.location}</td>
-                    <td><button type="button" class="btn btn-success edit-person-btn" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
-                    <button type="button" class="btn btn-danger del-person-btn" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
+                <tr class="row emp-row">
+                    <td class="col col-4 col-md-2 db-lastname-item">${item.lastName}</td>
+                    <td class="col col-4 col-md-2 db-firstname-item">${item.firstName}</td>
+                    <td class="col db-email-item">${item.email}</td>
+                    <td class="col db-jobtitle-item">${item.jobTitle}</td>
+                    <td class="col db-dept-item">${item.department}</td>
+                    <td class="col db-loc-item">${item.location}</td>
+                    <td class="col col-4 modify"><button type="button" class="btn btn-success edit-person-btn m-1" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button type="button" class="btn btn-danger del-person-btn m-1" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
                 `)
             })
