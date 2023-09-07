@@ -207,37 +207,38 @@ $("#addLocationForm").on("submit", function(e) {
 
     e.preventDefault();
 
-    const locationName = $(".l-name").val();
+    const addLocData = {
+        name: $("#addLocationName").val()
+    }
+
     let locationPresent = false;
+
     
     $.ajax({
         url: "libs/php/getAllLocations.php",
         type: "GET",
         success: function(result) {
+            console.log(result);
             for(item of result.data) {
-                if(locationName == item.name) {
-                    console.log(item.name);
+                if(addLocData.name == item.name) {
                     locationPresent = true;
                     $("#locDenyModal").modal("show");
-                    $("#addModal").modal("hide");
-                    $("#addModal .pdl-card").css("display", "none");
+                    $("#addLocationModal").modal("hide");
                     break;
-                } else {
-                    console.log("This item does not exist");
-                }
+                } 
             }
-            if(!locationPresent && locationName.length > 0) {
+            if(!locationPresent) {
+                
                 $.ajax({
-                    url: `libs/php/insertLocation.php?name=${locationName}`,
+                    url: `libs/php/insertLocation.php`,
                     type: "POST",
+                    data: addLocData,
                     success: function(result) {
-                        $("#addModal").modal("hide");
+                        $("#addLocationModal").modal("hide");
                         getAllLocations();
                     }
                 })
-            } else if (locationName.length == 0) {
-                $("#formWarningModal").modal("show");
-            }
+            } 
         }
     })
 
