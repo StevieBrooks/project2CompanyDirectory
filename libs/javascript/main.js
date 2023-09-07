@@ -98,11 +98,11 @@ $("#addPersonnelForm").on("submit", function(e) {
     e.preventDefault();
 
     const addPersData = {
-        firstName: $("#addFirstname").val(),
-        surname: $("#addLastName").val(),
+        firstName: $("#addFirstName").val(),
+        lastName: $("#addLastName").val(),
         jobTitle: $("#addJobTitle").val(),
         email: $("#addEmail").val(),
-        dept: $("#addDept").val()
+        departmentID: $("#addDept").val()
     }
 
     let personPresent = false;
@@ -111,7 +111,6 @@ $("#addPersonnelForm").on("submit", function(e) {
 
         url: "libs/php/getAllPersonnel.php",
         type: "GET",
-        data: addPersData,
         success: function(result) {
 
             for(item of result.data) {
@@ -127,13 +126,7 @@ $("#addPersonnelForm").on("submit", function(e) {
                 $.ajax({
                     url: `libs/php/insertPersonnel.php`,
                     type: "POST",
-                    data: {
-                        firstName: addPersData.firstName,
-                        lastName: addPersData.surname,
-                        jobTitle: addPersData.jobTitle,
-                        email: addPersData.email,
-                        departmentID: addPersData.dept
-                    },
+                    data: addPersData,
                     success: function(result) {
                         $("#addPersonnelModal").modal("hide");
                         getAllPersonnel();
@@ -152,11 +145,13 @@ $("#addDepartmentForm").on("submit", function(e) {
 
     e.preventDefault();
 
-    const deptName = $(".d-name").val();
-    const deptLocation = $(".d-location").val();
+    const addDeptData = {
+        name: $("#addDepartmentName").val(),
+        locationID: $("#addDeptLoc").val(),
+    }
+
     let deptLocConvert = null;
     let deptPresent = false;
-    console.log(deptLocation);
 
     $.ajax({
         url: "libs/php/getAllLocations.php",
