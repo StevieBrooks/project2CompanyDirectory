@@ -159,9 +159,8 @@ $("#addDepartmentForm").on("submit", function(e) {
         success: function(result) {
             console.log(result.data);
             for(item of result.data) {
-                if(item.id == deptLocation) {
+                if(item.id == addDeptData.locationID) {
                     deptLocConvert = item.name;
-                    console.log(deptLocConvert);
                     break;
                 }
             }
@@ -176,27 +175,25 @@ $("#addDepartmentForm").on("submit", function(e) {
             success: function(result) {
                 console.log(deptLocConvert);
                 for(item of result.data) {
-                    if(deptName == item.name && deptLocConvert == item.location) {
+                    if(addDeptData.name == item.name && deptLocConvert == item.location) {
                         deptPresent = true;
                         $("#deptDenyModal").modal("show");
-                        $("#addModal").modal("hide");
-                        $("#addModal .pdl-card").css("display", "none");
+                        $("#addDepartmentModal").modal("hide");
                         break;
                     }
                 }
-                if(!deptPresent && deptName.length > 0 && deptLocation.length > 0) {
+                if(!deptPresent) {
                     $.ajax({
-                        url: `libs/php/insertDepartment.php?name=${deptName}&locationID=${deptLocation}`,
+                        url: `libs/php/insertDepartment.php`,
                         type: "POST",
+                        data: addDeptData,
                         success: function(result) {
                             console.log(result);
-                            $("#addModal").modal("hide");
+                            $("#addDepartmentModal").modal("hide");
                             getAllDepartments();
                         }
                     })
-                } else if (deptName.length == 0 || deptLocation.length == 0) {
-                    $("#formWarningModal").modal("show");
-                }
+                } 
             }
         })
     }, 0o01)
