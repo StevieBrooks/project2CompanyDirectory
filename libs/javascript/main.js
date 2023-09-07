@@ -2,9 +2,6 @@
 
 let tbody = $("table tbody");
 let empQuery = null;
-const navItemPers = $(".nav-item-pers");
-const navItemDept = $(".nav-item-dept");
-const navItemLoc = $(".nav-item-loc");
 const personnelBtn = $("#personnelBtn");
 const departmentsBtn = $("#departmentsBtn");
 const locationsBtn = $("#locationsBtn");
@@ -15,7 +12,6 @@ const locationsBtn = $("#locationsBtn");
 
 $(document).ready(function() {
     getAllPersonnel();    
-    navItemPers.addClass("show");
 })
 
 
@@ -24,25 +20,24 @@ $(document).ready(function() {
 
 $("#empSearch").on("keyup", function() {
 
-    empQuery = $(".emp-search").val();
-
     $.ajax({
-        "url": `libs/php/search.php?empQuery=${empQuery}`,
+        "url": `libs/php/search.php`,
         "type": "GET",
+        "data": {
+            empQuery: $("#empSearch").val()
+        },
         "success": function(result) {
-
-            console.log(result);
 
             $(".db-body").html("");
             result.data.forEach(item => {
                 $("#personnel-tab-pane .db-body").append(`
-                <tr class="emp-row">
-                    <td>${item.lastName}</td>
-                    <td>${item.firstName}</td>
-                    <td class="db-email-item">${item.email}</td>
-                    <td class="db-jobtitle-item">${item.jobTitle}</td>
-                    <td class="db-dept-item">${item.department}</td>
-                    <td class="modify"><button type="button" class="btn btn-success edit-person-btn" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
+                <tr>
+                    <td class="align-middle text-nowrap">${item.lastName}</td>
+                    <td class="align-middle text-nowrap">${item.firstName}</td>
+                    <td class="align-middle text-nowrap d-none d-md-table-cell">${item.email}</td>
+                    <td class="align-middle text-nowrap d-none d-md-table-cell">${item.jobTitle}</td>
+                    <td class="align-middle text-nowrap d-none d-md-table-cell">${item.department}</td>
+                    <td class="text-end text-nowrap"><button type="button" class="btn btn-success edit-person-btn" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
                     <button type="button" class="btn btn-danger del-person-btn" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
                 `)
@@ -57,7 +52,9 @@ $("#empSearch").on("keyup", function() {
 
 $("#addBtn").click(function() {
 
-    if(personnelBtn.hasClass("active")) {
+    console.log($("#departmentsBtn"));
+
+    if(personnelBtn[0].attributes[7].nodeValue == "true") {
 
         $.ajax({
             url: "libs/php/getAllDepartments.php",
@@ -65,14 +62,14 @@ $("#addBtn").click(function() {
             success: function(result) {
                 const alphabeticalDepts = result.data.sort((a, b) => a.name.localeCompare(b.name));
                 alphabeticalDepts.forEach(item => {
-                    $(".p-dept").append(`<option value="${item.id}">${item.name}</option>`)
+                    $("#addDept").append(`<option value="${item.id}">${item.name}</option>`)
                 })
             }
         })
 
         $("#addPersonnelModal").modal("show");
 
-    } else if(departmentsBtn.hasClass("active")) {
+    } else if(departmentsBtn[0].attributes[7].nodeValue == "true") {
 
         $.ajax({
             url: "libs/php/getAllLocations.php",
@@ -80,7 +77,7 @@ $("#addBtn").click(function() {
             success: function(result) {
                 const alphabeticalLocs = result.data.sort((a, b) => a.name.localeCompare(b.name));
                 alphabeticalLocs.forEach(item => {
-                    $(".d-location").append(`<option value="${item.id}">${item.name}</option>`)
+                    $("#addDeptLoc").append(`<option value="${item.id}">${item.name}</option>`)
                 })
             }
         })
@@ -100,40 +97,49 @@ $("#addPersonnelForm").on("submit", function(e) {
 
     e.preventDefault();
 
-    console.log("hi");
+    const addPersData = {
+        firstName: $("#addFirstname").val(),
+        surname: $("#addLastName").val(),
+        jobTitle: $("#addJobTitle").val(),
+        email: $("#addEmail").val(),
+        dept: $("#addDept").val()
+    }
 
-    const firstName = $(".p-fname").val();
-    const surname = $(".p-sname").val();
-    const email = $(".p-email").val();
-    const jobTitle = $(".p-jobtitle").val();
-    const dept = $(".p-dept").val();
     let personPresent = false;
 
     $.ajax({
+
         url: "libs/php/getAllPersonnel.php",
         type: "GET",
+        data: addPersData,
         success: function(result) {
-            console.log(result);
+
             for(item of result.data) {
-                if(item.firstName == firstName && item.lastName == surname && item.email == email && item.jobTitle == jobTitle) {
+                if(item.email == addPersData.email) {
                      personPresent = true;
                      $("#personDenyModal").modal("show");
-                     $("#addModal").modal("hide");
+                     $("#addPersonnelModal").modal("hide");
                      break;
                 } 
             }
-            if(!personPresent && firstName.length > 0 && surname.length > 0 && email.length > 0 && dept.length > 0) {
+            
+            if(!personPresent) {
                 $.ajax({
-                    url: `libs/php/insertPersonnel.php?firstName=${firstName}&lastName=${surname}&jobTitle=${jobTitle}&email=${email}&departmentID=${dept}`,
+                    url: `libs/php/insertPersonnel.php`,
                     type: "POST",
+                    data: {
+                        firstName: addPersData.firstName,
+                        lastName: addPersData.surname,
+                        jobTitle: addPersData.jobTitle,
+                        email: addPersData.email,
+                        departmentID: addPersData.dept
+                    },
                     success: function(result) {
-                        $("#addModal").modal("hide");
+                        $("#addPersonnelModal").modal("hide");
                         getAllPersonnel();
                     }
                 })
-            } else if (firstName.length == 0 || surname.length == 0 || email.length == 0 || dept.length == 0) {
-                $("#formWarningModal").modal("show");
-            }
+            } 
         }
     })
 
@@ -261,16 +267,15 @@ function getAllPersonnel() {
             $(".db-body").html("");
             result.data.forEach(item => {
                 $("#personnel-tab-pane .db-body").append(`
-                <tr class="row emp-row">
-                    <td class="col col-4 col-md-2 db-lastname-item">${item.lastName}</td>
-                    <td class="col col-4 col-md-2 db-firstname-item">${item.firstName}</td>
-                    <td class="col db-email-item">${item.email}</td>
-                    <td class="col db-jobtitle-item">${item.jobTitle}</td>
-                    <td class="col db-dept-item">${item.department}</td>
-                    <td class="col db-loc-item">${item.location}</td>
-                    <td class="col col-4 modify"><button type="button" class="btn btn-success edit-person-btn m-1" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
-                    <button type="button" class="btn btn-danger del-person-btn m-1" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
-                </tr>
+                    <tr>
+                        <td class="align-middle text-nowrap">${item.lastName}</td>
+                        <td class="align-middle text-nowrap">${item.firstName}</td>
+                        <td class="align-middle text-nowrap d-none d-md-table-cell">${item.email}</td>
+                        <td class="align-middle text-nowrap d-none d-md-table-cell">${item.jobTitle}</td>
+                        <td class="align-middle text-nowrap d-none d-md-table-cell">${item.department}</td>
+                        <td class="text-end text-nowrap"><button type="button" class="btn btn-success edit-person-btn" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button type="button" class="btn btn-danger del-person-btn" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
+                    </tr>
                 `)
             })
         }
@@ -293,10 +298,10 @@ function getAllDepartments() {
             $(".db-body").html("");
             result.data.forEach(item => {
                 $("#departments-tab-pane .db-body").append(`
-                <tr class="emp-row">
-                    <td class="name">${item.name}</td>
-                    <td class="locationID">${item.location}</td>
-                    <td class="modify"><td><button type="button" class="btn btn-success edit-dept-btn" data-deptid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button><button type="button" class="btn btn-danger del-dept-btn" data-deptid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
+                <tr>
+                    <td class="align-middle text-nowrap">${item.name}</td>
+                    <td class="align-middle text-nowrap d-none d-md-table-cell">${item.location}</td>
+                    <td class="align-middle text-end text-nowrap"><td><button type="button" class="btn btn-success edit-dept-btn" data-deptid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button><button type="button" class="btn btn-danger del-dept-btn" data-deptid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
                 `)
             })
@@ -318,9 +323,9 @@ function getAllLocations() {
             $(".db-body").html("");
             result.data.forEach(item => {
                 $("#locations-tab-pane .db-body").append(`
-                <tr class="emp-row" data-locid="${item.id}">
-                    <td class="name">${item.name}</td>
-                    <td class="modify"><button type="button" class="btn btn-success edit-loc-btn" data-locid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button><button type="button" class="btn btn-danger del-loc-btn" data-locid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
+                <tr data-locid="${item.id}">
+                    <td class="align-middle text-nowrap">${item.name}</td>
+                    <td class="align-middle text-end text-nowrap"><button type="button" class="btn btn-success edit-loc-btn" data-locid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button><button type="button" class="btn btn-danger del-loc-btn" data-locid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
                 `)
             })
@@ -354,7 +359,7 @@ $("#editPersonnelModal").on("show.bs.modal", function (e) {
       type: "POST",
       dataType: "json",
       data: {
-        id: persID4Edit 
+        id: persID4Edit // use jquery to target html element (line 37 codepen)
       },
       success: function (result) {
         console.log(result);

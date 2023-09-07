@@ -30,7 +30,6 @@
       <div class="col col-10">
 
           <input class="form-control emp-search me-2" id="empSearch" type="search" placeholder="Search Employees" aria-label="Search">
-          <!-- <button class="btn btn-light emp-search-btn" type="submit">Search</button> -->
 
       </div>
 
@@ -39,6 +38,7 @@
         <div class="btn--group" role="group" aria-label="buttons">
 
           <button id="addBtn" class="btn btn-primary"><i class="fa-solid fa-folder-plus"></i></button>
+          <!--data-bs-target="#addPersonnelModal"  data-bs-toggle="modal"-->
 
         </div>
 
@@ -57,7 +57,7 @@
       <ul class="nav nav-tabs w-100" id="myTab" role="tablist">
 
         <li class="nav-item nav-item-pers" role="presentation">
-          <button class="nav-link active" id="personnelBtn" data-bs-toggle="tab" data-bs-target="#personnel-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">
+          <button class="nav-link" id="personnelBtn" data-bs-toggle="tab" data-bs-target="#personnel-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">
             <i class="fa-solid fa-users"></i><span class="d-none d-sm-block">Personnel</span>
           </button>
         </li>
@@ -143,17 +143,15 @@
 
           <form id="addPersonnelForm">
 
-            <input type="hidden" id="addPersonnelID">
-
-            <input type="text" class="form-control p-fname my-2" id="addFirstName" placeholder="First Name....">
+            <input type="text" class="form-control my-2" id="addFirstName" placeholder="First Name...." required>
             
-            <input type="text" class="form-control p-sname my-2" id="addLastName" placeholder="Surname...">
+            <input type="text" class="form-control my-2" id="addLastName" placeholder="Surname..." required>
 
-            <input type="text" class="form-control p-jobtitle my-2" id="addJobTitle" placeholder="Job Title">
+            <input type="text" class="form-control my-2" id="addJobTitle" placeholder="Job Title" required>
 
-            <input type="email" class="form-control p-email my-2" id="addEmail" placeholder="Email">
+            <input type="email" class="form-control my-2" id="addEmail" placeholder="Email" required>
 
-            <select class="form-select p-dept my-2" id="addDept" aria-label="Default select example">
+            <select class="form-select my-2" id="addDept" aria-label="Default select example" required>
                 <option value="" selected>Department</option>
               </select>
 
@@ -162,7 +160,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" form="addPersonnelForm" class="btn btn-primary add-new-btn" data-bs-dismiss="modal">Add to Database</button>
+          <button type="submit" form="addPersonnelForm" class="btn btn-primary add-new-btn">Add to Database</button>
         </div>
       </div>
     </div>
@@ -182,9 +180,9 @@
 
           <form id="addDepartmentForm">
 
-            <input type="text" class="form-control d-name my-2" id="addDepartmentName" placeholder="Department name...">
+            <input type="text" class="form-control d-name my-2" id="addDepartmentName" placeholder="Department name..." required>
 
-            <select class="form-select d-location my-2" id="addDeptLoc" aria-label="Default select example">
+            <select class="form-select my-2" id="addDeptLoc" aria-label="Default select example" required>
               <option value="" selected>Department Location</option>
 
             </select>
@@ -194,7 +192,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" form="addDepartmentForm" class="btn btn-primary add-new-btn" data-bs-dismiss="modal">Add to Database</button>
+          <button type="submit" form="addDepartmentForm" class="btn btn-primary add-new-btn">Add to Database</button>
         </div>
       </div>
     </div>
@@ -214,14 +212,14 @@
 
           <form id="addLocationForm">
 
-            <input type="text" class="form-control l-name" id="addLocationName" placeholder="Location name...">
+            <input type="text" class="form-control l-name" id="addLocationName" placeholder="Location name..." required>
 
           </form>
 
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" form="addLocationForm" class="btn btn-primary add-new-btn" data-bs-dismiss="modal">Add to Database</button>
+          <button type="submit" form="addLocationForm" class="btn btn-primary add-new-btn">Add to Database</button>
         </div>
       </div>
     </div>
@@ -297,42 +295,37 @@
             <input type="hidden" id="editPersonnelID">
 
             <div class="form-floating m-2">
-              <input class="form-control edit-surname" id="editPersonnelLastName" name="lastName" type="text" placeholder="Surname">
+              <input class="form-control" id="editPersonnelLastName" name="lastName" type="text" placeholder="Surname" required>
               <label for="editPersonnelLastName">Surname</label>
             </div>
 
             <div class="form-floating m-2">
-              <input class="form-control edit-firstname" id="editPersonnelFirstName" name="firstName" type="text" placeholder="First Name">
+              <input class="form-control" id="editPersonnelFirstName" name="firstName" type="text" placeholder="First Name" required>
               <label for="editPersonnelFirstName">First Name</label>
             </div>
 
             <div class="form-floating m-2">
-              <input class="form-control edit-jobtitle" id="editPersonnelJobTitle" name="jobTitle" type="text" placeholder="Job Title">
+              <input class="form-control" id="editPersonnelJobTitle" name="jobTitle" type="text" placeholder="Job Title" required>
               <label for="editPersonnelJobTitle">Job Title</label>
             </div>
 
             <div class="form-floating m-2">
-              <input class="form-control edit-email" id="editPersonnelEmail" name="email" type="email" placeholder="Email">
+              <input class="form-control" id="editPersonnelEmail" name="email" type="email" placeholder="Email" required>
               <label for="editPersonnelEmail">Email</label>
             </div>
 
             <div class="form-floating m-2">
-              <select id="editPDept" class="form-select edit-p-dept pt-4" name="departmentID">
+              <select id="editPDept" class="form-select edit-p-dept pt-4" name="departmentID" required>
                 <option value="">Department</option>
               </select>
               <label for="editPDept">Department</label>
             </div>
-
-            <!-- <div class="form-floating m-2">
-              <input type="text" class="form-control dept-location m-2 py-1" id="departmentLocation" placeholder="Department location" readonly>
-              <label for="departmentLocation">Location</label>
-            </div> -->
             
           </form>
 
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary edit-p-update" form="editPersonnelForm" data-bs-dismiss="modal">Update</button>
+          <button type="submit" class="btn btn-primary edit-p-update" form="editPersonnelForm">Update</button> 
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
@@ -408,12 +401,12 @@
             <input type="hidden" id="editDepartmentsID" name="id">
 
             <div class="form-floating m-2">
-              <input class="form-control edit-dept-name" id="editDepartmentName" name="name" type="text" placeholder="Department">
+              <input class="form-control" id="editDepartmentName" name="name" type="text" placeholder="Department" required>
               <label for="editDepartmentName">Department</label>
             </div>
 
             <div class="form-floating m-2">
-              <select id="editDepartmentLocation" class="form-select edit-d-loc pt-4" name="locationID">
+              <select id="editDepartmentLocation" class="form-select pt-4" name="locationID" required>
                 <option value="">Location</option>
               </select>
               <label for="editDepartmentLocation">Location</label>
@@ -423,7 +416,7 @@
 
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary edit-d-update" form="editDepartmentsForm" data-bs-dismiss="modal">Update</button>
+          <button type="submit" class="btn btn-primary" form="editDepartmentsForm">Update</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
@@ -440,14 +433,14 @@
           <h5 class="modal-title">Edit Location</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body d-flex flex-column ">
+        <div class="modal-body d-flex flex-column">
 
           <form action="" id="editLocationsForm">
 
             <input type="hidden" id="editLocationID" name="id">
 
             <div class="form-floating m-2">
-              <input class="form-control edit-loc-name" id="editLocationName" name="name" type="text" placeholder="Location">
+              <input class="form-control" id="editLocationName" name="name" type="text" placeholder="Location" required>
               <label for="editLocationName">Location</label>
             </div>
             
@@ -455,7 +448,7 @@
 
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary edit-l-update" form="editLocationsForm" data-bs-dismiss="modal">Update</button>
+          <button type="submit" class="btn btn-primary" form="editLocationsForm">Update</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
@@ -552,27 +545,6 @@
       </div>
     </div>
   </div>
-
-  <div class="modal" id="formWarningModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Incomplete Inputs</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>Please complete all sections of the form before submitting.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
-
 
 
 
