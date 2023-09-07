@@ -37,8 +37,11 @@ $("#empSearch").on("keyup", function() {
                     <td class="align-middle text-nowrap d-none d-md-table-cell">${item.email}</td>
                     <td class="align-middle text-nowrap d-none d-md-table-cell">${item.jobTitle}</td>
                     <td class="align-middle text-nowrap d-none d-md-table-cell">${item.department}</td>
-                    <td class="text-end text-nowrap"><button type="button" class="btn btn-success edit-person-btn" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
-                    <button type="button" class="btn btn-danger del-person-btn" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
+                    <td class="text-end text-nowrap">
+                        <button type="button" class="btn btn-success edit-person-btn" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
+
+                        <button type="button" class="btn btn-danger del-person-btn" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button>
+                    </td>
                 </tr>
                 `)
             })
@@ -54,7 +57,7 @@ $("#addBtn").click(function() {
 
     console.log($("#departmentsBtn"));
 
-    if(personnelBtn[0].attributes[7].nodeValue == "true") {
+    if(personnelBtn.hasClass("active")) {
 
         $.ajax({
             url: "libs/php/getAllDepartments.php",
@@ -69,7 +72,7 @@ $("#addBtn").click(function() {
 
         $("#addPersonnelModal").modal("show");
 
-    } else if(departmentsBtn[0].attributes[7].nodeValue == "true") {
+    } else if(departmentsBtn.hasClass("active")) {
 
         $.ajax({
             url: "libs/php/getAllLocations.php",
@@ -266,8 +269,11 @@ function getAllPersonnel() {
                         <td class="align-middle text-nowrap d-none d-md-table-cell">${item.email}</td>
                         <td class="align-middle text-nowrap d-none d-md-table-cell">${item.jobTitle}</td>
                         <td class="align-middle text-nowrap d-none d-md-table-cell">${item.department}</td>
-                        <td class="text-end text-nowrap"><button type="button" class="btn btn-success edit-person-btn" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button type="button" class="btn btn-danger del-person-btn" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
+                        <td class="text-end text-nowrap">
+                            <button type="button" class="btn btn-success edit-person-btn" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
+
+                            <button type="button" class="btn btn-danger del-person-btn" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button>
+                        </td>
                     </tr>
                 `)
             })
@@ -331,38 +337,40 @@ function getAllLocations() {
 
 /*===============EDIT PERSONNEL==============*/
 
-let persID4Edit = null;
+// let persID4Edit = null;
 
-tbody.on("click", ".edit-person-btn", function(e) {
+// tbody.on("click", ".edit-person-btn", function(e) {
 
-    console.log(e.currentTarget.dataset.empid);
+//     console.log(e.currentTarget.dataset.empid);
 
-    persID4Edit = e.currentTarget.dataset.empid;
+//     persID4Edit = e.currentTarget.dataset.empid;
 
-    $("#editPersonnelModal").modal("show");
-    $("#editPersonnelModal .dept-location").css("display", "none");
+//     $("#editPersonnelModal").modal("show");
+//     $("#editPersonnelModal .dept-location").css("display", "none");
 
-})
+// })
 
 $("#editPersonnelModal").on("show.bs.modal", function (e) {
+
+    console.log($(e.relatedTarget).attr("data-empid"));
   
     $.ajax({
-      url:
-        "libs/php/getPersonnelByID.php",
+      url: "libs/php/getPersonnelByID.php",
       type: "POST",
       dataType: "json",
       data: {
-        id: persID4Edit // use jquery to target html element (line 37 codepen)
+        id: $(e.relatedTarget).attr("data-empid")
       },
       success: function (result) {
+
         console.log(result);
   
         if (result.status.code == "200") {
   
           $("#editPersonnelID").val(result.data.personnel[0].id);
   
-          $("#editPersonnelLastName").val(result.data.personnel[0].lastName);
           $("#editPersonnelFirstName").val(result.data.personnel[0].firstName);
+          $("#editPersonnelLastName").val(result.data.personnel[0].lastName);
           $("#editPersonnelJobTitle").val(result.data.personnel[0].jobTitle);
           $("#editPersonnelEmail").val(result.data.personnel[0].email);
   
@@ -398,16 +406,23 @@ $("#editPersonnelModal").on("submit", function(e) {
     e.preventDefault();
 
     
-    const formData = $("#editPersonnelForm").serialize();
-    console.log(formData);
+    const editPersData = {
+        firstName: $("#editPersonnelFirstName").val(),
+        lastName: $("#editPersonnelLastName").val(),
+        jobTitle: $("#editPersonnelJobTitle").val(),
+        email: $("#editPersonnelEmail").val(),
+        departmentID: $("#editPDept").val(),
+        id: $("#editPersonnelID").val()
+    };
 
     $.ajax({
-        url: `libs/php/editPersonnel.php?id=${persID4Edit}`,
+        url: `libs/php/editPersonnel.php`,
         type: "POST",
-        data: formData,
+        data: editPersData,
         success: function(result) {
             console.log(result);
             getAllPersonnel();
+            $("#editPersonnelModal").modal("hide");
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log("Error performing operation.")
