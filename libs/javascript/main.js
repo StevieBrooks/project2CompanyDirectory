@@ -20,6 +20,10 @@ $(document).ready(function() {
 
 $("#empSearch").on("keyup", function() {
 
+    personnelBtn[0].attributes[0].nodeValue = "nav-link active";
+    departmentsBtn[0].attributes[0].nodeValue = "nav-link";
+
+
     $.ajax({
         "url": `libs/php/search.php`,
         "type": "GET",
