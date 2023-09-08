@@ -42,9 +42,9 @@ $("#empSearch").on("keyup", function() {
                     <td class="align-middle text-nowrap d-none d-md-table-cell">${item.jobTitle}</td>
                     <td class="align-middle text-nowrap d-none d-md-table-cell">${item.department}</td>
                     <td class="text-end text-nowrap">
-                        <button type="button" class="btn btn-success edit-person-btn" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
 
-                        <button type="button" class="btn btn-danger del-person-btn" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePModal" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>
                 `)
@@ -276,7 +276,7 @@ function getAllPersonnel() {
                         <td class="text-end text-nowrap">
                             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
 
-                            <button type="button" class="btn btn-danger" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePModal" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `)
@@ -588,29 +588,29 @@ $("#editLocationsModal").on("submit", function(e) {
 
 /*===============DELETE PERSONNEL BY ID==============*/
 
-let persID = null;
 let persRow = null;
 
-tbody.on("click", ".del-person-btn", function(e) {
+$("#deletePModal").on("show.bs.modal", function (e) {
 
-    persID = e.currentTarget.dataset.empid;
-    persRow = $(this).closest("tr");
+    $("#delPersonnelID").val($(e.relatedTarget).attr("data-empid"));
+    persRow = $(e.relatedTarget).closest("tr");
 
-    $("#deletePModal").modal("show");
+});
 
-})
+$("#deleteP").click(function(e) {
 
-$(".delete-p-yes").click(function() {
+    const parsedID = parseInt($("#delPersonnelID").val());
         
     $.ajax({
-        "url": `libs/php/deletePersonnelByID.php?id=${persID}`,
+        "url": `libs/php/deletePersonnelByID.php?id=${parsedID}`,
         "type": "DELETE",
-        "success": function() {
-
+        "success": function(result) {
+            $("#deletePModal").modal("hide");
             persRow.slideUp();
             getAllPersonnel();
         }
     })
+    // ajax call not working if I use data parameter. couldn't figure out why
 
 })
 
