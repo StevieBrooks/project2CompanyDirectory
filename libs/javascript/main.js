@@ -270,9 +270,9 @@ function getAllPersonnel() {
                         <td class="align-middle text-nowrap d-none d-md-table-cell">${item.jobTitle}</td>
                         <td class="align-middle text-nowrap d-none d-md-table-cell">${item.department}</td>
                         <td class="text-end text-nowrap">
-                            <button type="button" class="btn btn-success edit-person-btn" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
 
-                            <button type="button" class="btn btn-danger del-person-btn" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button>
+                            <button type="button" class="btn btn-danger" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `)
@@ -300,7 +300,10 @@ function getAllDepartments() {
                 <tr>
                     <td class="align-middle text-nowrap">${item.name}</td>
                     <td class="align-middle text-nowrap d-none d-md-table-cell">${item.location}</td>
-                    <td class="align-middle text-end text-nowrap"><td><button type="button" class="btn btn-success edit-dept-btn" data-deptid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button><button type="button" class="btn btn-danger del-dept-btn" data-deptid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
+                    <td class="align-middle text-end text-nowrap">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editDepartmentsModal" data-deptid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button type="button" class="btn btn-danger" data-deptid="${item.id}"><i class="fa-solid fa-trash"></i></button>
+                    </td>
                 </tr>
                 `)
             })
@@ -324,7 +327,10 @@ function getAllLocations() {
                 $("#locations-tab-pane .db-body").append(`
                 <tr data-locid="${item.id}">
                     <td class="align-middle text-nowrap">${item.name}</td>
-                    <td class="align-middle text-end text-nowrap"><button type="button" class="btn btn-success edit-loc-btn" data-locid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button><button type="button" class="btn btn-danger del-loc-btn" data-locid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
+                    <td class="align-middle text-end text-nowrap">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editLocationsModal" data-locid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button type="button" class="btn btn-danger" data-locid="${item.id}"><i class="fa-solid fa-trash"></i></button>
+                    </td>
                 </tr>
                 `)
             })
@@ -336,19 +342,6 @@ function getAllLocations() {
 
 
 /*===============EDIT PERSONNEL==============*/
-
-// let persID4Edit = null;
-
-// tbody.on("click", ".edit-person-btn", function(e) {
-
-//     console.log(e.currentTarget.dataset.empid);
-
-//     persID4Edit = e.currentTarget.dataset.empid;
-
-//     $("#editPersonnelModal").modal("show");
-//     $("#editPersonnelModal .dept-location").css("display", "none");
-
-// })
 
 $("#editPersonnelModal").on("show.bs.modal", function (e) {
 
@@ -432,20 +425,10 @@ $("#editPersonnelModal").on("submit", function(e) {
 
 
 /*===================EDIT DEPARTMENT==================*/
-deptID4Edit = null;
-
-tbody.on("click", ".edit-dept-btn", function(e) {
-
-    deptID4Edit = e.currentTarget.dataset.deptid;
-    $("#editDepartmentsForm #editDepartmentsID").val(deptID4Edit);
-
-    $("#editDepartmentsModal").modal("show");
-
-})
 
 $("#editDepartmentsModal").on("show.bs.modal", function (e) {
 
-    console.log($("#editDepartmentsForm #editDepartmentsID").val());
+    console.log($(e.relatedTarget).attr("data-deptid"));
 
     popDeptLocations();
   
@@ -455,15 +438,19 @@ $("#editDepartmentsModal").on("show.bs.modal", function (e) {
       type: "POST",
       dataType: "json",
       data: {
-        id: deptID4Edit 
+        id: $(e.relatedTarget).attr("data-deptid") 
       },
       success: function (result) {
+
+        console.log(result);
   
         if (result.status.code == "200") {
 
+            $("#editDepartmentsID").val(result.data[0].id);
+
+            $("#editDepartmentName").val(result.data[0].name);     
+
             getDeptLocation(result);
-            
-            $("#editDepartmentName").val(result.data[0].name);        
           
         } else {
           $("#editDepartmentsModal .modal-title").replaceWith(
@@ -503,10 +490,6 @@ function getDeptLocation(input) {
         success: function(result) {
             const deptLoc4Edit = result.data[0].id;
             $("#editDepartmentLocation").val(deptLoc4Edit);
-
-            console.log(result);
-            console.log(deptLoc4Edit);
-            console.log($("#editDepartmentLocation"));
         },
         error: function (jqXHR, textStatus, errorThrown) {
         $("#editDepartmentsModal .modal-title").replaceWith(
@@ -520,7 +503,6 @@ $("#editDepartmentsModal").on("submit", function(e) {
 
     e.preventDefault();
 
-    
     const formData = $("#editDepartmentsForm").serialize();
     console.log(formData);
 
@@ -529,7 +511,7 @@ $("#editDepartmentsModal").on("submit", function(e) {
         type: "POST",
         data: formData,
         success: function(result) {
-            console.log(result);
+            $("#editDepartmentsModal").modal("hide");
             getAllDepartments();
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -541,33 +523,31 @@ $("#editDepartmentsModal").on("submit", function(e) {
 
 /*===================EDIT LOCATION====================*/
 
-locID4Edit = null;
-
-tbody.on("click", ".edit-loc-btn", function(e) {
-
-    locID4Edit = e.currentTarget.dataset.locid;
-    $("#editLocationsForm #editLocationID").val(locID4Edit);
-
-    $("#editLocationsModal").modal("show");
-
-})
-
 $("#editLocationsModal").on("show.bs.modal", function (e) {
+
+    console.log(e.relatedTarget.attributes[4]);
   
     $.ajax({
       url: "libs/php/getLocationByID.php",
       type: "POST",
       dataType: "json",
       data: {
-        id: locID4Edit 
+        id: $(e.relatedTarget).attr("data-locid") 
       },
       success: function (result) {
         console.log(result);
 
         if(result.status.name == "ok") {
+
+            $("#editLocationID").val(result.data[0].id);
             $("#editLocationName").val(result.data[0].name);
+
         } else {
-            $("#editLocationName").val("Apologies: No info available");
+
+            $("#editDepartmentsModal .modal-title").replaceWith(
+                "Error retrieving data"
+              );
+
         }
        
       },
@@ -592,7 +572,7 @@ $("#editLocationsModal").on("submit", function(e) {
         type: "POST",
         data: formData,
         success: function(result) {
-            console.log(result);
+            $("#editLocationsModal").modal("hide");
             getAllLocations();
         },
         error: function (jqXHR, textStatus, errorThrown) {
