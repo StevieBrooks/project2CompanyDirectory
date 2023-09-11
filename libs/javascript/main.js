@@ -306,7 +306,7 @@ function getAllDepartments() {
                     <td class="align-middle text-nowrap d-none d-md-table-cell">${item.location}</td>
                     <td class="align-middle text-end text-nowrap">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editDepartmentsModal" data-deptid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button type="button" class="btn btn-danger" data-deptid="${item.id}"><i class="fa-solid fa-trash"></i></button>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteDModal" data-deptid="${item.id}"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>
                 `)
@@ -333,7 +333,7 @@ function getAllLocations() {
                     <td class="align-middle text-nowrap">${item.name}</td>
                     <td class="align-middle text-end text-nowrap">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editLocationsModal" data-locid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button type="button" class="btn btn-danger" data-locid="${item.id}"><i class="fa-solid fa-trash"></i></button>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteLModal" data-locid="${item.id}"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>
                 `)
@@ -610,7 +610,7 @@ $("#deleteP").click(function(e) {
             getAllPersonnel();
         }
     })
-    // ajax call not working if I use data parameter. couldn't figure out why
+    // ajax call responds as "success" when data param used, but nothing happens. can't figure out why
 
 })
 
@@ -618,58 +618,134 @@ $("#deleteP").click(function(e) {
 
 let deptID = null;
 let deptRow = null;
+let personnelAssigned = null;
 
-tbody.on("click", ".del-dept-btn", function(e) {
+$("#deleteDModal").on("show.bs.modal", function(e) {
+    console.log(e.relatedTarget.attributes[4].nodeValue);
+    $("#delDeptID").val(e.relatedTarget.attributes[4].nodeValue);
+    deptRow = $(e.relatedTarget).closest("tr");
 
-    deptID = e.currentTarget.dataset.deptid;
-    deptRow = $(this).closest("tr");
-    
-    $("#deleteDModal").modal("show");
+    personnelAssigned = [];
 
+    $.ajax({
+        url: "libs/php/getAllPersonnel.php",
+        type: "GET",
+        success: function(result) {
+            console.log(result);
+            result.data.forEach(item => {
+                if(item.departmentID == $(e.relatedTarget).attr("data-deptid")) {
+                    personnelAssigned.push(item);
+                } 
+            })
+            
+            if(personnelAssigned.length > 0) {
+
+                $("#deleteDModal .modal-title").html("Unable to Delete Department");
+                $("#deleteDModal .modal-body p").html(`There are currently ${personnelAssigned.length} employees assigned to this department. Therefore, it cannot be deleted at this time.`);
+                $("#deleteDModal .modal-footer").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>`)
+
+            } else {
+
+                $("#deleteDModal .modal-title").html("Delete Department");
+                $("#deleteDModal .modal-body p").html(`This action cannot be undone. Are you sure you want to delete this department?`);
+                $("#deleteDModal .modal-footer").html(`<button type="button" class="btn btn-secondary" id="deleteD">Yes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>`)
+
+            }
+        }
+    })
 })
 
-$(".delete-d-yes").click(function() {
-    console.log(deptID);
+$(document).on("click", "#deleteD", function(e) {
+    console.log(e);
+    deptID = $("#delDeptID").val();
 
     $.ajax({
         url: `libs/php/deleteDepartmentByID.php?id=${deptID}`,
         type: "DELETE",
-        success: function() {
-
+        // data: {
+        //     id: $("#delDeptID").val()
+        // }, same issue with using data parameter, but everything looks fine on backend...perplexed!
+        success: function(result) {
+            console.log(result);
+            $("#deleteDModal").modal("hide");
             deptRow.slideUp();
             getAllDepartments();
         }
     })
-
 })
 
 /*===============DELETE LOCATION BY ID==============*/
 
 let locID = null;
+let location4Delete = null;
 let locRow = null;
+let departmentsAssigned = null;
 
-tbody.on("click", ".del-loc-btn", function(e) {
-    
-    locID = e.currentTarget.dataset.locid;
-    locRow = $(this).closest("tr");
+$("#deleteLModal").on("show.bs.modal", function(e) {
+    console.log(e.relatedTarget.attributes[4].nodeValue);
+    $("#delLocID").val(e.relatedTarget.attributes[4].nodeValue);
+    locRow = $(e.relatedTarget).closest("tr");
 
-    $("#deleteLModal").modal("show");
- 
-})
-
-
-$(".delete-l-yes").click(function() {
+    departmentsAssigned = [];
 
     $.ajax({
-        "url": `libs/php/deleteLocationByID.php?id=${locID}`,
-        "type": "DELETE",
-        "success": function() {
+        url: "libs/php/getLocationByID.php",
+        type: "GET",
+        data: {
+            id: $(e.relatedTarget).attr("data-locid")
+        },
+        success: function(result) {
+            location4Delete = result.data[0].name
+        } 
+    })
 
+    $.ajax({
+        url: "libs/php/getAllDepartments.php",
+        type: "GET",
+        success: function(result) {
+            console.log(result);
+            result.data.forEach(item => {
+                if(item.location == location4Delete) {
+                    departmentsAssigned.push(item);
+                } 
+            })
+            
+            if(departmentsAssigned.length > 0) {
+
+                $("#deleteLModal .modal-title").html("Unable to Delete Location");
+                $("#deleteLModal .modal-body p").html(`There are currently ${departmentsAssigned.length} departments assigned to this location. Therefore, it cannot be deleted at this time.`);
+                $("#deleteLModal .modal-footer").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>`)
+
+            } else {
+
+                $("#deleteLModal .modal-title").html("Delete Location");
+                $("#deleteLModal .modal-body p").html(`This action cannot be undone. Are you sure you want to delete this location?`);
+                $("#deleteLModal .modal-footer").html(`<button type="button" class="btn btn-secondary" id="deleteL">Yes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>`)
+
+            }
+        }
+    })
+})
+
+$(document).on("click", "#deleteL", function(e) {
+    console.log(e);
+    locID = $("#delLocID").val();
+
+    $.ajax({
+        url: `libs/php/deleteLocationByID.php?id=${locID}`,
+        type: "DELETE",
+        // data: {
+        //     id: $("#delLocID").val()
+        // }, same issue with using data parameter, but everything looks fine on backend...perplexed!
+        success: function(result) {
+            console.log(result);
+            $("#deleteLModal").modal("hide");
             locRow.slideUp();
             getAllLocations();
         }
     })
-
 })
 
 
