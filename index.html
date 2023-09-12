@@ -21,113 +21,82 @@
 </head>
 <body>
 
-  <!------------------DATABASE HEADER----------------->
+  <section>
 
-  <div class="db-header position-relative top-0 w-100 p-3">
-
-    <div class="row">
-
-      <div class="col col-10">
-
-          <input class="form-control emp-search me-2" id="empSearch" type="search" placeholder="Search Employees" aria-label="Search">
-
-      </div>
-
-      <div class="col">
-
-        <div class="btn--group" role="group" aria-label="buttons">
-
-          <button id="addBtn" class="btn btn-primary"><i class="fa-solid fa-folder-plus"></i></button>
-          <!--data-bs-target="#addPersonnelModal"  data-bs-toggle="modal"-->
-
+    <!------------------DATABASE HEADER----------------->
+    <div class="db-header position-relative top-0 w-100 p-3">
+      <div class="row">
+        <div class="col">
+            <input class="form-control emp-search me-2" id="empSearch" type="search" placeholder="Search Employees" aria-label="Search">
         </div>
-
+        <div class="col col-2">
+          <div class="btn--group" role="group" aria-label="buttons">
+            <button id="addBtn" class="btn btn-primary"><i class="fa-solid fa-folder-plus"></i></button>
+          </div>
+        </div>
       </div>
-
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid d-flex justify-content-between">
+    
+          <ul class="nav nav-tabs w-100" id="myTab" role="tablist">
+    
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="personnelBtn" data-bs-toggle="tab" data-bs-target="#personnel-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">
+                <i class="fa-solid fa-users"></i><span class="d-none d-sm-block">Personnel</span>
+              </button>
+            </li>
+    
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="departmentsBtn" data-bs-toggle="tab" data-bs-target="#departments-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">
+                <i class="fa-solid fa-building"></i><span class="d-none d-sm-block">Departments</span>
+              </button>
+            </li>
+    
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="locationsBtn" data-bs-toggle="tab" data-bs-target="#locations-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">
+                <i class="fa-solid fa-earth-americas"></i><span class="d-none d-sm-block">Locations</span>
+              </button>
+            </li>
+    
+          </ul>
+    
+        </div>
+      </nav>
     </div>
-
-    <nav class="navbar navbar-expand-lg">
-      <div class="container-fluid d-flex justify-content-between">
-  
-        <ul class="nav nav-tabs w-100" id="myTab" role="tablist">
-  
-          <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="personnelBtn" data-bs-toggle="tab" data-bs-target="#personnel-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">
-              <i class="fa-solid fa-users"></i><span class="d-none d-sm-block">Personnel</span>
-            </button>
-          </li>
-  
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="departmentsBtn" data-bs-toggle="tab" data-bs-target="#departments-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">
-              <i class="fa-solid fa-building"></i><span class="d-none d-sm-block">Departments</span>
-            </button>
-          </li>
-  
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="locationsBtn" data-bs-toggle="tab" data-bs-target="#locations-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">
-              <i class="fa-solid fa-earth-americas"></i><span class="d-none d-sm-block">Locations</span>
-            </button>
-          </li>
-  
-        </ul>
-  
+    <!------------------DATABASE BODY----------------->
+    <div class="container table-container m-0">
+      <div class="tab-pane show active w-100" id="personnel-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+        <table class="table table-hover">
+    
+          <tbody class="db-body">
+    
+          </tbody>
+        </table>
       </div>
-    </nav>
-
-  </div>
-
-
-  <!------------------DATABASE BODY----------------->
-
-  <div class="container table-container m-0">
-
-    <div class="tab-pane show active w-100" id="personnel-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-
-      <table class="table table-hover">
+      <div class="tab-pane" id="departments-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+        <table class="table table-hover">
+          <tbody class="db-body">
     
-        <tbody class="db-body">
-  
-        </tbody>
-
-      </table>
-
-    </div>
-
-    <div class="tab-pane" id="departments-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-
-      <table class="table table-hover">
-
-        <tbody class="db-body">
-  
-        </tbody>
-        
-      </table>
-
-    </div>
-
-    <div class="tab-pane" id="locations-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
-
-      <table class="table table-hover">
-
-        <tbody class="db-body">
-  
-        </tbody>
-
-      </table>
-
-    </div>
-
-  </div>
+          </tbody>
     
-  </div>
+        </table>
+      </div>
+      <div class="tab-pane" id="locations-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+        <table class="table table-hover">
+          <tbody class="db-body">
+    
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    </div>
+    <!------------------DATABASE FOOTER----------------->
+    <div class="db-footer text-center">
+      <p class="fw-light my-3">Company Directory by Brooks[ode</p>
+    </div>
 
-  <!------------------DATABASE FOOTER----------------->
-
-  <div class="db-footer text-center">
-
-    <p class="fw-light my-3">Company Directory (v2.2) built by Brooks[ode</p>
-
-  </div>
+  </section>
 
 
   <!--------------------ADD PERSONNEL--------------------->
@@ -281,7 +250,7 @@
 
   <!----------------------EDIT PERSONNEL--------------------->
 
-  <div class="modal" id="editPersonnelModal" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="" aria-hidden="true">
+  <div class="modal" id="editPersonnelModal" tabindex="-1" aria-labelledby="" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -331,62 +300,9 @@
     </div>
   </div>
 
-  <div class="modal" id="editPCheck" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Confirm Update</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>Are you absolutely sure you want to update information for this member of personnel?</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary edit-p-yes" data-bs-dismiss="modal">Yes</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal" id="editPDeny1" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Issue Editing Item</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>Apologies! But please enter a valid email address.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal" id="editPDeny2" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Issue Editing Item</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>Apologies! But this email already exists. Please double check and try again.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
   <!--------------------EDIT DEPARTMENT------------------->
 
-  <div class="modal" id="editDepartmentsModal" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="" aria-hidden="true">
+  <div class="modal" id="editDepartmentsModal" tabindex="-1" aria-labelledby="" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -424,7 +340,7 @@
 
   <!--------------------EDIT LOCATION------------------->
 
-  <div class="modal" id="editLocationsModal" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="" aria-hidden="true">
+  <div class="modal" id="editLocationsModal" tabindex="-1"  aria-labelledby="" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
