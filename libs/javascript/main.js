@@ -600,14 +600,23 @@ $("#deletePModal").on("show.bs.modal", function (e) {
 $("#deleteP").click(function(e) {
 
     const parsedID = parseInt($("#delPersonnelID").val());
+
+    console.log(parsedID);
         
     $.ajax({
-        "url": `libs/php/deletePersonnelByID.php?id=${parsedID}`,
-        "type": "DELETE",
+        "url": `libs/php/deletePersonnelByID.php`,
+        "type": "POST",
+        "data": {
+            id: parsedID
+        },
         "success": function(result) {
+            console.log(result);
             $("#deletePModal").modal("hide");
             persRow.slideUp();
             getAllPersonnel();
+        },
+        error: function(err) {
+            console.log(err);
         }
     })
     // ajax call responds as "success" when data param used, but nothing happens. can't figure out why
@@ -661,11 +670,11 @@ $(document).on("click", "#deleteD", function(e) {
     deptID = $("#delDeptID").val();
 
     $.ajax({
-        url: `libs/php/deleteDepartmentByID.php?id=${deptID}`,
-        type: "DELETE",
-        // data: {
-        //     id: $("#delDeptID").val()
-        // }, same issue with using data parameter, but everything looks fine on backend...perplexed!
+        url: `libs/php/deleteDepartmentByID.php`,
+        type: "POST",
+        data: {
+            id: $("#delDeptID").val()
+        }, 
         success: function(result) {
             console.log(result);
             $("#deleteDModal").modal("hide");
@@ -734,11 +743,11 @@ $(document).on("click", "#deleteL", function(e) {
     locID = $("#delLocID").val();
 
     $.ajax({
-        url: `libs/php/deleteLocationByID.php?id=${locID}`,
-        type: "DELETE",
-        // data: {
-        //     id: $("#delLocID").val()
-        // }, same issue with using data parameter, but everything looks fine on backend...perplexed!
+        url: `libs/php/deleteLocationByID.php`,
+        type: "POST",
+        data: {
+            id: $("#delLocID").val()
+        }, 
         success: function(result) {
             console.log(result);
             $("#deleteLModal").modal("hide");
