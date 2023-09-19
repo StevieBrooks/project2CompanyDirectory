@@ -1,7 +1,6 @@
 /*==================GLOBAL VARIABLES======================*/
 
 let tbody = $("table tbody");
-let empQuery = null;
 const personnelBtn = $("#personnelBtn");
 const departmentsBtn = $("#departmentsBtn");
 const locationsBtn = $("#locationsBtn");
@@ -28,10 +27,13 @@ $("#empSearch").on("keyup", function() {
     $.ajax({
         "url": `libs/php/search.php`,
         "type": "GET",
+        "cache": false,
         "data": {
-            empQuery: $("#empSearch").val()
+            "empQuery": $("#empSearch").val()
         },
         "success": function(result) {
+
+            console.log(result); // gives correct result in dev mode, but returns entire table in live mode
 
             $(".db-body").html("");
             result.data.forEach(item => {
@@ -568,6 +570,7 @@ function getDeptLocation(input) {
             id: input.data[0].locationID
         },
         success: function(result) {
+            console.log(result);
             const deptLoc4Edit = result.data[0].id;
             $("#editDepartmentLocation").val(deptLoc4Edit);
         },
@@ -833,5 +836,10 @@ $(document).on("click", "#deleteL", function(e) {
     })
 })
 
+/* ISSUES WITH LIVE VERSION 
 
+    - search bar not working
+    - edit dept - get location not working
+    - delete location not working properly
+*/ 
 
