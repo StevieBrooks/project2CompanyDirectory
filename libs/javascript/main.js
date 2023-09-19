@@ -51,6 +51,9 @@ $("#empSearch").on("keyup", function() {
                 `)
             })
 
+        },
+        "error": function(xhr, status, error) {
+            console.error("AJAX Error:", status, error);
         }
     })
 })
