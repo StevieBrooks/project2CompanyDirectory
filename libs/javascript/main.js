@@ -37,8 +37,7 @@ $("#empSearch").on("keyup", function() {
             result.data.forEach(item => {
                 $("#personnel-tab-pane .db-body").append(`
                 <tr>
-                    <td class="align-middle text-nowrap">${item.lastName}</td>
-                    <td class="align-middle text-nowrap">${item.firstName}</td>
+                    <td class="align-middle text-nowrap">${item.lastName}, ${item.firstName}</td>
                     <td class="align-middle text-nowrap d-none d-md-table-cell">${item.email}</td>
                     <td class="align-middle text-nowrap d-none d-md-table-cell">${item.jobTitle}</td>
                     <td class="align-middle text-nowrap d-none d-md-table-cell">${item.department}</td>
@@ -274,12 +273,79 @@ function getAllPersonnel() {
         "type": "GET",
         "success": function(result) {
 
+                // $('#personnelTable').html("");
+            
+                // const docFrag = document.createDocumentFragment();
+            
+                // result.data.forEach(row => {
+            
+                //     let record = document.createElement("tr");
+            
+                //     let name = document.createElement("td");
+                //     name.classList = "align-middle text-nowrap";
+                //     name.innerHTML = `${row.lastName}, ${row.firstName}`;
+            
+                //     let jobTitle = document.createElement("td");
+                //     jobTitle.classList = "align-middle text-nowrap d-none d-md-table-cell";
+                //     jobTitle.innerHTML = row.jobTitle;
+                   
+                //     let department = document.createElement("td");
+                //     department.classList = "align-middle text-nowrap d-none d-md-table-cell";
+                //     department.innerHTML = row.department;
+            
+                //     let location = document.createElement("td");
+                //     location.classList = "align-middle text-nowrap d-none d-md-table-cell";
+                //     location.innerHTML = row.location;
+            
+                //     let email = document.createElement("td");
+                //     email.classList = "align-middle text-nowrap d-none d-md-table-cell";
+                //     email.innerHTML = row.email;
+            
+                //     let buttons = document.createElement("td");
+                //     buttons.classList = "text-end text-nowrap";
+            
+                //     let editBtn = document.createElement("button");
+                //     editBtn.classList = "btn btn-success btn-sm me-1";
+                //     editBtn.setAttribute("data-bs-toggle", "modal");
+                //     editBtn.setAttribute("data-bs-target", "#editPersonnelModal");
+                //     editBtn.setAttribute("data-id", row.id);
+            
+                //     let editBtnImg = document.createElement("i");
+                //     editBtnImg.classList = "fa-solid fa-pen-to-square fa-lg";
+                //     editBtn.append(editBtnImg);
+                //     buttons.append(editBtn);
+            
+                //     let removeBtn = document.createElement("button");
+                //     removeBtn.classList = "btn btn-danger btn-sm";
+                //     removeBtn.setAttribute("data-bs-toggle", "modal");
+                //     removeBtn.setAttribute("data-bs-target", "#removePersonnelModal");
+                //     removeBtn.setAttribute("data-id", row.id);
+            
+                //     let removeBtnImg = document.createElement("i");
+                //     removeBtnImg.classList = "fa-solid fa-trash fa-lg";
+                //     removeBtn.append(removeBtnImg);
+                //     buttons.append(removeBtn);
+            
+                //     record.append(name);
+                //     record.append(jobTitle);
+                //     record.append(department);
+                //     record.append(location);
+                //     record.append(email);
+                //     record.append(buttons);
+            
+                //     docFrag.append(record);
+            
+                // });
+            
+                // $("#personnelTable").append(docFrag);
+            
+            
+
             $(".db-body").html("");
             result.data.forEach(item => {
                 $("#personnel-tab-pane .db-body").append(`
                     <tr>
-                        <td class="align-middle text-nowrap">${item.lastName}</td>
-                        <td class="align-middle text-nowrap">${item.firstName}</td>
+                        <td class="align-middle text-nowrap">${item.lastName}, ${item.firstName}</td>
                         <td class="align-middle text-nowrap d-none d-md-table-cell">${item.email}</td>
                         <td class="align-middle text-nowrap d-none d-md-table-cell">${item.jobTitle}</td>
                         <td class="align-middle text-nowrap d-none d-md-table-cell">${item.department}</td>
