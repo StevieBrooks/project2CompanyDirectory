@@ -63,6 +63,7 @@
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
 	$output['data'] = [];
+	$output['error'] = $conn->connect_error;
 	
 	mysqli_close($conn);
 

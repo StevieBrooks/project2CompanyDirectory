@@ -20,6 +20,10 @@ $(document).ready(function() {
 
 $("#empSearch").on("keyup", function() {
 
+    personnelBtn[0].attributes[0].nodeValue = "nav-link active";
+    departmentsBtn[0].attributes[0].nodeValue = "nav-link";
+
+
     $.ajax({
         "url": `libs/php/search.php`,
         "type": "GET",
@@ -38,9 +42,9 @@ $("#empSearch").on("keyup", function() {
                     <td class="align-middle text-nowrap d-none d-md-table-cell">${item.jobTitle}</td>
                     <td class="align-middle text-nowrap d-none d-md-table-cell">${item.department}</td>
                     <td class="text-end text-nowrap">
-                        <button type="button" class="btn btn-success edit-person-btn" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
 
-                        <button type="button" class="btn btn-danger del-person-btn" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePModal" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>
                 `)
@@ -270,9 +274,9 @@ function getAllPersonnel() {
                         <td class="align-middle text-nowrap d-none d-md-table-cell">${item.jobTitle}</td>
                         <td class="align-middle text-nowrap d-none d-md-table-cell">${item.department}</td>
                         <td class="text-end text-nowrap">
-                            <button type="button" class="btn btn-success edit-person-btn" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
 
-                            <button type="button" class="btn btn-danger del-person-btn" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePModal" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `)
@@ -300,7 +304,10 @@ function getAllDepartments() {
                 <tr>
                     <td class="align-middle text-nowrap">${item.name}</td>
                     <td class="align-middle text-nowrap d-none d-md-table-cell">${item.location}</td>
-                    <td class="align-middle text-end text-nowrap"><td><button type="button" class="btn btn-success edit-dept-btn" data-deptid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button><button type="button" class="btn btn-danger del-dept-btn" data-deptid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
+                    <td class="align-middle text-end text-nowrap">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editDepartmentsModal" data-deptid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteDModal" data-deptid="${item.id}"><i class="fa-solid fa-trash"></i></button>
+                    </td>
                 </tr>
                 `)
             })
@@ -324,7 +331,10 @@ function getAllLocations() {
                 $("#locations-tab-pane .db-body").append(`
                 <tr data-locid="${item.id}">
                     <td class="align-middle text-nowrap">${item.name}</td>
-                    <td class="align-middle text-end text-nowrap"><button type="button" class="btn btn-success edit-loc-btn" data-locid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button><button type="button" class="btn btn-danger del-loc-btn" data-locid="${item.id}"><i class="fa-solid fa-trash"></i></button></td>
+                    <td class="align-middle text-end text-nowrap">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editLocationsModal" data-locid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteLModal" data-locid="${item.id}"><i class="fa-solid fa-trash"></i></button>
+                    </td>
                 </tr>
                 `)
             })
@@ -336,19 +346,6 @@ function getAllLocations() {
 
 
 /*===============EDIT PERSONNEL==============*/
-
-// let persID4Edit = null;
-
-// tbody.on("click", ".edit-person-btn", function(e) {
-
-//     console.log(e.currentTarget.dataset.empid);
-
-//     persID4Edit = e.currentTarget.dataset.empid;
-
-//     $("#editPersonnelModal").modal("show");
-//     $("#editPersonnelModal .dept-location").css("display", "none");
-
-// })
 
 $("#editPersonnelModal").on("show.bs.modal", function (e) {
 
@@ -432,20 +429,10 @@ $("#editPersonnelModal").on("submit", function(e) {
 
 
 /*===================EDIT DEPARTMENT==================*/
-deptID4Edit = null;
-
-tbody.on("click", ".edit-dept-btn", function(e) {
-
-    deptID4Edit = e.currentTarget.dataset.deptid;
-    $("#editDepartmentsForm #editDepartmentsID").val(deptID4Edit);
-
-    $("#editDepartmentsModal").modal("show");
-
-})
 
 $("#editDepartmentsModal").on("show.bs.modal", function (e) {
 
-    console.log($("#editDepartmentsForm #editDepartmentsID").val());
+    console.log($(e.relatedTarget).attr("data-deptid"));
 
     popDeptLocations();
   
@@ -455,15 +442,19 @@ $("#editDepartmentsModal").on("show.bs.modal", function (e) {
       type: "POST",
       dataType: "json",
       data: {
-        id: deptID4Edit 
+        id: $(e.relatedTarget).attr("data-deptid") 
       },
       success: function (result) {
+
+        console.log(result);
   
         if (result.status.code == "200") {
 
+            $("#editDepartmentsID").val(result.data[0].id);
+
+            $("#editDepartmentName").val(result.data[0].name);     
+
             getDeptLocation(result);
-            
-            $("#editDepartmentName").val(result.data[0].name);        
           
         } else {
           $("#editDepartmentsModal .modal-title").replaceWith(
@@ -503,10 +494,6 @@ function getDeptLocation(input) {
         success: function(result) {
             const deptLoc4Edit = result.data[0].id;
             $("#editDepartmentLocation").val(deptLoc4Edit);
-
-            console.log(result);
-            console.log(deptLoc4Edit);
-            console.log($("#editDepartmentLocation"));
         },
         error: function (jqXHR, textStatus, errorThrown) {
         $("#editDepartmentsModal .modal-title").replaceWith(
@@ -520,7 +507,6 @@ $("#editDepartmentsModal").on("submit", function(e) {
 
     e.preventDefault();
 
-    
     const formData = $("#editDepartmentsForm").serialize();
     console.log(formData);
 
@@ -529,7 +515,7 @@ $("#editDepartmentsModal").on("submit", function(e) {
         type: "POST",
         data: formData,
         success: function(result) {
-            console.log(result);
+            $("#editDepartmentsModal").modal("hide");
             getAllDepartments();
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -541,33 +527,31 @@ $("#editDepartmentsModal").on("submit", function(e) {
 
 /*===================EDIT LOCATION====================*/
 
-locID4Edit = null;
-
-tbody.on("click", ".edit-loc-btn", function(e) {
-
-    locID4Edit = e.currentTarget.dataset.locid;
-    $("#editLocationsForm #editLocationID").val(locID4Edit);
-
-    $("#editLocationsModal").modal("show");
-
-})
-
 $("#editLocationsModal").on("show.bs.modal", function (e) {
+
+    console.log(e.relatedTarget.attributes[4]);
   
     $.ajax({
       url: "libs/php/getLocationByID.php",
       type: "POST",
       dataType: "json",
       data: {
-        id: locID4Edit 
+        id: $(e.relatedTarget).attr("data-locid") 
       },
       success: function (result) {
         console.log(result);
 
         if(result.status.name == "ok") {
+
+            $("#editLocationID").val(result.data[0].id);
             $("#editLocationName").val(result.data[0].name);
+
         } else {
-            $("#editLocationName").val("Apologies: No info available");
+
+            $("#editDepartmentsModal .modal-title").replaceWith(
+                "Error retrieving data"
+              );
+
         }
        
       },
@@ -592,7 +576,7 @@ $("#editLocationsModal").on("submit", function(e) {
         type: "POST",
         data: formData,
         success: function(result) {
-            console.log(result);
+            $("#editLocationsModal").modal("hide");
             getAllLocations();
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -604,29 +588,38 @@ $("#editLocationsModal").on("submit", function(e) {
 
 /*===============DELETE PERSONNEL BY ID==============*/
 
-let persID = null;
 let persRow = null;
 
-tbody.on("click", ".del-person-btn", function(e) {
+$("#deletePModal").on("show.bs.modal", function (e) {
 
-    persID = e.currentTarget.dataset.empid;
-    persRow = $(this).closest("tr");
+    $("#delPersonnelID").val($(e.relatedTarget).attr("data-empid"));
+    persRow = $(e.relatedTarget).closest("tr");
 
-    $("#deletePModal").modal("show");
+});
 
-})
+$("#deleteP").click(function(e) {
 
-$(".delete-p-yes").click(function() {
+    const parsedID = parseInt($("#delPersonnelID").val());
+
+    console.log(parsedID);
         
     $.ajax({
-        "url": `libs/php/deletePersonnelByID.php?id=${persID}`,
-        "type": "DELETE",
-        "success": function() {
-
+        "url": `libs/php/deletePersonnelByID.php`,
+        "type": "POST",
+        "data": {
+            id: parsedID
+        },
+        "success": function(result) {
+            console.log(result);
+            $("#deletePModal").modal("hide");
             persRow.slideUp();
             getAllPersonnel();
+        },
+        error: function(err) {
+            console.log(err);
         }
     })
+    // ajax call responds as "success" when data param used, but nothing happens. can't figure out why
 
 })
 
@@ -634,60 +627,135 @@ $(".delete-p-yes").click(function() {
 
 let deptID = null;
 let deptRow = null;
+let personnelAssigned = null;
 
-tbody.on("click", ".del-dept-btn", function(e) {
+$("#deleteDModal").on("show.bs.modal", function(e) {
+    console.log(e.relatedTarget.attributes[4].nodeValue);
+    $("#delDeptID").val(e.relatedTarget.attributes[4].nodeValue);
+    deptRow = $(e.relatedTarget).closest("tr");
 
-    deptID = e.currentTarget.dataset.deptid;
-    deptRow = $(this).closest("tr");
-    
-    $("#deleteDModal").modal("show");
-
-})
-
-$(".delete-d-yes").click(function() {
-    console.log(deptID);
+    personnelAssigned = [];
 
     $.ajax({
-        url: `libs/php/deleteDepartmentByID.php?id=${deptID}`,
-        type: "DELETE",
-        success: function() {
+        url: "libs/php/getAllPersonnel.php",
+        type: "GET",
+        success: function(result) {
+            console.log(result);
+            result.data.forEach(item => {
+                if(item.departmentID == $(e.relatedTarget).attr("data-deptid")) {
+                    personnelAssigned.push(item);
+                } 
+            })
+            
+            if(personnelAssigned.length > 0) {
 
+                $("#deleteDModal .modal-title").html("Unable to Delete Department");
+                $("#deleteDModal .modal-body p").html(`There are currently ${personnelAssigned.length} employees assigned to this department. Therefore, it cannot be deleted at this time.`);
+                $("#deleteDModal .modal-footer").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>`)
+
+            } else {
+
+                $("#deleteDModal .modal-title").html("Delete Department");
+                $("#deleteDModal .modal-body p").html(`This action cannot be undone. Are you sure you want to delete this department?`);
+                $("#deleteDModal .modal-footer").html(`<button type="button" class="btn btn-secondary" id="deleteD">Yes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>`)
+
+            }
+        }
+    })
+})
+
+$(document).on("click", "#deleteD", function(e) {
+    console.log(e);
+    deptID = $("#delDeptID").val();
+
+    $.ajax({
+        url: `libs/php/deleteDepartmentByID.php`,
+        type: "POST",
+        data: {
+            id: $("#delDeptID").val()
+        }, 
+        success: function(result) {
+            console.log(result);
+            $("#deleteDModal").modal("hide");
             deptRow.slideUp();
             getAllDepartments();
         }
     })
-
 })
 
 /*===============DELETE LOCATION BY ID==============*/
 
 let locID = null;
+let location4Delete = null;
 let locRow = null;
+let departmentsAssigned = null;
 
-tbody.on("click", ".del-loc-btn", function(e) {
-    
-    locID = e.currentTarget.dataset.locid;
-    locRow = $(this).closest("tr");
+$("#deleteLModal").on("show.bs.modal", function(e) {
+    console.log(e.relatedTarget.attributes[4].nodeValue);
+    $("#delLocID").val(e.relatedTarget.attributes[4].nodeValue);
+    locRow = $(e.relatedTarget).closest("tr");
 
-    $("#deleteLModal").modal("show");
- 
-})
-
-
-$(".delete-l-yes").click(function() {
+    departmentsAssigned = [];
 
     $.ajax({
-        "url": `libs/php/deleteLocationByID.php?id=${locID}`,
-        "type": "DELETE",
-        "success": function() {
+        url: "libs/php/getLocationByID.php",
+        type: "GET",
+        data: {
+            id: $(e.relatedTarget).attr("data-locid")
+        },
+        success: function(result) {
+            location4Delete = result.data[0].name
+        } 
+    })
 
+    $.ajax({
+        url: "libs/php/getAllDepartments.php",
+        type: "GET",
+        success: function(result) {
+            console.log(result);
+            result.data.forEach(item => {
+                if(item.location == location4Delete) {
+                    departmentsAssigned.push(item);
+                } 
+            })
+            
+            if(departmentsAssigned.length > 0) {
+
+                $("#deleteLModal .modal-title").html("Unable to Delete Location");
+                $("#deleteLModal .modal-body p").html(`There are currently ${departmentsAssigned.length} departments assigned to this location. Therefore, it cannot be deleted at this time.`);
+                $("#deleteLModal .modal-footer").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>`)
+
+            } else {
+
+                $("#deleteLModal .modal-title").html("Delete Location");
+                $("#deleteLModal .modal-body p").html(`This action cannot be undone. Are you sure you want to delete this location?`);
+                $("#deleteLModal .modal-footer").html(`<button type="button" class="btn btn-secondary" id="deleteL">Yes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>`)
+
+            }
+        }
+    })
+})
+
+$(document).on("click", "#deleteL", function(e) {
+    console.log(e);
+    locID = $("#delLocID").val();
+
+    $.ajax({
+        url: `libs/php/deleteLocationByID.php`,
+        type: "POST",
+        data: {
+            id: $("#delLocID").val()
+        }, 
+        success: function(result) {
+            console.log(result);
+            $("#deleteLModal").modal("hide");
             locRow.slideUp();
             getAllLocations();
         }
     })
-
 })
-
 
 
 
