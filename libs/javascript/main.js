@@ -59,8 +59,6 @@ $("#empSearch").on("keyup", function() {
 
 $("#addBtn").click(function() {
 
-    console.log($("#departmentsBtn"));
-
     if(personnelBtn.hasClass("active")) {
 
         $.ajax({
@@ -97,6 +95,14 @@ $("#addBtn").click(function() {
 
     }
 
+})
+
+$("#addPersonnelModal").on("hidden.bs.modal", function() {
+    $("#addDept").html("");
+})
+
+$("#addDepartmentModal").on("hidden.bs.modal", function() {
+    $("#addDeptLoc").html("");
 })
 
 
