@@ -61,6 +61,10 @@ $("#empSearch").on("keyup", function() {
     })
 })
 
+$("#empSearch").on("blur", function() {
+    $("#empSearch").val("");
+})
+
 
 /*===================ADD NEW======================*/
 
