@@ -28,24 +28,6 @@ tr {
     cursor: default;
 }
 
-@media(max-width: 800px) {
-.db-jobtitle-item, .db-dept-item, .db-loc-item {
-        display: none;
-    }
-}
-
-@media(max-width: 705px) {
-    .db-email-item {
-        display: none;
-    }
-}
-
-@media(min-width: 768px) {
-    .table-container {
-        max-width: none;
-    }
-}
-
 @media(min-width: 576px) {
     .table-container {
         max-width: none;

@@ -41,7 +41,7 @@ $("#empSearch").on("keyup", function() {
                 <tr>
                     <td class="align-middle text-nowrap">${item.lastName}, ${item.firstName}</td>
                     <td class="align-middle text-nowrap d-none d-md-table-cell">${item.email}</td>
-                    <td class="align-middle text-nowrap d-none d-md-table-cell">${item.jobTitle}</td>
+                    <td class="align-middle text-nowrap d-none d-lg-table-cell">${item.jobTitle}</td>
                     <td class="align-middle text-nowrap d-none d-md-table-cell">${item.department}</td>
                     <td class="text-end text-nowrap">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
@@ -349,7 +349,7 @@ function getAllPersonnel() {
                     <tr>
                         <td class="align-middle text-nowrap">${item.lastName}, ${item.firstName}</td>
                         <td class="align-middle text-nowrap d-none d-md-table-cell">${item.email}</td>
-                        <td class="align-middle text-nowrap d-none d-md-table-cell">${item.jobTitle}</td>
+                        <td class="align-middle text-nowrap d-none d-lg-table-cell">${item.jobTitle}</td>
                         <td class="align-middle text-nowrap d-none d-md-table-cell">${item.department}</td>
                         <td class="text-end text-nowrap">
                             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
@@ -841,7 +841,5 @@ $(document).on("click", "#deleteL", function(e) {
     - search bar not working
     - edit dept - get location not working
     - delete location not working properly
-    - different gaps between navbar and tab-content with pers, dept, loc
-    - pers tab content: edit/del buttons disappear when width between 775 and 850
 */ 
 
