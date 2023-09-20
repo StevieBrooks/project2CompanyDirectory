@@ -800,7 +800,7 @@ $("#deleteLModal").on("show.bs.modal", function(e) {
 
     $.ajax({
         url: "libs/php/getLocationByID.php",
-        type: "GET",
+        type: "POST",
         data: {
             id: $(e.relatedTarget).attr("data-locid")
         },
@@ -811,7 +811,7 @@ $("#deleteLModal").on("show.bs.modal", function(e) {
 
     $.ajax({
         url: "libs/php/getAllDepartments.php",
-        type: "GET",
+        type: "POST",
         success: function(result) {
             console.log(result);
             result.data.forEach(item => {
