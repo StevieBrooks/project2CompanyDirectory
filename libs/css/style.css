@@ -1,6 +1,6 @@
 html,
 body {
-  margin: 5px 2px 5px 2px;
+  margin: 5px 0px 5px 2px;
   padding: 5px 0px 5px 2px;
   overflow: hidden;
 }
@@ -14,6 +14,14 @@ section {
 .table-container {
     flex: 1;
     overflow-y: scroll;
+}
+
+.table-container .tab-pane {
+    display: none;
+}
+
+.table-container .active {
+    display: block;
 }
 
 tr {

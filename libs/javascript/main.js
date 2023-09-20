@@ -841,5 +841,7 @@ $(document).on("click", "#deleteL", function(e) {
     - search bar not working
     - edit dept - get location not working
     - delete location not working properly
+    - different gaps between navbar and tab-content with pers, dept, loc
+    - pers tab content: edit/del buttons disappear when width between 775 and 850
 */ 
 
