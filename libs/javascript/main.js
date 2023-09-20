@@ -33,6 +33,8 @@ $("#empSearch").on("keyup", function() {
         },
         "success": function(result) {
 
+            console.log($("#empSearch").val());
+
             console.log(result); // gives correct result in dev mode, but returns entire table in live mode
 
             $(".db-body").html("");
@@ -476,6 +478,12 @@ $("#editPersonnelModal").on("show.bs.modal", function (e) {
     });
 });
 
+
+$("#editPersonnelModal").on("hidden.bs.modal", function() {
+    $("#editPDept").html("");
+})
+
+
 $("#editPersonnelModal").on("submit", function(e) {
 
     e.preventDefault();
@@ -548,6 +556,7 @@ $("#editDepartmentsModal").on("show.bs.modal", function (e) {
     });
 });
 
+
 function popDeptLocations() {
     
     $.ajax({
@@ -561,6 +570,12 @@ function popDeptLocations() {
         }
     })
 }
+
+
+$("#editDepartmentsModal").on("hidden.bs.modal", function() {
+    $("#editDepartmentLocation").html("");
+})
+
 
 function getDeptLocation(input) {
     $.ajax({
