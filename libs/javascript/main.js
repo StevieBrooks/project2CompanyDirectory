@@ -585,7 +585,7 @@ function getDeptLocation(input) {
     console.log(input);
     $.ajax({
         url: "libs/php/getLocationByID.php",
-        type: "GET",
+        type: "POST",
         cache: false,
         data: {
             id: input.data[0].locationID
@@ -859,7 +859,6 @@ $(document).on("click", "#deleteL", function(e) {
 
 /* ISSUES WITH LIVE VERSION 
 
-    - search bar not working
     - edit dept - get location not working
     - delete location not working properly
 */ 
