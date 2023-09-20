@@ -582,9 +582,11 @@ $("#editDepartmentsModal").on("hidden.bs.modal", function() {
 
 
 function getDeptLocation(input) {
+    console.log(input);
     $.ajax({
         url: "libs/php/getLocationByID.php",
         type: "GET",
+        cache: false,
         data: {
             id: input.data[0].locationID
         },

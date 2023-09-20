@@ -29,7 +29,7 @@
 	INNER JOIN department ON personnel.departmentID = department.id
 	WHERE personnel.firstName LIKE ? OR personnel.lastName LIKE ? OR personnel.email LIKE ?';
 
-
+	error_log(print_r($_REQUEST, true));
 
 
     $param = "%" . $_REQUEST['empQuery'] . "%";
