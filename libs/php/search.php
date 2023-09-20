@@ -32,7 +32,7 @@
 	error_log(print_r($_REQUEST, true));
 
 
-    $param = "%" . $_REQUEST['empQuery'] . "%";
+    $param = "%" . $_GET['empQuery'] . "%";
 
 	$stmt = $conn->prepare($query);
 	$stmt->bind_param("sss", $param, $param, $param);
