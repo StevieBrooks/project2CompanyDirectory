@@ -855,10 +855,3 @@ $(document).on("click", "#deleteL", function(e) {
         }
     })
 })
-
-/* ISSUES WITH LIVE VERSION 
-
-    - edit dept - get location not working
-    - delete location not working properly
-*/ 
-
