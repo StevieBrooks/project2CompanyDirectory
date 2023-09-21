@@ -565,7 +565,7 @@ function popDeptLocations() {
     
     $.ajax({
         url: "libs/php/getAllLocations.php",
-        type: "GET",
+        type: "POST",
         success: function(result) {
             const alphabeticalLocs = result.data.sort((a, b) => a.name.localeCompare(b.name));
                 alphabeticalLocs.forEach(item => {
@@ -719,7 +719,6 @@ $("#deleteP").click(function(e) {
             console.log(err);
         }
     })
-    // ajax call responds as "success" when data param used, but nothing happens. can't figure out why
 
 })
 
