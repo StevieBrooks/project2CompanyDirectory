@@ -271,6 +271,21 @@ $("#addLocationForm").on("submit", function(e) {
 })
 
 
+/*================REFRESH TABLES==================*/
+
+$("#refreshBtn").click(function() {
+
+    if($("#personnelBtn").hasClass("active")) {
+        getAllPersonnel();
+    } else if ($("#departmentsBtn").hasClass("active")) {
+        getAllDepartments();
+    } else {
+        getAllLocations();
+    }
+
+})
+
+
 /*===================GET ALL PERSONNEL======================*/
 $("#personnelBtn").click(getAllPersonnel)
 
@@ -876,8 +891,5 @@ $(document).on("click", "#deleteL", function(e) {
 
 /* TOMOZ - GET ON IT AND KILL THIS SHIT!!
 
-    - Sort employees (by last name)/depts/locs alphabetically (use ORDER BY in SQL statements in PHP files)
-    - need filter and refresh buttons next to add
-    - Refresh button - foloow codepen logic and replace Alert with call to getAllPersonnel()/getAllDepts(), etc
     - Filter & current issue - speak with Nelson
 */
