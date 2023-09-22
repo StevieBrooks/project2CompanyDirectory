@@ -35,7 +35,7 @@
 	// SQL does not accept parameters and so is not prepared
 
 	// $query = 'SELECT id, name, locationID FROM department';
-	$query = 'SELECT department.id, department.name, location.name AS location FROM department INNER JOIN location ON department.locationID = location.id';
+	$query = 'SELECT department.id, department.name, location.name AS location FROM department INNER JOIN location ON department.locationID = location.id ORDER BY department.name';
 
 	$result = $conn->query($query);
 	
