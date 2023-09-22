@@ -692,10 +692,27 @@ let persRow = null;
 
 $("#deletePModal").on("show.bs.modal", function (e) {
 
+    
     $("#delPersonnelID").val($(e.relatedTarget).attr("data-empid"));
     persRow = $(e.relatedTarget).closest("tr");
+    const employeeForDelete = persRow[0].children[0].innerText;
+    
+    $("#deletePModal .modal-body p").html(`This action cannot be undone. Are you sure you want to remove ${formatEmployee(employeeForDelete)}?`)
 
 });
+
+function formatEmployee(emp) {
+
+  const parts = emp.split(', ');
+
+  if (parts.length === 2) {
+    const reversedName = parts[1] + ' ' + parts[0];
+    return reversedName;
+  } else {
+    return emp;
+  }
+
+}
 
 $("#deleteP").click(function(e) {
 
@@ -732,6 +749,7 @@ $("#deleteDModal").on("show.bs.modal", function(e) {
     console.log(e.relatedTarget.attributes[4].nodeValue);
     $("#delDeptID").val(e.relatedTarget.attributes[4].nodeValue);
     deptRow = $(e.relatedTarget).closest("tr");
+    const departmentForDelete = deptRow[0].children[0].innerText;
 
     personnelAssigned = [];
 
@@ -748,16 +766,16 @@ $("#deleteDModal").on("show.bs.modal", function(e) {
             
             if(personnelAssigned.length > 0) {
 
-                $("#deleteDModal .modal-title").html("Unable to Delete Department");
-                $("#deleteDModal .modal-body p").html(`There are currently ${personnelAssigned.length} employees assigned to this department. Therefore, it cannot be deleted at this time.`);
+                $("#deleteDModal .modal-title").html("Apologies!");
+                $("#deleteDModal .modal-body p").html(`There are currently ${personnelAssigned.length} employees assigned to ${departmentForDelete}. Unable to remove.`);
                 $("#deleteDModal .modal-footer").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>`)
 
             } else {
 
                 $("#deleteDModal .modal-title").html("Delete Department");
-                $("#deleteDModal .modal-body p").html(`This action cannot be undone. Are you sure you want to delete this department?`);
-                $("#deleteDModal .modal-footer").html(`<button type="button" class="btn btn-secondary" id="deleteD">Yes</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>`)
+                $("#deleteDModal .modal-body p").html(`This action cannot be undone. Are you sure you want to delete ${departmentForDelete}?`);
+                $("#deleteDModal .modal-footer").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button><button type="button" class="btn btn-primary" id="deleteD">Yes</button>
+                `)
 
             }
         }
@@ -794,6 +812,7 @@ $("#deleteLModal").on("show.bs.modal", function(e) {
     console.log(e.relatedTarget.attributes[4].nodeValue);
     $("#delLocID").val(e.relatedTarget.attributes[4].nodeValue);
     locRow = $(e.relatedTarget).closest("tr");
+    const locationForDelete = locRow[0].children[0].innerText;
 
     departmentsAssigned = [];
 
@@ -821,16 +840,15 @@ $("#deleteLModal").on("show.bs.modal", function(e) {
             
             if(departmentsAssigned.length > 0) {
 
-                $("#deleteLModal .modal-title").html("Unable to Delete Location");
-                $("#deleteLModal .modal-body p").html(`There are currently ${departmentsAssigned.length} departments assigned to this location. Therefore, it cannot be deleted at this time.`);
+                $("#deleteLModal .modal-title").html("Apologies!");
+                $("#deleteLModal .modal-body p").html(`There are currently ${departmentsAssigned.length} departments assigned to ${locationForDelete}. Unable to remove.`);
                 $("#deleteLModal .modal-footer").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>`)
 
             } else {
 
                 $("#deleteLModal .modal-title").html("Delete Location");
-                $("#deleteLModal .modal-body p").html(`This action cannot be undone. Are you sure you want to delete this location?`);
-                $("#deleteLModal .modal-footer").html(`<button type="button" class="btn btn-secondary" id="deleteL">Yes</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>`)
+                $("#deleteLModal .modal-body p").html(`This action cannot be undone. Are you sure you want to delete ${locationForDelete}?`);
+                $("#deleteLModal .modal-footer").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button><button type="button" class="btn btn-primary" id="deleteL">Yes</button>`)
 
             }
         }
@@ -855,3 +873,11 @@ $(document).on("click", "#deleteL", function(e) {
         }
     })
 })
+
+/* TOMOZ - GET ON IT AND KILL THIS SHIT!!
+
+    - Sort employees (by last name)/depts/locs alphabetically (use ORDER BY in SQL statements in PHP files)
+    - need filter and refresh buttons next to add
+    - Refresh button - foloow codepen logic and replace Alert with call to getAllPersonnel()/getAllDepts(), etc
+    - Filter & current issue - speak with Nelson
+*/
