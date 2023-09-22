@@ -29,9 +29,21 @@
         <div class="col">
             <input class="form-control emp-search me-2" id="empSearch" type="search" placeholder="Search Employees" aria-label="Search">
         </div>
-        <div class="col col-3">
+        <div class="col d-flex justify-content-end">
           <div class="btn--group" role="group" aria-label="buttons">
-            <button id="addBtn" class="btn btn-primary"><i class="fa-solid fa-folder-plus"></i></button>
+
+            <button id="addBtn" class="btn btn-primary">
+              <i class="fa-solid fa-folder-plus"></i>
+            </button>
+
+            <button id="filterBtn" type="button" class="btn btn-primary">
+              <i class="fa-solid fa-filter fa-fw"></i>
+            </button>  
+
+            <button id="refreshBtn" type="button" class="btn btn-primary">
+              <i class="fa-solid fa-refresh fa-fw"></i>
+            </button> 
+
           </div>
         </div>
       </div>
