@@ -1,5 +1,8 @@
 <?php
 
+ini_set('display_errors', 'On');
+	error_reporting(E_ALL);
+
 	$executionStartTime = microtime(true);
 
 	include("config.php");
@@ -23,6 +26,7 @@
 		exit;
 
 	}	
+
 
 	$query = 'SELECT personnel.id, personnel.firstName, personnel.lastName, personnel.email, personnel.jobTitle, department.name AS department
 	FROM personnel

@@ -23,7 +23,6 @@ $("#empSearch").on("keyup", function() {
     departmentsBtn[0].attributes[0].nodeValue = "nav-link";
     locationsBtn[0].attributes[0].nodeValue = "nav-link";
 
-
     $.ajax({
         "url": `libs/php/search.php`,
         "type": "GET",
@@ -33,9 +32,7 @@ $("#empSearch").on("keyup", function() {
         },
         "success": function(result) {
 
-            console.log($("#empSearch").val());
-
-            console.log(result); // gives correct result in dev mode, but returns entire table in live mode
+            console.log(result); 
 
             $(".db-body").html("");
             result.data.forEach(item => {
@@ -275,9 +272,9 @@ $("#addLocationForm").on("submit", function(e) {
 
 $("#refreshBtn").click(function() {
 
-    if($("#personnelBtn").hasClass("active")) {
+    if(personnelBtn.hasClass("active")) {
         getAllPersonnel();
-    } else if ($("#departmentsBtn").hasClass("active")) {
+    } else if (departmentsBtn.hasClass("active")) {
         getAllDepartments();
     } else {
         getAllLocations();
@@ -891,5 +888,6 @@ $(document).on("click", "#deleteL", function(e) {
 
 /* TOMOZ - GET ON IT AND KILL THIS SHIT!!
 
+    - figure out AJAX error with search functionality
     - Filter & current issue - speak with Nelson
 */
