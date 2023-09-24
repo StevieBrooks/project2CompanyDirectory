@@ -371,6 +371,8 @@ $("#sendFilterBtn").click(function(e) {
                 }
             })
 
+            console.log(filterResult);
+
             $("#personnelBtn").tab("show"); 
             $(".tab-pane .db-body").html("");
 
@@ -391,6 +393,8 @@ $("#sendFilterBtn").click(function(e) {
             })
 
             $("#filterModal").modal("hide");
+            filterDeptName = null;
+            filterLocName = null;
         }
     })
 
