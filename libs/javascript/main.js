@@ -19,10 +19,6 @@ $(document).ready(function() {
 
 $("#empSearch").on("keyup", function() {
 
-    personnelBtn[0].attributes[0].nodeValue = "nav-link active";
-    departmentsBtn[0].attributes[0].nodeValue = "nav-link";
-    locationsBtn[0].attributes[0].nodeValue = "nav-link";
-
     $.ajax({
         "url": `libs/php/search.php`,
         "type": "GET",
@@ -34,7 +30,9 @@ $("#empSearch").on("keyup", function() {
 
             console.log(result); 
 
-            $(".db-body").html("");
+            $("#personnelBtn").tab("show"); 
+            $(".tab-pane .db-body").html("");
+
             result.data.forEach(item => {
                 $("#personnel-tab-pane .db-body").append(`
                 <tr>
