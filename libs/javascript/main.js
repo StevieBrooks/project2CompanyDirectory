@@ -373,7 +373,7 @@ $("#sendFilterBtn").click(function(e) {
                 }
             })
 
-            $("#personnel-tab-pane").tab("show"); // this isn't working yet
+            $("#personnelBtn").tab("show"); 
             $(".tab-pane .db-body").html("");
 
             filterResult.forEach(item => {
