@@ -268,6 +268,142 @@ $("#addLocationForm").on("submit", function(e) {
 })
 
 
+/*====================FILTER TABLES================*/
+
+let filterDeptName = null;
+let filterLocName = null;
+
+function populateDepartments(filterLocName) {
+    $.ajax({
+        url: "libs/php/getAllDepartments.php",
+        type: "GET",
+        success: function(result) {
+            $("#deptFilter").empty();
+            $("#deptFilter").append("<option value=''>Department</option>");
+            result.data.forEach(item => {
+                if (item.location == filterLocName) {
+                    $("#deptFilter").append(`
+                        <option value="${item.id}">${item.name}</option>
+                    `);
+                }
+            });
+        }
+    });
+}
+
+function populateDropdowns() {
+    $.ajax({
+        url: "libs/php/getAllLocations.php",
+        type: "GET",
+        success: function(result) {
+            $("#locFilter").html("<option value=''>Location</option>");
+            result.data.forEach(item => {
+                $("#locFilter").append(`
+                    <option value="${item.id}">${item.name}</option>
+                `);
+            });
+        }
+    });
+
+    $.ajax({
+        url: "libs/php/getAllDepartments.php",
+        type: "GET",
+        success: function(result) {
+            $("#deptFilter").html("<option value=''>Department</option>");
+            result.data.forEach(item => {
+                $("#deptFilter").append(`
+                    <option value="${item.id}">${item.name}</option>
+                `);
+            });
+        }
+    });
+}
+
+$("#filterBtn").click(function() {
+    $("#filterModal").modal("show");
+    populateDropdowns();
+});
+
+$("#locFilter").on("change", function() {
+    const filterLocation = $("#locFilter").val();
+    $.ajax({
+        url: "libs/php/getLocationByID.php",
+        type: "POST",
+        data: {
+            id: filterLocation
+        },
+        success: function(result) {
+            filterLocName = result.data[0].name;
+            populateDepartments(filterLocName);
+        }
+    });
+});
+
+$("#deptFilter").on("change", function() {
+    const filterDepartment = $("#deptFilter").val();
+    $.ajax({
+        url: "libs/php/getDepartmentByID.php",
+        type: "POST",
+        data: {
+            id: filterDepartment
+        },
+        success: function(result) {
+            filterDeptName = result.data[0].name;
+        }
+    });
+});
+
+
+$("#sendFilterBtn").click(function(e) {
+
+    e.preventDefault();
+
+    $.ajax({
+        url: "libs/php/getAll.php",
+        type: "GET",
+        success: function(result) {
+
+            const filterResult = result.data.filter(item => {
+                if(filterDeptName) {
+                    return item.department == filterDeptName;
+                } else if(filterLocName) {
+                    return item.location == filterLocName;
+                } else {
+                    return item.department == filterDeptName && item.location == filterLocName;
+                }
+            })
+
+            $("#personnel-tab-pane").tab("show"); // this isn't working yet
+            $(".tab-pane .db-body").html("");
+
+            filterResult.forEach(item => {
+                $("#personnel-tab-pane .db-body").append(`
+                <tr>
+                    <td class="align-middle text-nowrap">${item.lastName}, ${item.firstName}</td>
+                    <td class="align-middle text-nowrap d-none d-md-table-cell">${item.email}</td>
+                    <td class="align-middle text-nowrap d-none d-lg-table-cell">${item.jobTitle}</td>
+                    <td class="align-middle text-nowrap d-none d-md-table-cell">${item.department}</td>
+                    <td class="text-end text-nowrap">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
+
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePModal" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+                `)
+            })
+
+            $("#filterModal").modal("hide");
+        }
+    })
+
+})
+
+$("#filterModal").on("hidden.bs.modal", function() {
+    $("#filterForm").trigger("reset");
+});
+
+
+
 /*================REFRESH TABLES==================*/
 
 $("#refreshBtn").click(function() {
@@ -888,6 +1024,6 @@ $(document).on("click", "#deleteL", function(e) {
 
 /* TOMOZ - GET ON IT AND KILL THIS SHIT!!
 
-    - figure out AJAX error with search functionality
-    - Filter & current issue - speak with Nelson
+    - build filter and you're done!
+    - https://thomasjwelsh.co.uk/project2/
 */
