@@ -31,23 +31,65 @@ $("#empSearch").on("keyup", function() {
             console.log(result); 
 
             $("#personnelBtn").tab("show"); 
-            $(".tab-pane .db-body").html("");
-
-            result.data.forEach(item => {
-                $("#personnel-tab-pane .db-body").append(`
-                <tr>
-                    <td class="align-middle text-nowrap">${item.lastName}, ${item.firstName}</td>
-                    <td class="align-middle text-nowrap d-none d-md-table-cell">${item.email}</td>
-                    <td class="align-middle text-nowrap d-none d-lg-table-cell">${item.jobTitle}</td>
-                    <td class="align-middle text-nowrap d-none d-md-table-cell">${item.department}</td>
-                    <td class="text-end text-nowrap">
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
-
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePModal" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
-                `)
-            })
+            $('#personnelTable').html("");
+            
+                const docFrag = document.createDocumentFragment();
+            
+                result.data.forEach(row => {
+            
+                    let record = document.createElement("tr");
+            
+                    let name = document.createElement("td");
+                    name.classList = "align-middle text-nowrap";
+                    name.innerHTML = `${row.lastName}, ${row.firstName}`;
+            
+                    let jobTitle = document.createElement("td");
+                    jobTitle.classList = "align-middle text-nowrap d-none d-lg-table-cell";
+                    jobTitle.innerHTML = row.jobTitle;
+                   
+                    let department = document.createElement("td");
+                    department.classList = "align-middle text-nowrap d-none d-sm-table-cell";
+                    department.innerHTML = row.department;
+            
+                    let email = document.createElement("td");
+                    email.classList = "align-middle text-nowrap d-none d-md-table-cell";
+                    email.innerHTML = row.email;
+            
+                    let buttons = document.createElement("td");
+                    buttons.classList = "text-end text-nowrap";
+            
+                    let editBtn = document.createElement("button");
+                    editBtn.classList = "btn btn-success btn-sm me-1";
+                    editBtn.setAttribute("data-bs-toggle", "modal");
+                    editBtn.setAttribute("data-bs-target", "#editPersonnelModal");
+                    editBtn.setAttribute("data-id", row.id);
+            
+                    let editBtnImg = document.createElement("i");
+                    editBtnImg.classList = "fa-solid fa-pen-to-square fa-lg";
+                    editBtn.append(editBtnImg);
+                    buttons.append(editBtn);
+            
+                    let removeBtn = document.createElement("button");
+                    removeBtn.classList = "btn btn-danger btn-sm";
+                    removeBtn.setAttribute("data-bs-toggle", "modal");
+                    removeBtn.setAttribute("data-bs-target", "#deletePModal");
+                    removeBtn.setAttribute("data-id", row.id);
+            
+                    let removeBtnImg = document.createElement("i");
+                    removeBtnImg.classList = "fa-solid fa-trash fa-lg";
+                    removeBtn.append(removeBtnImg);
+                    buttons.append(removeBtn);
+            
+                    record.append(name);
+                    record.append(jobTitle);
+                    record.append(department);
+                    record.append(email);
+                    record.append(buttons);      
+                    docFrag.append(record);
+            
+                });
+            
+                $("#personnelTable").append(docFrag);
 
         },
         "error": function(xhr, status, error) {
@@ -376,21 +418,71 @@ $("#sendFilterBtn").click(function(e) {
             $("#personnelBtn").tab("show"); 
             $(".tab-pane .db-body").html("");
 
-            filterResult.forEach(item => {
-                $("#personnel-tab-pane .db-body").append(`
-                <tr>
-                    <td class="align-middle text-nowrap">${item.lastName}, ${item.firstName}</td>
-                    <td class="align-middle text-nowrap d-none d-md-table-cell">${item.email}</td>
-                    <td class="align-middle text-nowrap d-none d-lg-table-cell">${item.jobTitle}</td>
-                    <td class="align-middle text-nowrap d-none d-md-table-cell">${item.department}</td>
-                    <td class="text-end text-nowrap">
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
-
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePModal" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
-                `)
-            })
+            $('#personnelTable').html("");
+            
+                const docFrag = document.createDocumentFragment();
+            
+                filterResult.forEach(row => {
+            
+                    let record = document.createElement("tr");
+            
+                    let name = document.createElement("td");
+                    name.classList = "align-middle text-nowrap";
+                    name.innerHTML = `${row.lastName}, ${row.firstName}`;
+            
+                    let jobTitle = document.createElement("td");
+                    jobTitle.classList = "align-middle text-nowrap d-none d-lg-table-cell";
+                    jobTitle.innerHTML = row.jobTitle;
+                   
+                    let department = document.createElement("td");
+                    department.classList = "align-middle text-nowrap d-none d-sm-table-cell";
+                    department.innerHTML = row.department;
+            
+                    let location = document.createElement("td");
+                    location.classList = "align-middle text-nowrap d-none d-lg-table-cell";
+                    location.innerHTML = row.location;
+            
+                    let email = document.createElement("td");
+                    email.classList = "align-middle text-nowrap d-none d-md-table-cell";
+                    email.innerHTML = row.email;
+            
+                    let buttons = document.createElement("td");
+                    buttons.classList = "text-end text-nowrap";
+            
+                    let editBtn = document.createElement("button");
+                    editBtn.classList = "btn btn-success btn-sm me-1";
+                    editBtn.setAttribute("data-bs-toggle", "modal");
+                    editBtn.setAttribute("data-bs-target", "#editPersonnelModal");
+                    editBtn.setAttribute("data-id", row.id);
+            
+                    let editBtnImg = document.createElement("i");
+                    editBtnImg.classList = "fa-solid fa-pen-to-square fa-lg";
+                    editBtn.append(editBtnImg);
+                    buttons.append(editBtn);
+            
+                    let removeBtn = document.createElement("button");
+                    removeBtn.classList = "btn btn-danger btn-sm";
+                    removeBtn.setAttribute("data-bs-toggle", "modal");
+                    removeBtn.setAttribute("data-bs-target", "#deletePModal");
+                    removeBtn.setAttribute("data-id", row.id);
+            
+                    let removeBtnImg = document.createElement("i");
+                    removeBtnImg.classList = "fa-solid fa-trash fa-lg";
+                    removeBtn.append(removeBtnImg);
+                    buttons.append(removeBtn);
+            
+                    record.append(name);
+                    record.append(jobTitle);
+                    record.append(department);
+                    record.append(location);
+                    record.append(email);
+                    record.append(buttons);
+            
+                    docFrag.append(record);
+            
+                });
+            
+                $("#personnelTable").append(docFrag);
 
             $("#filterModal").modal("hide");
             filterDeptName = null;
@@ -431,90 +523,72 @@ function getAllPersonnel() {
         "type": "GET",
         "success": function(result) {
 
-                // $('#personnelTable').html("");
+                $('#personnelTable').html("");
             
-                // const docFrag = document.createDocumentFragment();
+                const docFrag = document.createDocumentFragment();
             
-                // result.data.forEach(row => {
+                result.data.forEach(row => {
             
-                //     let record = document.createElement("tr");
+                    let record = document.createElement("tr");
             
-                //     let name = document.createElement("td");
-                //     name.classList = "align-middle text-nowrap";
-                //     name.innerHTML = `${row.lastName}, ${row.firstName}`;
+                    let name = document.createElement("td");
+                    name.classList = "align-middle text-nowrap";
+                    name.innerHTML = `${row.lastName}, ${row.firstName}`;
             
-                //     let jobTitle = document.createElement("td");
-                //     jobTitle.classList = "align-middle text-nowrap d-none d-md-table-cell";
-                //     jobTitle.innerHTML = row.jobTitle;
+                    let jobTitle = document.createElement("td");
+                    jobTitle.classList = "align-middle text-nowrap d-none d-lg-table-cell";
+                    jobTitle.innerHTML = row.jobTitle;
                    
-                //     let department = document.createElement("td");
-                //     department.classList = "align-middle text-nowrap d-none d-md-table-cell";
-                //     department.innerHTML = row.department;
+                    let department = document.createElement("td");
+                    department.classList = "align-middle text-nowrap d-none d-sm-table-cell";
+                    department.innerHTML = row.department;
             
-                //     let location = document.createElement("td");
-                //     location.classList = "align-middle text-nowrap d-none d-md-table-cell";
-                //     location.innerHTML = row.location;
+                    let location = document.createElement("td");
+                    location.classList = "align-middle text-nowrap d-none d-lg-table-cell";
+                    location.innerHTML = row.location;
             
-                //     let email = document.createElement("td");
-                //     email.classList = "align-middle text-nowrap d-none d-md-table-cell";
-                //     email.innerHTML = row.email;
+                    let email = document.createElement("td");
+                    email.classList = "align-middle text-nowrap d-none d-md-table-cell";
+                    email.innerHTML = row.email;
             
-                //     let buttons = document.createElement("td");
-                //     buttons.classList = "text-end text-nowrap";
+                    let buttons = document.createElement("td");
+                    buttons.classList = "text-end text-nowrap";
             
-                //     let editBtn = document.createElement("button");
-                //     editBtn.classList = "btn btn-success btn-sm me-1";
-                //     editBtn.setAttribute("data-bs-toggle", "modal");
-                //     editBtn.setAttribute("data-bs-target", "#editPersonnelModal");
-                //     editBtn.setAttribute("data-id", row.id);
+                    let editBtn = document.createElement("button");
+                    editBtn.classList = "btn btn-success btn-sm me-1";
+                    editBtn.setAttribute("data-bs-toggle", "modal");
+                    editBtn.setAttribute("data-bs-target", "#editPersonnelModal");
+                    editBtn.setAttribute("data-id", row.id);
             
-                //     let editBtnImg = document.createElement("i");
-                //     editBtnImg.classList = "fa-solid fa-pen-to-square fa-lg";
-                //     editBtn.append(editBtnImg);
-                //     buttons.append(editBtn);
+                    let editBtnImg = document.createElement("i");
+                    editBtnImg.classList = "fa-solid fa-pen-to-square fa-lg";
+                    editBtn.append(editBtnImg);
+                    buttons.append(editBtn);
             
-                //     let removeBtn = document.createElement("button");
-                //     removeBtn.classList = "btn btn-danger btn-sm";
-                //     removeBtn.setAttribute("data-bs-toggle", "modal");
-                //     removeBtn.setAttribute("data-bs-target", "#removePersonnelModal");
-                //     removeBtn.setAttribute("data-id", row.id);
+                    let removeBtn = document.createElement("button");
+                    removeBtn.classList = "btn btn-danger btn-sm";
+                    removeBtn.setAttribute("data-bs-toggle", "modal");
+                    removeBtn.setAttribute("data-bs-target", "#deletePModal");
+                    removeBtn.setAttribute("data-id", row.id);
             
-                //     let removeBtnImg = document.createElement("i");
-                //     removeBtnImg.classList = "fa-solid fa-trash fa-lg";
-                //     removeBtn.append(removeBtnImg);
-                //     buttons.append(removeBtn);
+                    let removeBtnImg = document.createElement("i");
+                    removeBtnImg.classList = "fa-solid fa-trash fa-lg";
+                    removeBtn.append(removeBtnImg);
+                    buttons.append(removeBtn);
             
-                //     record.append(name);
-                //     record.append(jobTitle);
-                //     record.append(department);
-                //     record.append(location);
-                //     record.append(email);
-                //     record.append(buttons);
+                    record.append(name);
+                    record.append(jobTitle);
+                    record.append(department);
+                    record.append(location);
+                    record.append(email);
+                    record.append(buttons);
             
-                //     docFrag.append(record);
+                    docFrag.append(record);
             
-                // });
+                });
             
-                // $("#personnelTable").append(docFrag);
+                $("#personnelTable").append(docFrag);
             
-            
-
-            $(".db-body").html("");
-            result.data.forEach(item => {
-                $("#personnel-tab-pane .db-body").append(`
-                    <tr>
-                        <td class="align-middle text-nowrap">${item.lastName}, ${item.firstName}</td>
-                        <td class="align-middle text-nowrap d-none d-md-table-cell">${item.email}</td>
-                        <td class="align-middle text-nowrap d-none d-lg-table-cell">${item.jobTitle}</td>
-                        <td class="align-middle text-nowrap d-none d-md-table-cell">${item.department}</td>
-                        <td class="text-end text-nowrap">
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-empid="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
-
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePModal" data-empid="${item.id}"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                `)
-            })
         }
     })
 
@@ -583,14 +657,14 @@ function getAllLocations() {
 
 $("#editPersonnelModal").on("show.bs.modal", function (e) {
 
-    console.log($(e.relatedTarget).attr("data-empid"));
+    console.log(e.relatedTarget.attributes[3].nodeValue);
   
     $.ajax({
       url: "libs/php/getPersonnelByID.php",
       type: "POST",
       dataType: "json",
       data: {
-        id: $(e.relatedTarget).attr("data-empid")
+        id: e.relatedTarget.attributes[3].nodeValue
       },
       success: function (result) {
 
@@ -842,8 +916,10 @@ let persRow = null;
 
 $("#deletePModal").on("show.bs.modal", function (e) {
 
+    console.log(e);
+
     
-    $("#delPersonnelID").val($(e.relatedTarget).attr("data-empid"));
+    $("#delPersonnelID").val(e.relatedTarget.attributes[3].nodeValue);
     persRow = $(e.relatedTarget).closest("tr");
     const employeeForDelete = persRow[0].children[0].innerText;
     
@@ -1024,8 +1100,3 @@ $(document).on("click", "#deleteL", function(e) {
     })
 })
 
-/* TOMOZ - GET ON IT AND KILL THIS SHIT!!
-
-    - build filter and you're done!
-    - https://thomasjwelsh.co.uk/project2/
-*/
